@@ -1,0 +1,7 @@
+package scenes;
+
+public enum GameState {
+
+	PLAY, PAUSE, DIALOGUE, TITLE, CHARACTER, OPTIONS, GAME_OVER, TRANSITION, TRADE, EDITOR, SLEEP, MAP;
+
+}
