@@ -42,7 +42,6 @@ public class BuildBar extends Bar {
 				if (button.getBounds().contains(x, y)) {
 					activeList.mouseClicked(x, y);
 					selectedItem = activeList.getSelectedItem();
-					System.out.println(selectedItem.getName().toString());
 				}
 			});
 	}

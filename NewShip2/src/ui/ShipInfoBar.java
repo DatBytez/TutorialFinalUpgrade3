@@ -26,7 +26,7 @@ public class ShipInfoBar extends Bar {
 	private int titleOffset = 30;
 	private int frontTAB = 20;
 	private String title = "TEST";
-	private MyShipObject selectedItem;
+//	private MyShipObject selectedItem;
 
 	public ShipInfoBar(int x, int y, int width, int height, BuildScene building) {
 		super(x, y, width, height);
@@ -81,16 +81,16 @@ public class ShipInfoBar extends Bar {
 	private void drawShipInfo(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
-		g.setColor(PHB_TEXT);
-		g.setFont(alternityLiteFont);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 14F));
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
 		int i = 0;
 		int infoX = x + 20;
 		int infoY = y + 20 + titleOffset;
 		int infoTab = 50;
 		int infoGap = 20;
+		
+		g.setColor(PHB_TEXT);
+		g.setFont(alternityLiteFont);
+		g.setFont(g.getFont().deriveFont(Font.BOLD, 14F));
+//		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		g.drawString("Cost:", infoX, infoY + infoGap * i);
 		g.drawString(String.valueOf(building.getNewShip().getCost()), infoX + infoTab, infoY + infoGap * i);

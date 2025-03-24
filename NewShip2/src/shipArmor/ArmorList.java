@@ -51,7 +51,7 @@ public enum ArmorList {
 		this.tech = tech;
 		this.blockSet = blockSet;
 		this.cost = cost;
-		this.description=description;
+//		this.description=description;
 	}
 	
 	public static ArrayList<MyShipObject> getListArmors() {

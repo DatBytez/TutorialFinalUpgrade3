@@ -14,6 +14,9 @@ public class Constants {
 	public static final Color PHB_LIST_BKGR_1 = new Color(10, 120, 140);
 	public static final Color PHB_LIST_BKGR_2 = new Color(0, 2, 32);
 	public static final Color PHB_BKGR = Color.white;
+	public static final Color PHB_LIST_HOVERED = new Color(60, 170, 170, 50);
+	public static final Color PHB_LIST_CLICKED = new Color(60, 170, 170, 200);
+	public static final Color PHB_LIST_SELECTED = new Color(60, 170, 170, 180);
 	public static final Color STR_BKGR = new Color(0, 0, 255, 50);
 	public static final int MARGIN = 20;
 	public static boolean DEBUG = false;

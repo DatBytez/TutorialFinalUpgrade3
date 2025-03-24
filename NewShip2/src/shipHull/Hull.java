@@ -17,14 +17,14 @@ public class Hull extends MyShipObject {
 		super(hull.name, hull.cost);
 		this.name = hull.name;
 		this.hullType = hull.hullType;
-		this.hull = hull.hull;
+		this.hull = hull.hullPoints;
 		this.toughness = hull.toughness;
 		this.target = hull.target;
 		this.maneuverability = hull.maneuverability;
 		this.crew = hull.crew;
-		setDamageTrack(hull.hull);
-		setHullPoints(hull.hull);
-		setCompartmentCount(hull.hull);
+		setDamageTrack(hull.hullPoints);
+		setHullPoints(hull.hullPoints);
+		setCompartmentCount(hull.hullPoints);
 	}
 
 	private void setDamageTrack(int hull) {

@@ -30,12 +30,10 @@ import ui.ButtonSideBar;
 import ui.MyButton;
 import ui.MyButtonList;
 import ui.ShipInfoBar;
+import ui.ShipObjectDescriptionBar;
 
 //RANDOM TODO:
-//	Make list indicators stay when something is selected
-//	Change Super-Heavy to Super to reduce length of lists
 //	Make lists scrollable
-//	Add item description to bottom
 //	Add page description to blank build pages
 //
 //Select HUll (Grey out Armor and all other catagories) (Add note "Select a hull")
@@ -48,6 +46,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	private ButtonSideBar sideBar;
 	private BuildBar buildBar;
+	private ShipObjectDescriptionBar descriptionBox;
 	private ShipInfoBar shipInfoBar;
 	private Ship newShip = new Ship();
 	private boolean gamePaused;
@@ -65,6 +64,8 @@ public class BuildScene extends GameScene implements SceneMethods {
 		shipInfoBar = new ShipInfoBar(MARGIN, MARGIN, GameScreen.XSIZE - (GameScreen.XSIZE / 2 + 150) - 20,
 				GameScreen.YSIZE - 40, this);
 		buildBar = new BuildBar(GameScreen.XSIZE / 2, MARGIN, (GameScreen.XSIZE / 2) - MARGIN,
+				GameScreen.YSIZE - MARGIN * 2, this);
+		descriptionBox = new ShipObjectDescriptionBar(GameScreen.XSIZE / 2, (GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN,
 				GameScreen.YSIZE - MARGIN * 2, this);
 
 		initButtons();
@@ -99,6 +100,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		buildBar.draw(g);
 		shipInfoBar.draw(g);
 		sideBar.draw(g);
+		descriptionBox.draw(g);
 		if (activeList != null)
 			activeList.draw(g);
 		drawButtons(g);
@@ -216,6 +218,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 		if (buildBar.getBounds().contains(x, y))
 			buildBar.mouseClicked(x, y);
+			this.selectedItem = buildBar.getSelecteItem();
 	}
 
 	@Override
@@ -261,6 +264,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	public void setNewShip(Ship newShip) {
 		this.newShip = newShip;
+	}
+	
+	public MyShipObject getSelectedItem() {
+		return selectedItem;
 	}
 
 }

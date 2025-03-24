@@ -2,6 +2,7 @@ package shipfight;
 
 import java.util.ArrayList;
 
+import helpz.MyShipObject;
 import shipArmor.Armor;
 import shipHelperz.Rollz;
 import shipHull.Hull;
@@ -25,6 +26,7 @@ public class Ship {
 	private Armor armor;
 	private Crew crew;
 	private Toughness toughness;// probably can delete this
+	private ArrayList<ShipCompartment> compartments = new ArrayList<ShipCompartment>();
 
 	// Change During Combat
 	private int stun, wound, mortal, critical, modifier, maneuverability;

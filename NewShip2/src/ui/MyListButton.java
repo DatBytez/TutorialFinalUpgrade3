@@ -5,12 +5,13 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import helpz.MyShipObject;
+import static helpz.Constants.*;
 
 public class MyListButton {
 
 	public int x, y, width, height, index;
 	private Rectangle bounds;
-	private boolean mouseOver, mousePressed;
+	private boolean mouseOver, mousePressed, selected;
 	private ArrayList<Object> properties = new ArrayList<Object>();
 	private MyButtonList myButtonList;
 	private MyShipObject item;
@@ -42,10 +43,12 @@ public class MyListButton {
 	}
 
 	private void drawBody(Graphics g) {
-		if (mousePressed)
-			g.setColor(new Color(60, 170, 170, 200));
+		if (selected) {
+			g.setColor(PHB_LIST_SELECTED);
+		} else if (mousePressed)
+			g.setColor(PHB_LIST_CLICKED);
 		else if (mouseOver)
-			g.setColor(new Color(60, 170, 170, 50));
+			g.setColor(PHB_LIST_HOVERED);
 		else
 			g.setColor(translucent);
 		g.fillRect(x, y, width, height);
@@ -91,7 +94,10 @@ public class MyListButton {
 	public void setMouseOver(boolean mouseOver) {
 		this.mouseOver = mouseOver;
 	}
-
+	
+    public void setSelected(boolean selected) { // New method for setting selection
+        this.selected = selected;
+    }
 	public boolean isMouseOver() {
 		return mouseOver;
 	}

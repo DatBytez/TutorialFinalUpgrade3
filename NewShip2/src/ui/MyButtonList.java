@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import helpz.MyShipObject;
-import main.GameScreen;
 
 import static helpz.Constants.*;
 
@@ -34,6 +33,7 @@ public class MyButtonList extends Bar {
 	private int frontTAB = 20;
 	private String title;
 	private MyShipObject selectedItem;
+	private MyListButton selectedButton;
 
 	public MyButtonList(String title, ArrayList<MyShipObject> itemList, ArrayList<String> listTitles, int x, int y, int width) {
 		super(x, y, width, 0);
@@ -152,7 +152,13 @@ public class MyButtonList extends Bar {
 	public void mouseClicked(int x, int y) {
 	    for (MyListButton button : listButtons) {
 	        if (button.getBounds().contains(x, y)) {
+	            if (selectedButton != null) {
+	                selectedButton.setSelected(false);
+	            }
+	            selectedButton = button;
 	            selectedItem = button.getItem();
+	            button.setSelected(true);
+	            break;
 	        }
 	    }
 	}
