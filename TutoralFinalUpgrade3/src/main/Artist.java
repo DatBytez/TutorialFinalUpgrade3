@@ -1,16 +1,17 @@
 package main;
 
-import static helpz.Constants.TILE_SIZE;
-
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.awt.AlphaComposite;
+
+import javax.imageio.ImageIO;
+
+import helpz.Debug;
 
 public class Artist {
 	// The purpose of this method is to replicate the functionality of
@@ -94,10 +95,9 @@ public class Artist {
 	public static void loadSpriteAtlas(String path) {
 		try {
 			spriteAtlas = ImageIO.read(Artist.class.getResourceAsStream("/res/" + path));
-			System.err.println("SpriteAtlas loaded. [Artist]");
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Failed to load sprite atlas: /res/" + path);
+			Debug.msg("Failed to load sprite atlas: /res/" + path);
 		}
 	}
 

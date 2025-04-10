@@ -1,14 +1,4 @@
-/.classpath
-/.project
-/.settings/
-/bin/
-/pom.xml
-/target/
 /META-INF/
-/helpz/
-/inputs/
-/main/
-/managers/
-/objects/
 /scenes/
+/target/
 /ui/

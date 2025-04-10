@@ -1,6 +1,5 @@
 package scenes;
 
-import java.awt.Graphics;
 
 import main.Artist;
 

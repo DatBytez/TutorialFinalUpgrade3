@@ -49,7 +49,8 @@ public class MenuScene extends Scene {
 	@Override
 	public void mouseClicked(int x, int y) {
 		if (bPlaying.getBounds().contains(x, y))
-			SceneManager.changeScene(SceneType.PLAYING);
+			return;
+//			SceneManager.changeScene(SceneType.PLAYING);
 		else if (bEdit.getBounds().contains(x, y))
 			SceneManager.changeScene(SceneType.EDITING);
 //		else if (bSettings.getBounds().contains(x, y))

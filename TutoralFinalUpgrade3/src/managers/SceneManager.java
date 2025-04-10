@@ -4,16 +4,13 @@ import main.Artist;
 import scenes.Scene;
 import scenes.EditingScene;
 import scenes.MenuScene;
-import scenes.PlayingScene;
-// import scenes.EditingScene;
-// import scenes.SettingsScene;
 
 public class SceneManager {
 
 	// Enum representing all possible scenes in the game
 	public enum SceneType {
 		// Each enum constant holds a reference to the class of the Scene
-		MENU(MenuScene.class), PLAYING(PlayingScene.class), EDITING(EditingScene.class);
+		MENU(MenuScene.class), EDITING(EditingScene.class);
 		// SETTINGS(SettingsScene.class);
 
 		private final Class<? extends Scene> sceneClass; // The class of the Scene
