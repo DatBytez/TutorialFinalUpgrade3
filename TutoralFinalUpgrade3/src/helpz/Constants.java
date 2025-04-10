@@ -18,10 +18,10 @@ public class Constants {
 	public static final int MAX_WORLD_ROW = 100;
 	public final int maxMap = 10; // TODO: Figure out what this is.
 	public static final String DEFAULT_LEVEL = "default_level";
-	
+
 	// EDITOR SETTINGS
-	public static final int TOOLBAR_HEIGHT = TILE_SIZE*4;
-	
+	public static final int TOOLBAR_HEIGHT = TILE_SIZE * 4;
+
 	// GAME SETTINGS
 	public static final String PROGRAM_NAME = "Dat Bytez Game Maker";
 	// ---------------------------------------------------------------------

@@ -82,13 +82,13 @@ public class Artist {
 	public void drawOval(int x, int y, int width, int height) {
 		g2d.drawOval(x, y, width, height);
 	}
-	
+
 	public void setAlphaComposite(float alpha) {
-	    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 	}
 
 	public void resetComposite() {
-	    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 	}
 
 	public static void loadSpriteAtlas(String path) {

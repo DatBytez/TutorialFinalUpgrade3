@@ -8,7 +8,7 @@ import main.Artist;
 
 public class Tile2 {
 
-	private int x,y;
+	private int x, y;
 	private BufferedImage[] sprite;
 	private int id, tileType;
 
@@ -24,11 +24,11 @@ public class Tile2 {
 		this.id = id;
 		this.tileType = tileType;
 	}
-	
+
 	public void draw(Artist a) {
-		if(sprite.equals(null))
+		if (sprite.equals(null))
 			a.drawImage(getSprite(id), x * TILE_SIZE, y * TILE_SIZE);
-		
+
 	}
 
 	public int getTileType() {

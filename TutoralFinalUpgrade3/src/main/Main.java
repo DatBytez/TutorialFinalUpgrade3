@@ -53,25 +53,24 @@ public class Main extends JFrame implements Runnable {
 			setLocationRelativeTo(null);
 		}
 
-		
 		initArtist();
 
 		setVisible(true);
 		canvas.requestFocusInWindow();
-		
+
 		SceneManager.changeScene(SceneManager.SceneType.MENU);
 		initInputs();
 	}
 
-    private void initInputs() {
-        MyMouseListener mouseListener = new MyMouseListener();  // Create mouse listener instance
-        canvas.addMouseListener(mouseListener);  // Add mouse listener to canvas
-        canvas.addMouseMotionListener(mouseListener);  // Add mouse motion listener
-        
+	private void initInputs() {
+		MyMouseListener mouseListener = new MyMouseListener(); // Create mouse listener instance
+		canvas.addMouseListener(mouseListener); // Add mouse listener to canvas
+		canvas.addMouseMotionListener(mouseListener); // Add mouse motion listener
+
 		KeyboardListener keyboardListener = new KeyboardListener();
 		canvas.addKeyListener(keyboardListener); // Add key listener to canvas
-    }
-    
+	}
+
 	private void initArtist() {
 		Dimension screenSize = fullscreen ? Toolkit.getDefaultToolkit().getScreenSize()
 				: new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);

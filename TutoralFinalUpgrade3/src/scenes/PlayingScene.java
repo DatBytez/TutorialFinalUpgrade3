@@ -14,7 +14,7 @@ public class PlayingScene extends Scene {
 	private ArrayList<Tile> tiles;
 	private BufferedImage spriteAtlas;
 	private BufferedImage altTileImage; // New image to switch to
-	
+
 	public PlayingScene() {
 		Debug.msg("Loaded");
 		tiles = new ArrayList<>();
@@ -26,7 +26,7 @@ public class PlayingScene extends Scene {
 		altTileImage = extractTileFromAtlas(9, 0); // Load the 10th tile in top row
 		createTileGrid();
 	}
-	
+
 	private void createTileGrid() {
 		for (int y = 0; y < MAX_WORLD_ROW; y++) {
 			for (int x = 0; x < MAX_WORLD_COL; x++) {
@@ -58,7 +58,7 @@ public class PlayingScene extends Scene {
 		a.setColor(Color.BLACK);
 		a.drawCenteredString("Playing", 401, 301);
 	}
-	
+
 	private void paintTile(int x, int y) {
 		int tileX = x / TILE_SIZE;
 		int tileY = y / TILE_SIZE;
@@ -73,17 +73,36 @@ public class PlayingScene extends Scene {
 
 	@Override
 	public void mousePressed(int x, int y) {
-		paintTile(x,y);
+		paintTile(x, y);
 	}
 
 	// Unused but required overrides
-	@Override public void mouseClicked(int x, int y) {}
-	@Override public void mouseMoved(int x, int y) {}
-	@Override public void mouseReleased(int x, int y) {}
-	@Override public void mouseDragged(int x, int y) {
-		paintTile(x,y);
+	@Override
+	public void mouseClicked(int x, int y) {
 	}
-	@Override public void keyPressed(int keyCode) {}
-	@Override public void keyReleased(int keyCode) {}
-	@Override public void keyTyped(char keyChar) {}
+
+	@Override
+	public void mouseMoved(int x, int y) {
+	}
+
+	@Override
+	public void mouseReleased(int x, int y) {
+	}
+
+	@Override
+	public void mouseDragged(int x, int y) {
+		paintTile(x, y);
+	}
+
+	@Override
+	public void keyPressed(int keyCode) {
+	}
+
+	@Override
+	public void keyReleased(int keyCode) {
+	}
+
+	@Override
+	public void keyTyped(char keyChar) {
+	}
 }

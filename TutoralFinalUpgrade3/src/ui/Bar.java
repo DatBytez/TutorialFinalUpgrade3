@@ -15,7 +15,7 @@ public class Bar {
 		this.height = height;
 
 	}
-	
+
 	protected void drawButtonFeedback(Artist a, MyButton b) {
 		// MouseOver
 		if (b.isMouseOver())

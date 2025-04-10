@@ -1,11 +1,14 @@
+/.classpath
+/.project
+/.settings/
+/bin/
+/pom.xml
+/target/
 /META-INF/
-/enemies/
-/events/
 /helpz/
 /inputs/
 /main/
 /managers/
 /objects/
-/res/
 /scenes/
 /ui/

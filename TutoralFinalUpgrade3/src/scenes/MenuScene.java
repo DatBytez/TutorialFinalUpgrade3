@@ -7,14 +7,14 @@ import ui.MyButton;
 import managers.SceneManager;
 
 public class MenuScene extends Scene {
-	
+
 	private MyButton bPlaying, bEdit, bSettings, bQuit;
-	
+
 	public MenuScene() {
 		Debug.msg("Loaded");
 		initButtons();
 	}
-	
+
 	private void initButtons() {
 
 		int w = 150;
@@ -29,16 +29,16 @@ public class MenuScene extends Scene {
 		bQuit = new MyButton("Quit", x, y + yOffset * 3, w, h);
 
 	}
-	
-    @Override
-    public void update() {
-    }
 
-    @Override
-    public void render(Artist a) {
-    	drawButtons(a);
-    }
-    
+	@Override
+	public void update() {
+	}
+
+	@Override
+	public void render(Artist a) {
+		drawButtons(a);
+	}
+
 	private void drawButtons(Artist artist) {
 		bPlaying.draw(artist);
 		bEdit.draw(artist);
@@ -91,7 +91,7 @@ public class MenuScene extends Scene {
 	public void mouseReleased(int x, int y) {
 		resetButtons();
 	}
-	
+
 	private void resetButtons() {
 		bPlaying.resetBooleans();
 		bEdit.resetBooleans();
