@@ -14,6 +14,7 @@ import helpz.MyShipObject;
 import static helpz.Constants.*;
 import scenes.BuildScene;
 import shipWeapons.Weapon;
+import shipfight.ShipCompartment;
 
 public class ShipInfoBar extends Bar {
 
@@ -108,15 +109,59 @@ public class ShipInfoBar extends Bar {
 		if (building.getNewShip().getArmor() != null)
 			g.drawString(building.getNewShip().getArmor().getName(), infoX + infoTab, infoY + infoGap * i);
 		i++;
+		drawCompInfo(g, infoX, infoY, i);
 		
-		if(building.getNewShip().getWeapons() != null) {
-			int w = 0;
-		    for (Weapon weapon : building.getNewShip().getWeapons()) {
-		    	g.drawString(weapon.getName(), infoX + infoTab, infoY + infoGap * i);
-				i++;
-		    }
-		}
+//		if(building.getNewShip().getWeapons() != null) {
+//			int w = 0;
+//		    for (Weapon weapon : building.getNewShip().getWeapons()) {
+//		    	g.drawString(weapon.getName(), infoX + infoTab, infoY + infoGap * i);
+//				i++;
+//		    }
+//		}
 	}
+	
+	private void drawCompInfo(Graphics g, int infoX, int infoY, int i) {
+		Graphics2D g2d = (Graphics2D) g;
+
+		int infoTab = 50;
+		int infoGap = 20;
+		
+		g.setColor(PHB_TEXT);
+		g.setFont(alternityLiteFont);
+		g.setFont(g.getFont().deriveFont(Font.BOLD, 14F));
+//		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+//		g.drawString("Compartment:", infoX, infoY + infoGap * i);
+//		g.drawString(String.valueOf(building.getNewShip().getHull().getCompartmentCount()), infoX + infoTab, infoY + infoGap * i);
+		i++;
+//		g.drawString("Name:", infoX, infoY + infoGap * i);
+//		g.drawString(building.getNewShip().getName(), infoX + infoTab, infoY + infoGap * i);
+//		i++;
+//		g.drawString("Hull:", infoX, infoY + infoGap * i);
+//		g.drawString(building.getNewShip().getHull().getName(), infoX + infoTab, infoY + infoGap * i);
+//		i++;
+//		g.drawString("Crew:", infoX, infoY + infoGap * i);
+//		g.drawString(building.getNewShip().getCrew().toString(), infoX + infoTab, infoY + infoGap * i);
+//		i++;
+//		g.drawString("Armor:", infoX, infoY + infoGap * i);
+//		if (building.getNewShip().getArmor() != null)
+//			g.drawString(building.getNewShip().getArmor().getName(), infoX + infoTab, infoY + infoGap * i);
+//		i++;
+		
+		if(building.getNewShip().getHull() != null) {
+	        for (ShipCompartment compartment : building.getNewShip().getCompartments()) {
+		    	g.drawString("ZONE " +compartment.getName()+ " >>", infoX + infoTab, infoY + infoGap * i);
+		    	i++;
+	        }
+		}
+		}
+//			int w = 0;
+//		    for (ShipCompartment compartment : building.getNewShip().getWeapons()) {
+//		    	g.drawString(compartment.getName(), infoX + infoTab, infoY + infoGap * i);
+//				i++;
+//		    }
+//		}
+		
 
 	public void mouseClicked(int x, int y) {
 

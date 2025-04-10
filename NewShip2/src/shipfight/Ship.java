@@ -27,6 +27,7 @@ public class Ship {
 	private Crew crew;
 	private Toughness toughness;// probably can delete this
 	private ArrayList<ShipCompartment> compartments = new ArrayList<ShipCompartment>();
+//	private int compartmentCount = 0; // May not need. Could be removed
 
 	// Change During Combat
 	private int stun, wound, mortal, critical, modifier, maneuverability;
@@ -51,6 +52,7 @@ public class Ship {
 		this.critical = hull.getCritical();
 		this.toughness = hull.getToughness();
 		this.maneuverability = hull.getManeuverability();
+		buildCompartments();
 	}
 
 	public void statusUpdate() {
@@ -257,5 +259,48 @@ public class Ship {
 	public void addCost(int cost) {
 		this.cost += cost;
 	}
+	
+	private void buildCompartments() {
+		compartments.clear();
+		
+    		switch (this.getHull().getHullType()) {
+    		case SUPERHEAVY:
+    			compartments.add(new ShipCompartment(this,"FFP"));
+    			compartments.add(new ShipCompartment(this,"FFC")); 
+    			compartments.add(new ShipCompartment(this,"FFS")); 
+    			compartments.add(new ShipCompartment(this,"AAP"));
+    			compartments.add(new ShipCompartment(this,"AAC")); 
+    			compartments.add(new ShipCompartment(this,"AAS")); 
+    			compartments.add(new ShipCompartment(this,"PC"));
+    			compartments.add(new ShipCompartment(this,"SC"));
+    		case HEAVY:
+    			compartments.add(new ShipCompartment(this,"CA"));
+    			compartments.add(new ShipCompartment(this,"CF")); 
+    			compartments.add(new ShipCompartment(this,"AP"));
+    			compartments.add(new ShipCompartment(this,"AS")); 			
+    		case MEDIUM:
+    			compartments.add(new ShipCompartment(this,"FP"));
+    			compartments.add(new ShipCompartment(this,"FS"));
+    		case LIGHT:
+    			compartments.add(new ShipCompartment(this,"P"));
+    			compartments.add(new ShipCompartment(this,"S"));
+    		case SMALL:
+    			compartments.add(new ShipCompartment(this,"F"));
+    			compartments.add(new ShipCompartment(this,"A"));
+    			if (this.getHull().getHull() <= 20) {
+    				break;
+    			}
+    			else { // May not need this
+        			compartments.add(new ShipCompartment(this,"FC"));//
+        			compartments.add(new ShipCompartment(this,"AC"));//
+    			}
+    		}
+	}
+
+	public ArrayList<ShipCompartment> getCompartments() {
+		return compartments;
+	}
+	
+	
 
 }

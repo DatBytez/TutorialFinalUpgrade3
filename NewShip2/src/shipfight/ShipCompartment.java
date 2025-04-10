@@ -6,10 +6,22 @@ import helpz.MyShipObject;
 
 public class ShipCompartment {
 	private ArrayList<MyShipObject> ShipObjects = new ArrayList<MyShipObject>();
-	private int stun, wound, mortal, critial;
+	private String name;
 	
-	public ShipCompartment(Ship ship) {
-		
+	public ShipCompartment(Ship ship,String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<MyShipObject> getShipObjects() {
+		return ShipObjects;
 	}
 
 }
