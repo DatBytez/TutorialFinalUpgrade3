@@ -24,4 +24,6 @@ public abstract class Scene {
 	public abstract void keyReleased(int keyCode);
 
 	public abstract void keyTyped(char keyChar);
+
+	public abstract void rightMousePressed(int x, int y);
 }

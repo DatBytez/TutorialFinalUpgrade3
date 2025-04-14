@@ -157,6 +157,7 @@ public class Main extends JFrame implements Runnable {
 
 		g.dispose();
 		bs.show();
+		Toolkit.getDefaultToolkit().sync();
 	}
 
 	private void update() {

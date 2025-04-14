@@ -115,4 +115,10 @@ public class MenuScene extends Scene {
 	@Override
 	public void keyTyped(char keyChar) {
 	}
+
+	@Override
+	public void rightMousePressed(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
