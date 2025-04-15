@@ -1,5 +1,7 @@
 package ui;
 
+import static helpz.Constants.TILE_SIZE;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -8,7 +10,6 @@ import java.util.List;
 import main.Artist;
 import map.TileData;
 import scenes.EditingScene;
-import util.MapIO;
 
 public class TileSelectionBar extends Bar {
     // Fixed buttons (vertical stack)
@@ -17,7 +18,6 @@ public class TileSelectionBar extends Bar {
     private List<MyButton> tileButtons;
 
     private List<TileData> paletteTiles;
-    private int tileSize;
     // The currently selected tile index (updated by clicking a tile button)
     private int selectedTileIndex;
     
@@ -38,14 +38,12 @@ public class TileSelectionBar extends Bar {
      * @param width         total width of the bar
      * @param height        total height of the bar
      * @param paletteTiles  list of tile data (from the current atlas)
-     * @param tileSize      size (width/height) of each tile button
      * @param editingScene  reference to the EditingScene using the bar
      */
     public TileSelectionBar(int x, int y, int width, int height,
-                            List<TileData> paletteTiles, int tileSize, EditingScene editingScene) {
+                            List<TileData> paletteTiles, EditingScene editingScene) {
         super(x, y, width, height);
         this.paletteTiles = paletteTiles;
-        this.tileSize = tileSize;
         this.editingScene = editingScene;
         this.selectedTileIndex = 0;
         
@@ -74,9 +72,9 @@ public class TileSelectionBar extends Bar {
         for (int i = 0; i < numTileButtons; i++) {
             int row = i % 2; // Row 0 or 1.
             int col = i / 2;
-            int btnX = tileStartX + col * (tileSize + margin);
-            int btnY = tileStartY + row * (tileSize + margin);
-            MyButton tileButton = new MyButton("", btnX, btnY, tileSize, tileSize, i);
+            int btnX = tileStartX + col * (TILE_SIZE + margin);
+            int btnY = tileStartY + row * (TILE_SIZE + margin);
+            MyButton tileButton = new MyButton("", btnX, btnY, TILE_SIZE, TILE_SIZE, i);
             tileButtons.add(tileButton);
         }
     }
@@ -98,12 +96,13 @@ public class TileSelectionBar extends Bar {
         }
         // Draw the tile buttons.
         for (MyButton btn : tileButtons) {
-            btn.draw(a);
+//            btn.draw(a);
             int id = btn.getId();
             if (id >= 0 && id < tileImages.size()) {
                 BufferedImage tileImg = tileImages.get(id);
                 a.drawImage(tileImg, btn.x, btn.y, btn.width, btn.height);
             }
+            btn.draw(a);
         }
     }
     
@@ -111,7 +110,7 @@ public class TileSelectionBar extends Bar {
      * Handles mousePressed events within the bar. Fixed buttons call separate
      * methods on the associated EditingScene.
      */
-    public void handleMousePressed(int mouseX, int mouseY) {
+    public void mousePressed(int mouseX, int mouseY) {
         // Check fixed buttons.
         for (int i = 0; i < fixedButtons.size(); i++) {
             MyButton btn = fixedButtons.get(i);
@@ -140,7 +139,8 @@ public class TileSelectionBar extends Bar {
     /**
      * Handles mouseReleased events within the bar. Resets button states.
      */
-    public void handleMouseReleased(int mouseX, int mouseY) {
+    public void mouseReleased(int mouseX, int mouseY) {
+    	//TODO: Remove for and just have btn.resetBooleans(); once everything is working again
         for (MyButton btn : fixedButtons) {
             btn.resetBooleans();
         }

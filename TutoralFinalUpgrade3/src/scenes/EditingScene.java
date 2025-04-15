@@ -57,7 +57,7 @@ public class EditingScene extends Scene {
         // Create the tile selection bar at the bottom.
         int barHeight = (TILE_SIZE + 20) * 2;
         int barY = SCREEN_HEIGHT - barHeight;
-        tileSelectionBar = new TileSelectionBar(0, barY, SCREEN_WIDTH, barHeight, paletteTiles, TILE_SIZE, this);
+        tileSelectionBar = new TileSelectionBar(0, barY, SCREEN_WIDTH, barHeight, paletteTiles, this);
     }
     
     // Loads atlas images.
@@ -203,7 +203,7 @@ public class EditingScene extends Scene {
     @Override
     public void mousePressed(int x, int y) {
         if (inSelectionBar(x, y)) {
-            tileSelectionBar.handleMousePressed(x, y);
+            tileSelectionBar.mousePressed(x, y);
         } else {
             paintTile(x, y);
         }
@@ -219,7 +219,7 @@ public class EditingScene extends Scene {
     @Override
     public void mouseReleased(int x, int y) {
         if (inSelectionBar(x, y)) {
-            tileSelectionBar.handleMouseReleased(x, y);
+            tileSelectionBar.mouseReleased(x, y);
         }
     }
     
@@ -309,7 +309,7 @@ public class EditingScene extends Scene {
     public void mouseClicked(int x, int y) {
         // Additional behavior if needed.
     }
-    
+     
     @Override
     public void mouseMoved(int x, int y) {
         // Additional behavior if needed.

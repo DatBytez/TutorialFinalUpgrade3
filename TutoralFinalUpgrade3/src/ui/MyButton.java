@@ -1,8 +1,8 @@
 package ui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import main.Artist;
 
@@ -12,6 +12,8 @@ public class MyButton {
 	private String text;
 	private Rectangle bounds;
 	private boolean mouseOver, mousePressed;
+	private BufferedImage img;
+	private boolean transparent = false;
 
 	// For normal Buttons
 	public MyButton(String text, int x, int y, int width, int height) {
@@ -21,8 +23,7 @@ public class MyButton {
 		this.width = width;
 		this.height = height;
 		this.id = -1;
-
-		initBounds();
+		this.bounds = new Rectangle(x, y, width, height);
 	}
 
 	// For tile buttons
@@ -33,11 +34,7 @@ public class MyButton {
 		this.width = width;
 		this.height = height;
 		this.id = id;
-
-		initBounds();
-	}
-
-	private void initBounds() {
+		this.transparent = true;
 		this.bounds = new Rectangle(x, y, width, height);
 	}
 
@@ -64,12 +61,13 @@ public class MyButton {
 	}
 
 	private void drawBody(Artist artist) {
+		if (!transparent) {
 		if (mouseOver)
 			artist.setColor(Color.gray);
 		else
 			artist.setColor(Color.WHITE);
 		artist.fillRect(x, y, width, height);
-
+		}
 	}
 
 	private void drawText(Artist artist) {
