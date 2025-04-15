@@ -12,20 +12,20 @@ import javax.imageio.ImageIO;
 import helpz.Debug;
 
 public class Artist {
-    // Offscreen image and its graphics context.
+    // Offscreen image where all scene drawing is done.
     private BufferedImage offscreenImage;
     private Graphics2D g2d;
     
     // Static sprite atlas.
     private static BufferedImage spriteAtlas;
     
-    // Constructor that creates a new offscreen image based on the given screen size.
+    // Constructor: creates offscreen image based on provided dimensions.
     public Artist(Dimension screenSize) {
         offscreenImage = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         g2d = offscreenImage.createGraphics();
     }
     
-    // Overloaded constructor that uses an existing BufferedImage.
+    // Overloaded constructor: uses an existing BufferedImage.
     public Artist(BufferedImage offscreenImage) {
         this.offscreenImage = offscreenImage;
         g2d = offscreenImage.createGraphics();
@@ -53,8 +53,14 @@ public class Artist {
         g2d.drawString(text, x - textWidth / 2, y + textHeight / 2);
     }
     
+    // Renders the offscreen image to the target Graphics context without scaling.
     public void render(Graphics g) {
         g.drawImage(offscreenImage, 0, 0, null);
+    }
+    
+    // New method: renders the offscreen image scaled to the specified width and height.
+    public void renderScaled(Graphics g, int width, int height) {
+        g.drawImage(offscreenImage, 0, 0, width, height, null);
     }
     
     public void drawBackground() {
@@ -70,18 +76,10 @@ public class Artist {
         g2d.drawString(text, x, y);
     }
     
-    // Draws the entire image at location (x,y).
-    public void drawImage(BufferedImage bufferedImage, int x, int y) {
-        g2d.drawImage(bufferedImage, x, y, null);
-    }
-    
-    // Draws the entire image scaled to the given width and height.
     public void drawImage(BufferedImage bufferedImage, int x, int y, int width, int height) {
         g2d.drawImage(bufferedImage, x, y, width, height, null);
     }
     
-    // Overloaded drawImage: Draws a portion (source rectangle) of the image into the destination rectangle.
-    // dx1,dy1,dx2,dy2 define the destination rectangle; sx1,sy1,sx2,sy2 the source rectangle.
     public void drawImage(BufferedImage image, int dx1, int dy1, int dx2, int dy2,
                           int sx1, int sy1, int sx2, int sy2) {
         g2d.drawImage(image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
@@ -103,6 +101,7 @@ public class Artist {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
     
+    // Sprite atlas management.
     public static void loadSpriteAtlas(String path) {
         try {
             spriteAtlas = ImageIO.read(Artist.class.getResourceAsStream("/res/" + path));

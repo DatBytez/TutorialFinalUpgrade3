@@ -35,7 +35,7 @@ public class EditingScene extends Scene {
 
 	// Palette of available tiles loaded from the atlas.
 	private List<TileData> paletteTiles = new ArrayList<>();
-	// Index in the atlas reserved for transparency (or you can choose to use -1).
+	// Index in the atlas reserved for transparency.
 	private int transparentTileIndex;
 
 	// Atlas images indexed by atlas ID.
@@ -59,8 +59,6 @@ public class EditingScene extends Scene {
 		// Create the tile selection bar at the bottom of the screen.
 		int barHeight = (TILE_SIZE + 20) * 2;
 		int barY = SCREEN_HEIGHT - barHeight;
-		// (Assumes that your TileSelectionBar constructor is updated to the simple
-		// version.)
 		tileSelectionBar = new TileSelectionBar(0, barY, SCREEN_WIDTH, barHeight, paletteTiles, this);
 	}
 
@@ -151,24 +149,7 @@ public class EditingScene extends Scene {
 	// columns.
 	// Only tiles with a nonnegative tileIndex are drawn.
 	private void renderTileMap(Artist a) {
-		// Use full opacity for the active layer and lower for others.
-//		for (int layer = 0; layer < LAYER_COUNT; layer++) {
-//			float alpha = (layer == activeLayer) ? 1.0f : 0.5f;
-//			a.setAlphaComposite(alpha);
-//			for (int row = 0; row < MAX_WORLD_ROW; row++) {
-//				for (int col = 0; col < MAX_WORLD_COL; col++) {
-//					TileData tile = tileMapLayers[layer][row][col];
-//					// Only draw if tile index is >= 0 (i.e. not erased).
-//					if (tile.getTileIndex() >= 0) {
-//						BufferedImage img = getTileImage(tile);
-//						// Subtract camera offset when drawing.
-//						int drawX = col * TILE_SIZE - camX;
-//						int drawY = row * TILE_SIZE - camY;
-//						a.drawImage(img, drawX, drawY, TILE_SIZE, TILE_SIZE);
-//					}
-//				}
-//			}
-//		}
+
 			for (int row = 0; row < MAX_WORLD_ROW; row++) {
 				for (int col = 0; col < MAX_WORLD_COL; col++) {
 					for (int layer = 0; layer < LAYER_COUNT; layer++) {
@@ -268,16 +249,16 @@ public class EditingScene extends Scene {
 		}
 		// Camera scrolling: adjust camX and camY.
 		if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
-			camY = Math.min(camY + scrollSpeed, MAX_WORLD_ROW * TILE_SIZE - SCREEN_HEIGHT);
+			camY = Math.min(camY - scrollSpeed, MAX_WORLD_ROW * TILE_SIZE - SCREEN_HEIGHT);
 		}
 		if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
-			camY = Math.max(camY - scrollSpeed, 0);
+			camY = Math.max(camY + scrollSpeed, 0);
 		}
 		if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
-			camX = Math.min(camX + scrollSpeed, MAX_WORLD_COL * TILE_SIZE - SCREEN_WIDTH);
+			camX = Math.min(camX - scrollSpeed, MAX_WORLD_COL * TILE_SIZE - SCREEN_WIDTH);
 		}
 		if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
-			camX = Math.max(camX - scrollSpeed, 0);
+			camX = Math.max(camX + scrollSpeed, 0);
 		}
 		if (keyCode == KeyEvent.VK_L) {
 			// Load map functionality.

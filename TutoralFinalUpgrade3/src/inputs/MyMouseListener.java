@@ -4,44 +4,51 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import managers.SceneManager;
+import main.Main; // Import Main to use getVirtualX/Y methods
 
 public class MyMouseListener implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        SceneManager.getCurrentScene().getScene().mouseDragged(e.getX(), e.getY());
+        int vx = Main.getVirtualX(e.getX());
+        int vy = Main.getVirtualY(e.getY());
+        SceneManager.getCurrentScene().getScene().mouseDragged(vx, vy);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        SceneManager.getCurrentScene().getScene().mouseMoved(e.getX(), e.getY());
+        int vx = Main.getVirtualX(e.getX());
+        int vy = Main.getVirtualY(e.getY());
+        SceneManager.getCurrentScene().getScene().mouseMoved(vx, vy);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Left-click processing remains unchanged.
+        int vx = Main.getVirtualX(e.getX());
+        int vy = Main.getVirtualY(e.getY());
         if (e.getButton() == MouseEvent.BUTTON1) {
-            SceneManager.getCurrentScene().getScene().mouseClicked(e.getX(), e.getY());
-        }
-        // Optionally, handle right-click here as well.
-        else if (e.getButton() == MouseEvent.BUTTON3) {
-            // This line is optional if you want right-click actions also on the click event.
-            SceneManager.getCurrentScene().getScene().rightMousePressed(e.getX(), e.getY());
+            SceneManager.getCurrentScene().getScene().mouseClicked(vx, vy);
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+            SceneManager.getCurrentScene().getScene().rightMousePressed(vx, vy);
         }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        int vx = Main.getVirtualX(e.getX());
+        int vy = Main.getVirtualY(e.getY());
         if (e.getButton() == MouseEvent.BUTTON1) {
-            SceneManager.getCurrentScene().getScene().mousePressed(e.getX(), e.getY());
+            SceneManager.getCurrentScene().getScene().mousePressed(vx, vy);
         } else if (e.getButton() == MouseEvent.BUTTON3) {
-            SceneManager.getCurrentScene().getScene().rightMousePressed(e.getX(), e.getY());
+            SceneManager.getCurrentScene().getScene().rightMousePressed(vx, vy);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        SceneManager.getCurrentScene().getScene().mouseReleased(e.getX(), e.getY());
+        int vx = Main.getVirtualX(e.getX());
+        int vy = Main.getVirtualY(e.getY());
+        SceneManager.getCurrentScene().getScene().mouseReleased(vx, vy);
     }
 
     @Override
