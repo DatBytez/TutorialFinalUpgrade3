@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import helpz.MixedList;
 import helpz.MyShipObject;
+import static helpz.Format.*;
 
 public class Hull extends MyShipObject {
 
@@ -108,7 +109,7 @@ public class Hull extends MyShipObject {
 		properties.add(String.valueOf(mortal));
 		properties.add(String.valueOf(critical));
 		properties.add(String.valueOf(crew));
-		properties.add(getCostString());
+		properties.add(getMoneyString(cost));
 
 		return properties;
 	}

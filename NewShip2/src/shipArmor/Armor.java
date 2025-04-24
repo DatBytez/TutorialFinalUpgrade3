@@ -7,6 +7,7 @@ import shipHelperz.Rollz;
 import shipWeapons.DamageType;
 import shipfight.ProgressLevel;
 import shipfight.Tech;
+import static helpz.Format.*;
 
 public class Armor extends MyShipObject {
 	String name, description;
@@ -58,7 +59,7 @@ public class Armor extends MyShipObject {
 		properties.add((tech));
 		properties.add(blockSet);
 		properties.add(getHullCost());
-		properties.add(getCostString());
+		properties.add(getMoneyString(cost));
 
 		return properties;
 	}

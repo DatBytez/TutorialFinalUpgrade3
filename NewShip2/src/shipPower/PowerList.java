@@ -1,5 +1,9 @@
 package shipPower;
 
+import java.util.ArrayList;
+
+import helpz.MyShipObject;
+import shipArmor.Armor;
 import shipHelperz.Moneyz;
 import shipfight.ProgressLevel;
 import shipfight.Tech;
@@ -23,7 +27,7 @@ public enum PowerList {
 	ProgressLevel level;
 	Tech tech;
 	double power;
-	int baseCost, costPerHull, minSize, fuelCost, fuelEfficiency;
+	int baseCost, costPerHull, minSize, fuelCost, fuelEfficiency, cost;
 	boolean fuelReq;
 
 	PowerList(String name, ProgressLevel progressLevel, Tech tech, double power, int baseCost, int costPerHull,
@@ -38,5 +42,44 @@ public enum PowerList {
 		this.fuelReq = fuelReq;
 		this.fuelCost = fuelCost;
 		this.fuelEfficiency = fuelEfficiency;
+		calculateCost();
+	}
+	
+	private void calculateCost() {
+		cost = baseCost * costPerHull * minSize;
+	}
+	
+	public static ArrayList<MyShipObject> getListPowerSystems() {
+		ArrayList<MyShipObject> fullList = new ArrayList<>();
+		fullList.add(new PowerSystem(SolarCell));
+		fullList.add(new PowerSystem(FissionGenerator));
+		fullList.add(new PowerSystem(FusionGenerator));
+		fullList.add(new PowerSystem(GravFusionCell));
+		fullList.add(new PowerSystem(FuelTank));
+		fullList.add(new PowerSystem(TachyonicCollider));
+		fullList.add(new PowerSystem(AntimatterReactor));
+		fullList.add(new PowerSystem(MassReactor));
+		fullList.add(new PowerSystem(DynamicMassReactor));
+		fullList.add(new PowerSystem(MatterConverter));
+		fullList.add(new PowerSystem(QuantumCell));
+		fullList.add(new PowerSystem(SingularityGenerator));
+		
+		return fullList;
+	}
+	
+	public static ArrayList<String> getListTitles(){
+		
+		ArrayList<String> listTitles = new ArrayList<String>();
+		listTitles.add("Name");
+		listTitles.add("PL");
+		listTitles.add("Tech");
+		listTitles.add("Base Cost");
+		listTitles.add("Cost/Hull Pt.");
+		listTitles.add("Min Size");
+		listTitles.add("Fuel?");
+		listTitles.add("Fuel Cost");
+		listTitles.add("Fuel Eff");
+		
+		return listTitles;
 	}
 }

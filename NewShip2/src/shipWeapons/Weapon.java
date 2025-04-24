@@ -9,6 +9,7 @@ import shipfight.ProgressLevel;
 import shipfight.Result;
 import shipfight.Severity;
 import shipfight.Tech;
+import static helpz.Format.*;
 
 public class Weapon extends MyShipObject{
 	private String name;
@@ -81,7 +82,7 @@ public class Weapon extends MyShipObject{
 		properties.add(tech);
 		properties.add(String.valueOf(hull));
 		properties.add(String.valueOf(power));
-		properties.add(getCostString());
+		properties.add(getMoneyString(cost));
 		properties.add(getModifierString(accuracy));
 		properties.add(range);
 		properties.add(damageType +"/" + firepower);

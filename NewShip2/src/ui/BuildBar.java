@@ -1,15 +1,17 @@
 package ui;
 
 import static helpz.Constants.DEBUG;
+import static helpz.Constants.MARGIN;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import helpz.MyShipObject;
 import scenes.BuildScene;
 import shipArmor.ArmorList;
 import shipHull.HullList;
+import shipPower.PowerList;
 import shipWeapons.WeaponList;
-import static helpz.Constants.*;
 
 public class BuildBar extends Bar {
 
@@ -81,8 +83,11 @@ public class BuildBar extends Bar {
         case "BEAMS":
         	activeList = new MyButtonList("BEAMS", WeaponList.getListBeams(), WeaponList.getListTitles(), x, y, width - MARGIN);
 			break;
-        case "Friday":
+        case "PROJECTILES":
         	activeList = new MyButtonList("PROJECTILES", WeaponList.getListProjectiles(), WeaponList.getListTitles(), x, y, width - MARGIN);
+			break;
+        case "POWER":
+        	activeList = new MyButtonList("POWER", PowerList.getListPowerSystems(), PowerList.getListTitles(), x, y, width - MARGIN);
 			break;
         default:
             

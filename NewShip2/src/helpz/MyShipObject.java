@@ -2,11 +2,16 @@ package helpz;
 
 import java.util.ArrayList;
 
+import shipfight.ProgressLevel;
+import shipfight.Tech;
+
 public class MyShipObject {
 	private ArrayList<Object> properties = new ArrayList<Object>();
 	private String name;
+	ProgressLevel level;
+	Tech tech;
 	private boolean military = false;
-	private int cost;
+	protected int cost;
 	private String description = "";
 
 	public MyShipObject(String name, int cost) {
@@ -34,23 +39,7 @@ public class MyShipObject {
 	public String getDescription() {
 		return description;
 	}
-
-	public String getCostString() {
-		if (cost < 1000)
-			return ("$" + cost + " K");
-		else if (cost < 1000000)
-			return ("$" + (cost / 1000) + " M");
-		else
-			return ("$" + (cost / 1000000) + " B");
-	}
-
-	public String getModifierString(int modifier) {
-		if (modifier > 0)
-			return ("+" + modifier);
-		else
-			return ("" + modifier);
-	}
-
+	
 	private void setDescription() {
 
 		switch (this.name) {
