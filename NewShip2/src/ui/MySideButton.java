@@ -10,15 +10,17 @@ import java.awt.Font;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
-public class MySideButton extends MyButton{
+public class MySideButton extends MyButton {
 
 	public int x, y, width, height, rotation;
 	private String text;
 	private Rectangle bounds;
 	private boolean mouseOver, mousePressed;
+	private boolean isTopLevelCategory = false;
+	private boolean isActiveCategory = false; // NEW FLAG
 
 	public MySideButton(String text, int x, int y, int width, int height, int rotation) {
-		super(text,x,y,width,height);
+		super(text, x, y, width, height);
 		this.text = text;
 		this.x = x;
 		this.y = y;
@@ -28,65 +30,71 @@ public class MySideButton extends MyButton{
 		this.id = -1;
 
 		initBounds();
+		checkTopLevel();
 	}
 
 	private void initBounds() {
 		this.bounds = new Rectangle(x, y, width, height);
 	}
 
+	private void checkTopLevel() {
+		if (text.endsWith(">>")) {
+			this.isTopLevelCategory = true;
+			this.text = text.substring(0, text.length() - 2).trim();
+		} else {
+			this.isTopLevelCategory = false;
+		}
+	}
+
 	public void draw(Graphics g) {
-		if(DEBUG) {
+		if (DEBUG) {
 			g.setColor(Color.red);
 			g.drawRect(x, y, width, height);
 		}
 		drawText(g);
 	}
-	
+
 	private void drawText(Graphics g) {
-	    Graphics2D g2d = (Graphics2D) g;
-	    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-	    AffineTransform originalTransform = g2d.getTransform();
+		AffineTransform originalTransform = g2d.getTransform();
 
-	    int centerX = x + (width / 2);
-	    int centerY = y + (height / 2);
+		int centerX = x + (width / 2);
+		int centerY = y + (height / 2);
 
-	    g2d.translate(centerX, centerY);
-	    g2d.scale(1.0, 0.7);
-	    g2d.rotate(Math.toRadians(rotation)); // 🔁 restore rotation
+		g2d.translate(centerX, centerY);
+		g2d.scale(1.0, 0.7);
+		g2d.rotate(Math.toRadians(rotation));
 
-	    int fontSize = mousePressed ? 26 : 24;
+		int fontSize = mousePressed ? 26 : 24;
+		g2d.setFont(alternityLiteFont.deriveFont(Font.BOLD, fontSize));
+		int textWidth = g2d.getFontMetrics().stringWidth(text);
+		int textHeight = g2d.getFontMetrics().getAscent();
 
-	    // Draw main text in custom font
-	    g2d.setFont(alternityLiteFont.deriveFont(Font.BOLD, fontSize));
-	    int textWidth = g2d.getFontMetrics().stringWidth(text);
-	    int textHeight = g2d.getFontMetrics().getAscent();
+		g2d.setColor(PHB_SIDE_TEXT);
+		g2d.drawString(text, -textWidth / 2, textHeight / 2);
 
-	    g2d.setColor(PHB_SIDE_TEXT);
-	    g2d.drawString(text, -textWidth / 2, textHeight / 2);
+		Font arrowFont = new Font("Dialog", Font.PLAIN, fontSize);
+		g2d.setFont(arrowFont);
+		int arrowY = textHeight / 2;
 
-	    // Draw arrows using fallback font (only on hover)
-	    if (mouseOver) {
-	        Font arrowFont = new Font("Dialog", Font.PLAIN, fontSize - 4);
-	        g2d.setFont(arrowFont);
+		if (isTopLevelCategory) {
+			String doubleRight = "▶▶";
+			int rightX = textWidth / 2 + 8;
+			g2d.drawString(doubleRight, rightX, arrowY);
+		} else if (mouseOver) {
+			String leftArrow = "▶";
+			String rightArrow = "◀";
+			int arrowSpacing = 4;
+			int leftX = -textWidth / 2 - arrowSpacing - g2d.getFontMetrics().stringWidth(rightArrow);
+			int rightX = textWidth / 2 + arrowSpacing;
+			g2d.drawString(rightArrow, leftX, arrowY);
+			g2d.drawString(leftArrow, rightX, arrowY);
+		}
 
-	        String leftArrow = "▶";
-	        String rightArrow = "◀";
-	        int arrowSpacing = 10;
-
-	        int leftX = -textWidth / 2 - arrowSpacing - g2d.getFontMetrics().stringWidth(leftArrow);
-	        int rightX = textWidth / 2 + arrowSpacing;
-
-	        int arrowY = textHeight / 2;
-
-	        g2d.drawString(leftArrow, leftX, arrowY);
-	        g2d.drawString(rightArrow, rightX, arrowY);
-	    }
-
-	    g2d.setTransform(originalTransform);
+		g2d.setTransform(originalTransform);
 	}
-
-
 
 	public void resetBooleans() {
 		this.mouseOver = false;
@@ -95,6 +103,7 @@ public class MySideButton extends MyButton{
 
 	public void setText(String text) {
 		this.text = text;
+		checkTopLevel();
 	}
 
 	public void setMousePressed(boolean mousePressed) {
@@ -121,8 +130,22 @@ public class MySideButton extends MyButton{
 		return text;
 	}
 
-	public void update() {
-
+	public void setTopLevelCategory(boolean topLevel) {
+		this.isTopLevelCategory = topLevel;
 	}
 
+	public boolean isTopLevelCategory() {
+		return isTopLevelCategory;
+	}
+
+	public void setActiveCategory(boolean active) {
+		this.isActiveCategory = active;
+	}
+
+	public boolean isActiveCategory() {
+		return isActiveCategory;
+	}
+
+	public void update() {
+	}
 }

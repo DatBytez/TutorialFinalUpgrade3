@@ -3,8 +3,6 @@ package scenes;
 import static helpz.Constants.MARGIN;
 import static helpz.Constants.PHB_BKGR;
 import static helpz.Constants.TEST_SHIP;
-import static main.GameStates.MENU_STATE;
-import static main.GameStates.SetGameState;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -30,7 +28,6 @@ import ui.ButtonSideBar;
 import ui.MyButton;
 import ui.MyButtonList;
 import ui.ShipInfoBar;
-import ui.ShipObjectDescriptionBar;
 
 //RANDOM TODO:
 //	Make lists scrollable
@@ -47,35 +44,22 @@ public class BuildScene extends GameScene implements SceneMethods {
 	private ButtonSideBar sideBar;
 	private ButtonSideBar leftSideBar;
 	private BuildBar buildBar;
-	private ShipObjectDescriptionBar descriptionBox;
 	private ShipInfoBar shipInfoBar;
 	private Ship newShip = new Ship();
 	private boolean gamePaused;
 
 	private MyButtonList activeList;
 	private ShipSystem selectedItem;
-	private MyButton bBuy, bMenu;
+	private MyButton bBuy;
 
 	public BuildScene(Game game) {
 		super(game);
 
 		newShip = new Ship();
 
-		// Relative to shipInfoBar
-//		shipInfoBar = new ShipInfoBar(MARGIN, MARGIN, (GameScreen.XSIZE/3) - 20,
-//				GameScreen.YSIZE - 40, this);
-//		buildBar = new BuildBar(shipInfoBar.getBounds().x+shipInfoBar.getBounds().width+MARGIN, MARGIN, (GameScreen.XSIZE / 2) - MARGIN,
-//				GameScreen.YSIZE - MARGIN * 2, this);
-//		descriptionBox = new ShipObjectDescriptionBar((GameScreen.XSIZE / 2), (GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN,
-//				GameScreen.YSIZE - MARGIN * 2, this);
-
-		// Relative to full screen size
 		shipInfoBar = new ShipInfoBar(MARGIN * 4, MARGIN, (GameScreen.XSIZE / 3) - 20, GameScreen.YSIZE - 40, this);
 		buildBar = new BuildBar((GameScreen.XSIZE / 2) + MARGIN, MARGIN, (GameScreen.XSIZE / 2) - MARGIN * 4,
 				GameScreen.YSIZE - MARGIN * 2, this);
-		descriptionBox = new ShipObjectDescriptionBar((GameScreen.XSIZE / 2) + MARGIN * 2,
-				(GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN, GameScreen.YSIZE - MARGIN * 2,
-				this);
 
 		initButtons();
 		initSideBar();
@@ -87,8 +71,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		int w = 150;
 		int h = w / 3;
 
-		bBuy = new MyButton("BUY", GameScreen.XSIZE / 2 - w / 2, GameScreen.YSIZE - MARGIN - h, w, h);
-		bMenu = new MyButton("MENU", MARGIN, GameScreen.YSIZE - MARGIN - h, w, h);
+		bBuy = new MyButton("BUY", ((GameScreen.XSIZE / 4)*3) - w / 2, GameScreen.YSIZE - MARGIN - h, w, h);
 	}
 
 	public void initSideBar() {
@@ -120,7 +103,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 		shipInfoBar.draw(g);
 		sideBar.draw(g);
 		leftSideBar.draw(g);
-		descriptionBox.draw(g);
 		if (activeList != null)
 			activeList.draw(g);
 		drawButtons(g);
@@ -132,7 +114,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	private void drawButtons(Graphics g) {
 		bBuy.draw(g);
-		bMenu.draw(g);
 	}
 
 	private void drawBackground(Graphics g) {
@@ -274,8 +255,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public void mouseClicked(int x, int y) {
 		if (bBuy.getBounds().contains(x, y)) {
 			buyClicked();
-		} else if (bMenu.getBounds().contains(x, y))
-			SetGameState(MENU_STATE);
+		}
 
 		if (shipInfoBar.getBounds().contains(x, y)) {
 			shipInfoBar.mouseClicked(x, y);
@@ -284,12 +264,12 @@ public class BuildScene extends GameScene implements SceneMethods {
 		if (sideBar.getBounds().contains(x, y)) {
 			sideBar.mouseClicked(x, y);
 			if (sideBar.getSelectedItem().getText() == "HULL") {
-				sideBar.changeList(new ArrayList<>(Arrays.asList("HULL >>", "CIVILIAN", "MILITARY", "ARMOR", "BACK")));
+				sideBar.changeList(new ArrayList<>(Arrays.asList("HULL>>", "CIVILIAN", "MILITARY", "ARMOR", "BACK")));
 			} else if (sideBar.getSelectedItem().getText() == "ENGINES") {
 				sideBar.changeList(new ArrayList<>(Arrays.asList("ENGINES >>", "SUBSPACE", "FTL", "BACK")));
 			} else if (sideBar.getSelectedItem().getText() == "WEAPONS") {
 				sideBar.changeList(new ArrayList<>(
-						Arrays.asList("WEAPONS >>", "BEAMS", "PROJECTILES", "ORDINANCE", "SPECIAL", "BACK")));
+						Arrays.asList("WEAPONS>>", "BEAMS", "PROJECTILES", "ORDINANCE", "SPECIAL", "BACK")));
 			} else
 				buildBar.setActiveList(sideBar.getSelectedItem().getText());
 		}
@@ -313,7 +293,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 	@Override
 	public void mouseMoved(int x, int y) {
 		bBuy.setMouseOver(false);
-		bMenu.setMouseOver(false);
 		sideBar.mouseMoved(x, y);
 		leftSideBar.mouseMoved(x, y);
 		buildBar.mouseMoved(x, y);
@@ -323,8 +302,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public void mousePressed(int x, int y) {
 		if (bBuy.getBounds().contains(x, y))
 			bBuy.setMousePressed(true);
-		else if (bMenu.getBounds().contains(x, y))
-			bMenu.setMousePressed(true);
 		if (sideBar.getBounds().contains(x, y))
 			sideBar.mousePressed(x, y);
 		if (leftSideBar.getBounds().contains(x, y))
@@ -344,7 +321,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	private void resetButtons() {
 		bBuy.resetBooleans();
-		bMenu.resetBooleans();
 	}
 
 	@Override

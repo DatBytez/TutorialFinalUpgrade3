@@ -8,6 +8,8 @@ import java.util.Stack;
 
 import main.GameScreen;
 import static helpz.Constants.*;
+import static main.GameStates.MENU_STATE;
+import static main.GameStates.SetGameState;
 
 public class ButtonSideBar extends Bar {
 
@@ -65,6 +67,9 @@ public class ButtonSideBar extends Bar {
 	            if (button.getText().equals("BACK") && !buttonHistory.isEmpty()) {
 	                buttonTitles = buttonHistory.pop();
 	                shouldUpdateButtons = true; // Mark that an update is needed
+	            }
+	            if (button.getText().equals("MENU")) {
+	            	SetGameState(MENU_STATE);
 	            }
 	        }
 	    }

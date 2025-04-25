@@ -203,6 +203,10 @@ public class MyButtonList extends Bar {
 	public int getWidth() {
 		return width;
 	}
+	
+	public int getHeight() {
+		return height;
+	}
 
 	public ArrayList<Integer> getSpacingList() {
 		return spacingList;
