@@ -3,10 +3,10 @@ package shipHull;
 import java.util.ArrayList;
 
 import helpz.MixedList;
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import static helpz.Format.*;
 
-public class Hull extends MyShipObject {
+public class Hull extends ShipSystem {
 
 	private String name;
 	private HullType hullType;

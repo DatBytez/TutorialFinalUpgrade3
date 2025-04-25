@@ -1,8 +1,8 @@
-package shipfight;
+package ship;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import shipArmor.Armor;
 import shipHelperz.Rollz;
 import shipHull.Hull;
@@ -22,12 +22,12 @@ public class Ship {
 	private int cost = 0;
 	private String name;
 	private Hull hull;
-	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+//	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	private Armor armor;
 	private Crew crew;
 	private Toughness toughness;// probably can delete this
 	private ArrayList<ShipCompartment> compartments = new ArrayList<ShipCompartment>();
-//	private int compartmentCount = 0; // May not need. Could be removed
+	private ArrayList<ShipSystem> systemList = new ArrayList<ShipSystem>();
 
 	// Change During Combat
 	private int stun, wound, mortal, critical, modifier, maneuverability;
@@ -176,9 +176,9 @@ public class Ship {
 		this.edge = edge;
 	}
 
-	public void addWeapon(Weapon weapon) {
-		this.weapons.add(weapon);
-	}
+//	public void addWeapon(Weapon weapon) {
+//		this.weapons.add(weapon);
+//	}
 
 	public void setArmor(Armor armor) {
 		this.armor = armor;
@@ -208,11 +208,13 @@ public class Ship {
 		return mortal;
 	}
 
-	public Weapon getShipWeapon() {
-		return weapons.get(0);
-	}
-
 	public ArrayList<Weapon> getWeapons() {
+		ArrayList<Weapon> weapons = new ArrayList<>();
+		for (ShipSystem system : systemList) {
+		    if (system instanceof Weapon) {
+		        weapons.add((Weapon) system);
+		    }
+		}
 		return weapons;
 	}
 
@@ -301,6 +303,8 @@ public class Ship {
 		return compartments;
 	}
 	
-	
+	public void addSystem(ShipSystem newSystem) {
+		this.systemList.add(newSystem);
+	}
 
 }

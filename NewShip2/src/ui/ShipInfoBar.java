@@ -10,11 +10,11 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import static helpz.Constants.*;
 import scenes.BuildScene;
+import ship.ShipCompartment;
 import shipWeapons.Weapon;
-import shipfight.ShipCompartment;
 
 public class ShipInfoBar extends Bar {
 
@@ -26,7 +26,7 @@ public class ShipInfoBar extends Bar {
 	private int yOffset = 30;
 	private int titleOffset = 30;
 	private int frontTAB = 20;
-	private String title = "TEST";
+	private String shipName = "NEW";
 //	private MyShipObject selectedItem;
 
 	public ShipInfoBar(int x, int y, int width, int height, BuildScene building) {
@@ -64,9 +64,9 @@ public class ShipInfoBar extends Bar {
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 16F));
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-		int titleWidth = g.getFontMetrics().stringWidth(title);
+		int titleWidth = g.getFontMetrics().stringWidth(shipName);
 
-		g.drawString(title, x + (width / 2) - titleWidth / 2, y + yOffset);
+		g.drawString(shipName, x + (width / 2) - titleWidth / 2, y + yOffset);
 
 		g2d.setPaint(PHB_DARK);
 		g2d.fillRect(x + 40, y + 35, width - 80, 5);
@@ -88,11 +88,23 @@ public class ShipInfoBar extends Bar {
 		int infoTab = 50;
 		int infoGap = 20;
 		
+		int typeSpace = 20;
+		int powSpace = 20;
+		int hullSpace = 20;
+		int systemSpace = 20;
+		int costSpace = 20;
+		
 		g.setColor(PHB_TEXT);
 		g.setFont(alternityLiteFont);
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 14F));
 //		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
+//		String title = "TYPE     POW REQ     HULL PTS     SYSTEM     COST";
+		g.drawString("TYPE", infoX, infoY + infoGap * i);
+		g.drawString("POW", infoX, infoY + typeSpace * i);
+		g.drawString("HULL", infoX, infoY + powSpace * i);
+		g.drawString("SYSTEM", infoX, infoY + hullSpace * i);
+		g.drawString("COST", infoX, infoY + systemSpace * i);
+		i++;
 		g.drawString("Cost:", infoX, infoY + infoGap * i);
 		g.drawString(String.valueOf(building.getNewShip().getCost()), infoX + infoTab, infoY + infoGap * i);
 		i++;
@@ -180,6 +192,6 @@ public class ShipInfoBar extends Bar {
 	}
 
 	public void update() {
-
+		this.shipName = building.getNewShip().getName();
 	}
 }

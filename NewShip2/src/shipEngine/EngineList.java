@@ -1,9 +1,9 @@
 package shipEngine;
 
 
+import ship.ProgressLevel;
+import ship.Tech;
 import shipHelperz.Moneyz;
-import shipfight.ProgressLevel;
-import shipfight.Tech;
 
 public enum EngineList {
 

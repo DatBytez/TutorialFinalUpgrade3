@@ -1,6 +1,6 @@
 package shipWeapons;
 
-import shipfight.Severity;
+import ship.Severity;
 
 public class DamageSet {
 	

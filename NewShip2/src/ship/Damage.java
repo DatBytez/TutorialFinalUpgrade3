@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 import shipWeapons.DamageType;
 import shipWeapons.Firepower;

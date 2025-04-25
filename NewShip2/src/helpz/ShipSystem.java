@@ -2,19 +2,21 @@ package helpz;
 
 import java.util.ArrayList;
 
-import shipfight.ProgressLevel;
-import shipfight.Tech;
+import ship.ProgressLevel;
+import ship.Tech;
 
-public class MyShipObject {
+public class ShipSystem {
 	private ArrayList<Object> properties = new ArrayList<Object>();
 	private String name;
+	private int hullPts;
+	private int powerReq;
 	ProgressLevel level;
 	Tech tech;
 	private boolean military = false;
 	protected int cost;
 	private String description = "";
 
-	public MyShipObject(String name, int cost) {
+	public ShipSystem(String name, int cost) {
 		this.name = name;
 		this.cost = cost;
 		setDescription();

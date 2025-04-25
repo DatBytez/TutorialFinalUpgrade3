@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 public enum Severity {
 	STUN, WOUND, MORTAL, CRITICAL, MISS;

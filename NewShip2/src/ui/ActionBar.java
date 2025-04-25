@@ -10,15 +10,16 @@ import java.awt.Graphics;
 import actions.AttackAction;
 import main.GameScreen;
 import scenes.CombatScene;
+import ship.Crew;
+import ship.Result;
+import ship.Ship;
 import shipArmor.Armor;
 import shipArmor.ArmorList;
 import shipHull.Hull;
 import shipHull.HullList;
 import shipWeapons.Weapon;
 import shipWeapons.WeaponList;
-import shipfight.Crew;
-import shipfight.Result;
-import shipfight.Ship;
+
 import static helpz.Constants.*;
 
 public class ActionBar extends Bar {
@@ -106,7 +107,7 @@ public class ActionBar extends Bar {
 		g.drawString("Critical: " + ship.getCritical(), xOffset + 120, yOffset + iOffset * 3);
 		g.drawString("Crew: " + ship.getCrew(), xOffset + singleLineMargin, yOffset + iOffset * 4);
 		g.drawString("Edge: " + ship.getShipEdge(), xOffset + singleLineMargin, yOffset + iOffset * 5);
-		g.drawString("Weapon: " + ship.getShipWeapon().getName(), xOffset + singleLineMargin, yOffset + iOffset * 6);
+		g.drawString("Weapon: " + ship.getWeapons().get(0).getName(), xOffset + singleLineMargin, yOffset + iOffset * 6);
 		g.drawString("Armor: " + ship.getArmor().getName(), xOffset + singleLineMargin, yOffset + iOffset * 7);
 		g.drawString("Status: " + ship.getStatus(), xOffset + singleLineMargin, yOffset + iOffset * 8);
 //		g.drawString("Heading: Incomplete", xOffset+singleLineMargin, yOffset+iOffset*10);
@@ -289,7 +290,7 @@ public class ActionBar extends Bar {
 
 	public void loadShips() {
 		enemyShip = new Ship("Demon", new Hull(HullList.LightCruiser), Crew.ORDINARY);
-		enemyShip.addWeapon(new Weapon(WeaponList.NeutroniumDriver));
+		enemyShip.addSystem(new Weapon(WeaponList.NeutroniumDriver));
 		Armor enemyArmor = new Armor(ArmorList.CerametalHeavy);
 		enemyShip.setArmor(enemyArmor);
 
@@ -298,16 +299,38 @@ public class ActionBar extends Bar {
 		else {
 			alliedShip = new Ship("Striker", new Hull(HullList.LightCruiser), Crew.AMAZING);
 
-			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
-			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
-			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
-			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
+			alliedShip.addSystem(new Weapon(WeaponList.KineticLance));
+			alliedShip.addSystem(new Weapon(WeaponList.KineticLance));
+			alliedShip.addSystem(new Weapon(WeaponList.KineticLance));
+			alliedShip.addSystem(new Weapon(WeaponList.KineticLance));
 
 			Armor alliedArmor = new Armor(ArmorList.NanofluidicLight);
 			alliedShip.setArmor(alliedArmor);
 		}
 
 	}
+	
+//	public void loadShips() {
+//		enemyShip = new Ship("Demon", new Hull(HullList.LightCruiser), Crew.ORDINARY);
+//		enemyShip.addWeapon(new Weapon(WeaponList.NeutroniumDriver));
+//		Armor enemyArmor = new Armor(ArmorList.CerametalHeavy);
+//		enemyShip.setArmor(enemyArmor);
+//
+//		if (TEST_SHIP != null)
+//			alliedShip = TEST_SHIP;
+//		else {
+//			alliedShip = new Ship("Striker", new Hull(HullList.LightCruiser), Crew.AMAZING);
+//
+//			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
+//			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
+//			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
+//			alliedShip.addWeapon(new Weapon(WeaponList.KineticLance));
+//
+//			Armor alliedArmor = new Armor(ArmorList.NanofluidicLight);
+//			alliedShip.setArmor(alliedArmor);
+//		}
+//
+//	}
 
 	private void initiativeCheck() {
 		Result alliedShipEdgeCheck = alliedShip.rollEdgeCheck();

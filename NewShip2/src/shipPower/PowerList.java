@@ -2,11 +2,11 @@ package shipPower;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
+import ship.ProgressLevel;
+import ship.Tech;
 import shipArmor.Armor;
 import shipHelperz.Moneyz;
-import shipfight.ProgressLevel;
-import shipfight.Tech;
 
 public enum PowerList {
 
@@ -49,8 +49,8 @@ public enum PowerList {
 		cost = baseCost * costPerHull * minSize;
 	}
 	
-	public static ArrayList<MyShipObject> getListPowerSystems() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getListPowerSystems() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new PowerSystem(SolarCell));
 		fullList.add(new PowerSystem(FissionGenerator));
 		fullList.add(new PowerSystem(FusionGenerator));

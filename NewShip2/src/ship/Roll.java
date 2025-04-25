@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 public class Roll {
 

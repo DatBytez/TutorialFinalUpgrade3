@@ -1,11 +1,11 @@
-package shipfight;
+package ship;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 
 public class ShipCompartment {
-	private ArrayList<MyShipObject> ShipObjects = new ArrayList<MyShipObject>();
+	private ArrayList<ShipSystem> ShipObjects = new ArrayList<ShipSystem>();
 	private String name;
 	
 	public ShipCompartment(Ship ship,String name) {
@@ -20,7 +20,7 @@ public class ShipCompartment {
 		this.name = name;
 	}
 
-	public ArrayList<MyShipObject> getShipObjects() {
+	public ArrayList<ShipSystem> getShipObjects() {
 		return ShipObjects;
 	}
 

@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 public enum ProgressLevel {
 PL6("Fusion Age",6),

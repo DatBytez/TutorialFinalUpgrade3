@@ -2,12 +2,12 @@ package shipWeapons;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
+import ship.ProgressLevel;
+import ship.Severity;
+import ship.Tech;
 import shipArmor.Armor;
 import shipHelperz.Moneyz;
-import shipfight.ProgressLevel;
-import shipfight.Severity;
-import shipfight.Tech;
 
 public enum WeaponList {
 	//BEAM
@@ -230,8 +230,8 @@ public enum WeaponList {
 		this.modes = modes;
 	}
 	
-	public static ArrayList<MyShipObject> getListBeams() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getListBeams() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new Weapon(Laser));
 		fullList.add(new Weapon(IRLaser));
 		fullList.add(new Weapon(XRayLaser));
@@ -267,8 +267,8 @@ public enum WeaponList {
 		return fullList;
 	}
 	
-	public static ArrayList<MyShipObject> getListProjectiles() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getListProjectiles() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new Weapon(PointDefense));
 		fullList.add(new Weapon(RailCannon));
 		fullList.add(new Weapon(NeedleDriver));

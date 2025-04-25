@@ -2,7 +2,7 @@ package helpz;
 
 import java.awt.Color;
 
-import shipfight.Ship;
+import ship.Ship;
 
 public class Constants {
 	public static final Color PHB_DARK = new Color(60, 145, 170, 255);

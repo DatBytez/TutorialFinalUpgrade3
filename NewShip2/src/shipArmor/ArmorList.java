@@ -2,10 +2,10 @@ package shipArmor;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
+import ship.ProgressLevel;
+import ship.Tech;
 import shipHelperz.Moneyz;
-import shipfight.ProgressLevel;
-import shipfight.Tech;
 
 public enum ArmorList {
 
@@ -53,8 +53,8 @@ public enum ArmorList {
 		this.cost = cost;
 	}
 	
-	public static ArrayList<MyShipObject> getListArmors() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getListArmors() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new Armor(PolymericLight));
 		fullList.add(new Armor(ReflectiveLight));
 		fullList.add(new Armor(CerametalLight));

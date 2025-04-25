@@ -6,7 +6,7 @@ import static helpz.Constants.MARGIN;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import scenes.BuildScene;
 import shipArmor.ArmorList;
 import shipHull.HullList;
@@ -16,7 +16,7 @@ import shipWeapons.WeaponList;
 public class BuildBar extends Bar {
 
 	private MyButtonList activeList;
-	private MyShipObject selectedItem;
+	private ShipSystem selectedItem;
 
 	public BuildBar(int x, int y, int width, int height, BuildScene building) {
 		super(x, y, width, height);
@@ -94,7 +94,7 @@ public class BuildBar extends Bar {
         }
 	}
 	
-	public MyShipObject getSelecteItem() {
+	public ShipSystem getSelecteItem() {
 		return selectedItem;
 	}
 }

@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 public enum Status {
 	ACTIVE(0,0,0),

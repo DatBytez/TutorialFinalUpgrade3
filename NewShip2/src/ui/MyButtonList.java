@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 
 import static helpz.Constants.*;
 
 public class MyButtonList extends Bar {
 
-	private ArrayList<MyShipObject> itemList = new ArrayList<MyShipObject>();
+	private ArrayList<ShipSystem> itemList = new ArrayList<ShipSystem>();
 	private ArrayList<MyListButton> listButtons = new ArrayList<MyListButton>();
 	private ArrayList<String> listTitles = new ArrayList<String>();
 	private ArrayList<Integer> spacingList = new ArrayList<Integer>();
@@ -32,10 +32,10 @@ public class MyButtonList extends Bar {
 	private int titleOffset = 30;
 	private int frontTAB = 20;
 	private String title;
-	private MyShipObject selectedItem;
+	private ShipSystem selectedItem;
 	private MyListButton selectedButton;
 
-	public MyButtonList(String title, ArrayList<MyShipObject> itemList, ArrayList<String> listTitles, int x, int y, int width) {
+	public MyButtonList(String title, ArrayList<ShipSystem> itemList, ArrayList<String> listTitles, int x, int y, int width) {
 		super(x, y, width, 0);
 		this.y = y;
 		this.x = x;
@@ -76,7 +76,7 @@ public class MyButtonList extends Bar {
 
 	private void initButtons() {		
 		int i = 0;
-		for (MyShipObject item : itemList) {
+		for (ShipSystem item : itemList) {
 			listButtons.add(new MyListButton(item,x,y+yOffset+titleOffset+(i*buttonHeight)+5,this));
 			i++;
 		}
@@ -192,7 +192,7 @@ public class MyButtonList extends Bar {
 		initBounds();
 	}
 	
-	public MyShipObject getSelectedItem() {
+	public ShipSystem getSelectedItem() {
 		return selectedItem;
 	}
 

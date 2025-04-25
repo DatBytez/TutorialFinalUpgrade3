@@ -3,7 +3,7 @@ package shipHull;
 import java.util.ArrayList;
 
 import helpz.MixedList;
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 
 public class HullDescriptions {
 
@@ -13,7 +13,7 @@ public class HullDescriptions {
 
 	}
 
-	private void getDescription(MyShipObject shipObject) {
+	private void getDescription(ShipSystem shipObject) {
 
 		switch (shipObject.getName()) {
 		case "Launch":

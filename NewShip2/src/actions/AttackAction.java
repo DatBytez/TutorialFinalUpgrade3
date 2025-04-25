@@ -2,10 +2,10 @@ package actions;
 
 import java.util.ArrayList;
 
+import ship.Result;
+import ship.Ship;
 import shipHelperz.Rollz;
 import shipWeapons.Weapon;
-import shipfight.Result;
-import shipfight.Ship;
 
 public class AttackAction {
 

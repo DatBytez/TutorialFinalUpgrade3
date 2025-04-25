@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import static helpz.Constants.*;
 
 public class MyListButton {
@@ -14,12 +14,12 @@ public class MyListButton {
 	private boolean mouseOver, mousePressed, selected;
 	private ArrayList<Object> properties = new ArrayList<Object>();
 	private MyButtonList myButtonList;
-	private MyShipObject item;
+	private ShipSystem item;
 	private Color translucent = new Color(0, 0, 0, 0);
 	private int frontTAB;
 
 	// For List Buttons
-	public MyListButton(MyShipObject item, int x, int y, MyButtonList myButtonList) {
+	public MyListButton(ShipSystem item, int x, int y, MyButtonList myButtonList) {
 		this.item = item;
 		this.x = x;
 		this.y = y;
@@ -71,9 +71,6 @@ public class MyListButton {
 			spacing += myButtonList.getSpacingList().get(i - 1);
 
 			g.drawString(item.toString(), frontTAB + x + spacing, y + (h / 2) - 2 + height / 2);
-			
-//			if(myButtonList.getWidth() < frontTAB + x + spacing + myButtonList.getSpacingList().get(i))
-//				myButtonList.setWidth(frontTAB + x + spacing + myButtonList.getSpacingList().get(i));
 			i++;
 		}
 	}
@@ -110,7 +107,7 @@ public class MyListButton {
 		return bounds;
 	}
 	
-	public MyShipObject getItem() {
+	public ShipSystem getItem() {
 		return item;
 	}
 }

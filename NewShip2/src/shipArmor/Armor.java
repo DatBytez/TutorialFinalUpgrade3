@@ -2,14 +2,15 @@ package shipArmor;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
+import ship.ProgressLevel;
+import ship.Tech;
 import shipHelperz.Rollz;
 import shipWeapons.DamageType;
-import shipfight.ProgressLevel;
-import shipfight.Tech;
+
 import static helpz.Format.*;
 
-public class Armor extends MyShipObject {
+public class Armor extends ShipSystem {
 	String name, description;
 	ArmorType armorType;
 	ProgressLevel level;

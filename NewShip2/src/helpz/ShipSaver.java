@@ -2,7 +2,7 @@ package helpz;
 
 import java.io.*;
 
-import shipfight.Ship;
+import ship.Ship;
 
 public class ShipSaver {
     public static void saveShip(Ship ship, String fileName) {

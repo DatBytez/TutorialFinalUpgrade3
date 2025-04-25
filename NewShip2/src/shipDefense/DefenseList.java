@@ -1,9 +1,9 @@
 package shipDefense;
 
+import ship.ProgressLevel;
+import ship.Severity;
+import ship.Tech;
 import shipHelperz.Moneyz;
-import shipfight.ProgressLevel;
-import shipfight.Severity;
-import shipfight.Tech;
 
 public enum DefenseList {
 		

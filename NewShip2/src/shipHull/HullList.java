@@ -3,7 +3,7 @@ package shipHull;
 import java.awt.Font;
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import shipHelperz.Moneyz;
 
 public enum HullList {
@@ -71,8 +71,8 @@ public enum HullList {
 		this.zoneLimit=zoneLimit;
 	}
 	
-	public static ArrayList<MyShipObject> getCivilianHulls() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getCivilianHulls() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new Hull(Launch));
 		fullList.add(new Hull(Courier));
 		fullList.add(new Hull(Trader));
@@ -90,8 +90,8 @@ public enum HullList {
 		return fullList;
 	}
 
-	public static ArrayList<MyShipObject> getMilitaryHulls() {
-		ArrayList<MyShipObject> fullList = new ArrayList<>();
+	public static ArrayList<ShipSystem> getMilitaryHulls() {
+		ArrayList<ShipSystem> fullList = new ArrayList<>();
 		fullList.add(new Hull(Fighter));
 		fullList.add(new Hull(StrikeFighter));
 		fullList.add(new Hull(Cutter));

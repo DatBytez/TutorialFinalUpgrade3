@@ -6,7 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 import static helpz.Constants.*;
 import scenes.BuildScene;
 

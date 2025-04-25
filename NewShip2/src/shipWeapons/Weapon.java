@@ -2,16 +2,17 @@ package shipWeapons;
 
 import java.util.ArrayList;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
+import ship.Damage;
+import ship.ProgressLevel;
+import ship.Result;
+import ship.Severity;
+import ship.Tech;
 import shipHelperz.Rollz;
-import shipfight.Damage;
-import shipfight.ProgressLevel;
-import shipfight.Result;
-import shipfight.Severity;
-import shipfight.Tech;
+
 import static helpz.Format.*;
 
-public class Weapon extends MyShipObject{
+public class Weapon extends ShipSystem{
 	private String name;
 	private WeaponType weaponType;
 	private ProgressLevel level;

@@ -11,7 +11,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import helpz.MyShipObject;
+import helpz.ShipSystem;
 
 import static helpz.Constants.*;
 import static main.GameStates.MENU_STATE;
@@ -19,12 +19,12 @@ import static main.GameStates.SetGameState;
 
 import main.Game;
 import main.GameScreen;
+import ship.Crew;
+import ship.Ship;
 import shipArmor.Armor;
 import shipHull.Hull;
 import shipHull.HullList;
 import shipWeapons.Weapon;
-import shipfight.Crew;
-import shipfight.Ship;
 import ui.BuildBar;
 import ui.ButtonSideBar;
 import ui.MyButton;
@@ -54,7 +54,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 	int actionBarWidthOffset = 0;
 
 	private MyButtonList activeList;
-	private MyShipObject selectedItem;
+	private ShipSystem selectedItem;
 	private MyButton bBuy, bMenu;
 
 	public BuildScene(Game game) {
@@ -189,9 +189,9 @@ public class BuildScene extends GameScene implements SceneMethods {
 			else if (selectedItem.getClass() == Armor.class)
 				newShip.setArmor((Armor) selectedItem);
 			else if (selectedItem.getClass() == Weapon.class)
-				newShip.addWeapon((Weapon) selectedItem);
+				newShip.addSystem((Weapon) selectedItem);
 
-			newShip.setName("NEW-SHIP");
+			newShip.setName("NEW-UNNAMED");
 			TEST_SHIP = newShip;
 		}
 	}
@@ -266,7 +266,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		this.newShip = newShip;
 	}
 	
-	public MyShipObject getSelectedItem() {
+	public ShipSystem getSelectedItem() {
 		return selectedItem;
 	}
 

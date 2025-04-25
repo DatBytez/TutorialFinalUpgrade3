@@ -1,6 +1,6 @@
 package shipHelperz;
 
-import shipfight.Result;
+import ship.Result;
 
 public class Rollz {
 	

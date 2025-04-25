@@ -1,4 +1,4 @@
-package shipfight;
+package ship;
 
 
 import shipHelperz.Moneyz;
