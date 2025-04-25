@@ -2,8 +2,8 @@ package shipPower;
 
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
 import ship.ProgressLevel;
+import ship.ShipSystem;
 import ship.Tech;
 import shipArmor.Armor;
 import shipHelperz.Moneyz;
@@ -51,18 +51,18 @@ public enum PowerList {
 	
 	public static ArrayList<ShipSystem> getListPowerSystems() {
 		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new PowerSystem(SolarCell));
-		fullList.add(new PowerSystem(FissionGenerator));
-		fullList.add(new PowerSystem(FusionGenerator));
-		fullList.add(new PowerSystem(GravFusionCell));
-		fullList.add(new PowerSystem(FuelTank));
-		fullList.add(new PowerSystem(TachyonicCollider));
-		fullList.add(new PowerSystem(AntimatterReactor));
-		fullList.add(new PowerSystem(MassReactor));
-		fullList.add(new PowerSystem(DynamicMassReactor));
-		fullList.add(new PowerSystem(MatterConverter));
-		fullList.add(new PowerSystem(QuantumCell));
-		fullList.add(new PowerSystem(SingularityGenerator));
+		fullList.add(new Power(SolarCell));
+		fullList.add(new Power(FissionGenerator));
+		fullList.add(new Power(FusionGenerator));
+		fullList.add(new Power(GravFusionCell));
+		fullList.add(new Power(FuelTank));
+		fullList.add(new Power(TachyonicCollider));
+		fullList.add(new Power(AntimatterReactor));
+		fullList.add(new Power(MassReactor));
+		fullList.add(new Power(DynamicMassReactor));
+		fullList.add(new Power(MatterConverter));
+		fullList.add(new Power(QuantumCell));
+		fullList.add(new Power(SingularityGenerator));
 		
 		return fullList;
 	}

@@ -65,24 +65,48 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			switch (GameStates.gameState) {
-			case MENU_STATE:
-				game.getMenuScene().mouseClicked(e.getX(), e.getY());
-				break;
-			case BUILD_STATE:
-				game.getBuildScene().mouseClicked(e.getX(), e.getY());
-				break;
-			case COMBAT_STATE:
-				game.getCombatScene().mouseClicked(e.getX(), e.getY());
-				break;
-			case EDIT_STATE:
-				game.getEditorScene().mouseClicked(e.getX(), e.getY());
-				break;
-			case GAME_OVER_STATE:
-				game.getGameOverScene().mouseClicked(e.getX(), e.getY());
-				break;
-			default:
-				break;
+			if (e.getClickCount() == 2) {
+				switch (GameStates.gameState) {
+				case MENU_STATE:
+					game.getMenuScene().mouseDoubleClicked(e.getX(), e.getY());
+					break;
+				case BUILD_STATE:
+					game.getBuildScene().mouseDoubleClicked(e.getX(), e.getY());
+
+					break;
+				case COMBAT_STATE:
+					game.getCombatScene().mouseDoubleClicked(e.getX(), e.getY());
+					break;
+				case EDIT_STATE:
+					game.getEditorScene().mouseDoubleClicked(e.getX(), e.getY());
+					break;
+				case GAME_OVER_STATE:
+					game.getGameOverScene().mouseDoubleClicked(e.getX(), e.getY());
+					break;
+				default:
+					break;
+				}
+			} else {
+				switch (GameStates.gameState) {
+				case MENU_STATE:
+					game.getMenuScene().mouseClicked(e.getX(), e.getY());
+					break;
+				case BUILD_STATE:
+					game.getBuildScene().mouseClicked(e.getX(), e.getY());
+
+					break;
+				case COMBAT_STATE:
+					game.getCombatScene().mouseClicked(e.getX(), e.getY());
+					break;
+				case EDIT_STATE:
+					game.getEditorScene().mouseClicked(e.getX(), e.getY());
+					break;
+				case GAME_OVER_STATE:
+					game.getGameOverScene().mouseClicked(e.getX(), e.getY());
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}

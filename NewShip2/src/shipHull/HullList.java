@@ -3,7 +3,7 @@ package shipHull;
 import java.awt.Font;
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
+import ship.ShipSystem;
 import shipHelperz.Moneyz;
 
 public enum HullList {

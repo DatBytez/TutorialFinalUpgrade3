@@ -2,9 +2,9 @@ package shipWeapons;
 
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
 import ship.ProgressLevel;
 import ship.Severity;
+import ship.ShipSystem;
 import ship.Tech;
 import shipArmor.Armor;
 import shipHelperz.Moneyz;

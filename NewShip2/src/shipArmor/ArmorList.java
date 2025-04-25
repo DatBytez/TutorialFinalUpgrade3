@@ -2,8 +2,8 @@ package shipArmor;
 
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
 import ship.ProgressLevel;
+import ship.ShipSystem;
 import ship.Tech;
 import shipHelperz.Moneyz;
 

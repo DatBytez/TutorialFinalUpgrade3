@@ -1,7 +1,15 @@
 package scenes;
 
+import static helpz.Constants.MARGIN;
+import static helpz.Constants.PHB_BKGR;
+import static helpz.Constants.TEST_SHIP;
+import static main.GameStates.MENU_STATE;
+import static main.GameStates.SetGameState;
+
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,20 +19,12 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import helpz.ShipSystem;
-
-import static helpz.Constants.*;
-import static main.GameStates.MENU_STATE;
-import static main.GameStates.SetGameState;
-
 import main.Game;
 import main.GameScreen;
-import ship.Crew;
 import ship.Ship;
+import ship.ShipSystem;
 import shipArmor.Armor;
 import shipHull.Hull;
-import shipHull.HullList;
-import shipWeapons.Weapon;
 import ui.BuildBar;
 import ui.ButtonSideBar;
 import ui.MyButton;
@@ -45,13 +45,12 @@ import ui.ShipObjectDescriptionBar;
 public class BuildScene extends GameScene implements SceneMethods {
 
 	private ButtonSideBar sideBar;
+	private ButtonSideBar leftSideBar;
 	private BuildBar buildBar;
 	private ShipObjectDescriptionBar descriptionBox;
 	private ShipInfoBar shipInfoBar;
 	private Ship newShip = new Ship();
 	private boolean gamePaused;
-	int actionBarHeightOffset = 0;
-	int actionBarWidthOffset = 0;
 
 	private MyButtonList activeList;
 	private ShipSystem selectedItem;
@@ -60,16 +59,27 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public BuildScene(Game game) {
 		super(game);
 
-		newShip = new Ship("New", new Hull(HullList.None), Crew.MARGINAL);
-		shipInfoBar = new ShipInfoBar(MARGIN, MARGIN, GameScreen.XSIZE - (GameScreen.XSIZE / 2 + 150) - 20,
-				GameScreen.YSIZE - 40, this);
-		buildBar = new BuildBar(GameScreen.XSIZE / 2, MARGIN, (GameScreen.XSIZE / 2) - MARGIN,
+		newShip = new Ship();
+
+		// Relative to shipInfoBar
+//		shipInfoBar = new ShipInfoBar(MARGIN, MARGIN, (GameScreen.XSIZE/3) - 20,
+//				GameScreen.YSIZE - 40, this);
+//		buildBar = new BuildBar(shipInfoBar.getBounds().x+shipInfoBar.getBounds().width+MARGIN, MARGIN, (GameScreen.XSIZE / 2) - MARGIN,
+//				GameScreen.YSIZE - MARGIN * 2, this);
+//		descriptionBox = new ShipObjectDescriptionBar((GameScreen.XSIZE / 2), (GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN,
+//				GameScreen.YSIZE - MARGIN * 2, this);
+
+		// Relative to full screen size
+		shipInfoBar = new ShipInfoBar(MARGIN * 4, MARGIN, (GameScreen.XSIZE / 3) - 20, GameScreen.YSIZE - 40, this);
+		buildBar = new BuildBar((GameScreen.XSIZE / 2) + MARGIN, MARGIN, (GameScreen.XSIZE / 2) - MARGIN * 4,
 				GameScreen.YSIZE - MARGIN * 2, this);
-		descriptionBox = new ShipObjectDescriptionBar(GameScreen.XSIZE / 2, (GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN,
-				GameScreen.YSIZE - MARGIN * 2, this);
+		descriptionBox = new ShipObjectDescriptionBar((GameScreen.XSIZE / 2) + MARGIN * 2,
+				(GameScreen.YSIZE / 3) * 2 - MARGIN * 2, (GameScreen.XSIZE / 2) - MARGIN, GameScreen.YSIZE - MARGIN * 2,
+				this);
 
 		initButtons();
 		initSideBar();
+		initLeftSideBar();
 	}
 
 	private void initButtons() {
@@ -91,7 +101,16 @@ public class BuildScene extends GameScene implements SceneMethods {
 		buttonTitles.add("COMMAND");
 		buttonTitles.add("SENSORS");
 		buttonTitles.add("MISC");
-		sideBar = new ButtonSideBar(buttonTitles, GameScreen.XSIZE - 40, 0 + MARGIN);
+		sideBar = new ButtonSideBar(buttonTitles, GameScreen.XSIZE - MARGIN * 3, 0 + MARGIN, 90);
+	}
+
+	public void initLeftSideBar() {
+		ArrayList<String> buttonTitles = new ArrayList<>();
+		buttonTitles.add("MENU");
+		buttonTitles.add("LOAD");
+		buttonTitles.add("SAVE");
+		buttonTitles.add("RESET");
+		leftSideBar = new ButtonSideBar(buttonTitles, MARGIN, 0 + MARGIN, -90);
 	}
 
 	@Override
@@ -100,11 +119,15 @@ public class BuildScene extends GameScene implements SceneMethods {
 		buildBar.draw(g);
 		shipInfoBar.draw(g);
 		sideBar.draw(g);
+		leftSideBar.draw(g);
 		descriptionBox.draw(g);
 		if (activeList != null)
 			activeList.draw(g);
 		drawButtons(g);
 		drawScreenEffect(g);
+		drawVerticalVignette(g);
+		drawCenterSpineVignette(g);
+
 	}
 
 	private void drawButtons(Graphics g) {
@@ -115,7 +138,58 @@ public class BuildScene extends GameScene implements SceneMethods {
 	private void drawBackground(Graphics g) {
 		g.setColor(PHB_BKGR);
 		g.fillRect(0, 0, GameScreen.XSIZE, GameScreen.YSIZE);
-//		g.drawImage(getBackgroundImage(), 0, -150, GameScreen.XSIZE, GameScreen.YSIZE+ 150, null);
+		g.drawImage(getBackgroundImage(), 0, -150, GameScreen.XSIZE, GameScreen.YSIZE+ 150, null);
+		g.setColor(Color.WHITE);
+		g.fillRect(GameScreen.XSIZE / 2, 0, GameScreen.XSIZE / 2, GameScreen.YSIZE);
+	}
+
+	private void drawVerticalVignette(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		int fadeWidth = 100; // How far in from each edge the fade goes
+		int screenHeight = GameScreen.YSIZE;
+
+		// Left vignette
+		for (int i = 0; i < fadeWidth; i++) {
+			int alpha = (int) (180 * (1.0 - (i / (float) fadeWidth))); // 180 max alpha
+			alpha = clamp(alpha, 0, 255);
+			g2d.setColor(new Color(0, 0, 0, alpha));
+			g2d.drawLine(i, 0, i, screenHeight);
+		}
+
+		// Right vignette
+		int screenWidth = GameScreen.XSIZE;
+		for (int i = 0; i < fadeWidth; i++) {
+			int alpha = (int) (180 * (1.0 - (i / (float) fadeWidth)));
+			alpha = clamp(alpha, 0, 255);
+			g2d.setColor(new Color(0, 0, 0, alpha));
+			g2d.drawLine(screenWidth - i - 1, 0, screenWidth - i - 1, screenHeight);
+		}
+	}
+
+	private void drawCenterSpineVignette(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		int screenWidth = GameScreen.XSIZE;
+		int screenHeight = GameScreen.YSIZE;
+		int centerX = screenWidth / 2;
+
+		// Draw the central spine line
+		g2d.setColor(new Color(0, 0, 0, 200)); // Strong dark center line
+		g2d.drawLine(centerX, 0, centerX, screenHeight);
+
+		// Fade outward from center
+		int fadeWidth = 80; // Distance to fade on both sides
+
+		for (int i = 1; i <= fadeWidth; i++) {
+			int alpha = (int) (180 * (1.0 - i / (float) fadeWidth)); // max 180 alpha
+			alpha = clamp(alpha, 0, 255);
+			Color fadeColor = new Color(0, 0, 0, alpha);
+
+			g2d.setColor(fadeColor);
+
+			// Draw on both sides of center
+			g2d.drawLine(centerX - i, 0, centerX - i, screenHeight);
+			g2d.drawLine(centerX + i, 0, centerX + i, screenHeight);
+		}
 	}
 
 	public void drawScreenEffect(Graphics g) {
@@ -188,10 +262,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 				newShip.setHull((Hull) selectedItem);
 			else if (selectedItem.getClass() == Armor.class)
 				newShip.setArmor((Armor) selectedItem);
-			else if (selectedItem.getClass() == Weapon.class)
-				newShip.addSystem((Weapon) selectedItem);
+			else
+				newShip.addSystem(selectedItem);
 
-			newShip.setName("NEW-UNNAMED");
+//			newShip.setName("NEW-UNNAMED");
 			TEST_SHIP = newShip;
 		}
 	}
@@ -202,6 +276,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 			buyClicked();
 		} else if (bMenu.getBounds().contains(x, y))
 			SetGameState(MENU_STATE);
+
+		if (shipInfoBar.getBounds().contains(x, y)) {
+			shipInfoBar.mouseClicked(x, y);
+		}
 
 		if (sideBar.getBounds().contains(x, y)) {
 			sideBar.mouseClicked(x, y);
@@ -215,10 +293,21 @@ public class BuildScene extends GameScene implements SceneMethods {
 			} else
 				buildBar.setActiveList(sideBar.getSelectedItem().getText());
 		}
+		
+		if (leftSideBar.getBounds().contains(x, y)) 
+			leftSideBar.mouseClicked(x, y);
 
 		if (buildBar.getBounds().contains(x, y))
 			buildBar.mouseClicked(x, y);
-			this.selectedItem = buildBar.getSelecteItem();
+		
+		this.selectedItem = buildBar.getSelecteItem();
+	}
+
+	@Override
+	public void mouseDoubleClicked(int x, int y) {
+		if (shipInfoBar.getBounds().contains(x, y)) {
+			shipInfoBar.mouseDoubleClicked(x, y);
+		}
 	}
 
 	@Override
@@ -226,6 +315,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		bBuy.setMouseOver(false);
 		bMenu.setMouseOver(false);
 		sideBar.mouseMoved(x, y);
+		leftSideBar.mouseMoved(x, y);
 		buildBar.mouseMoved(x, y);
 	}
 
@@ -237,6 +327,8 @@ public class BuildScene extends GameScene implements SceneMethods {
 			bMenu.setMousePressed(true);
 		if (sideBar.getBounds().contains(x, y))
 			sideBar.mousePressed(x, y);
+		if (leftSideBar.getBounds().contains(x, y))
+			leftSideBar.mousePressed(x, y);
 		if (buildBar.getBounds().contains(x, y))
 			buildBar.mousePressed(x, y);
 
@@ -246,6 +338,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public void mouseReleased(int x, int y) {
 		resetButtons();
 		sideBar.mouseReleased(x, y);
+		leftSideBar.mouseReleased(x, y);
 		buildBar.mouseReleased(x, y);
 	}
 
@@ -258,6 +351,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public void mouseDragged(int x, int y) {
 	}
 
+	public void keyPressed(KeyEvent e) {
+		shipInfoBar.keyPressed(e);
+	}
+
 	public Ship getNewShip() {
 		return newShip;
 	}
@@ -265,7 +362,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 	public void setNewShip(Ship newShip) {
 		this.newShip = newShip;
 	}
-	
+
 	public ShipSystem getSelectedItem() {
 		return selectedItem;
 	}

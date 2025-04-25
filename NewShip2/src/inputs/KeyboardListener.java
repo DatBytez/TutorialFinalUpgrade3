@@ -26,13 +26,12 @@ public class KeyboardListener implements KeyListener {
 			game.getEditorScene().keyPressed(e);
 		else if (GameStates.gameState == COMBAT_STATE)
 			game.getEditorScene().keyPressed(e);
-
+		else if (GameStates.gameState == BUILD_STATE)
+			game.getBuildScene().keyPressed(e);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

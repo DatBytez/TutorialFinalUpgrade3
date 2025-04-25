@@ -6,8 +6,8 @@ import static helpz.Constants.MARGIN;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import helpz.ShipSystem;
 import scenes.BuildScene;
+import ship.ShipSystem;
 import shipArmor.ArmorList;
 import shipHull.HullList;
 import shipPower.PowerList;

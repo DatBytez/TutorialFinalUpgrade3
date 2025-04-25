@@ -1,15 +1,12 @@
-package helpz;
+package ship;
 
 import java.util.ArrayList;
-
-import ship.ProgressLevel;
-import ship.Tech;
 
 public class ShipSystem {
 	private ArrayList<Object> properties = new ArrayList<Object>();
 	private String name;
-	private int hullPts;
-	private int powerReq;
+	private int hullPts = 0;
+	private int powerReq = 0;
 	ProgressLevel level;
 	Tech tech;
 	private boolean military = false;
@@ -42,6 +39,14 @@ public class ShipSystem {
 		return description;
 	}
 	
+	public int getHullPts() {
+		return hullPts;
+	}
+
+	public int getPowerReq() {
+		return powerReq;
+	}
+
 	private void setDescription() {
 
 		switch (this.name) {

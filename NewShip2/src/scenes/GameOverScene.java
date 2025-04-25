@@ -56,7 +56,7 @@ public class GameOverScene extends GameScene implements SceneMethods {
 //		game.getPlaying().resetEverything();
 	}
 
-	@Override
+//	@Override
 	public void mouseClicked(int x, int y) {
 		if (bMenu.getBounds().contains(x, y)) {
 			SetGameState(MENU_STATE);
@@ -96,6 +96,12 @@ public class GameOverScene extends GameScene implements SceneMethods {
 	public void mouseDragged(int x, int y) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void mouseDoubleClicked(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

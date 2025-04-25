@@ -2,8 +2,6 @@ package ship;
 
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
-
 public class ShipCompartment {
 	private ArrayList<ShipSystem> ShipObjects = new ArrayList<ShipSystem>();
 	private String name;

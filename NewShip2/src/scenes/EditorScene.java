@@ -46,7 +46,7 @@ public class EditorScene extends GameScene implements SceneMethods {
 		}
 	}
 
-	@Override
+//	@Override
 	public void mouseClicked(int x, int y) {
 		if (y >= 640) {
 //			toolbar.mouseClicked(x, y);
@@ -96,6 +96,12 @@ public class EditorScene extends GameScene implements SceneMethods {
 	public void keyPressed(KeyEvent e) {
 //		if (e.getKeyCode() == KeyEvent.VK_R)
 //			toolbar.rotateSprite();
+	}
+
+	@Override
+	public void mouseDoubleClicked(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

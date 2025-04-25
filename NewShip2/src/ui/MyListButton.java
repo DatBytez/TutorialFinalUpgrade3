@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import helpz.ShipSystem;
+
+import ship.ShipSystem;
+
 import static helpz.Constants.*;
 
 public class MyListButton {

@@ -46,7 +46,7 @@ public class CombatScene extends GameScene implements SceneMethods {
 		actionBar.draw(g);
 	}
 
-	@Override
+//	@Override
 	public void mouseClicked(int x, int y) {
 		if (y >= actionBarHeightOffset) {
 			actionBar.mouseClicked(x, y);
@@ -76,6 +76,12 @@ public class CombatScene extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseDragged(int x, int y) {
+	}
+
+	@Override
+	public void mouseDoubleClicked(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

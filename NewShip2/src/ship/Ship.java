@@ -2,57 +2,50 @@ package ship;
 
 import java.util.ArrayList;
 
-import helpz.ShipSystem;
 import shipArmor.Armor;
 import shipHelperz.Rollz;
 import shipHull.Hull;
-import shipHull.Toughness;
-
-/**
-* Ship.java
-* A class that stores the stats for Ship
-* @author Ted Dykstra
-* @version 0.0
-*/
-
+import shipHull.HullList;
 import shipWeapons.Weapon;
 
 public class Ship {
 	// Established During Ship Creation
 	private int cost = 0;
-	private String name;
+	private String name = "New Ship";
 	private Hull hull;
-//	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+//	private Hull hull = new Hull(HullList.None);
 	private Armor armor;
-	private Crew crew;
-	private Toughness toughness;// probably can delete this
+	private Crew crew = Crew.MARGINAL;
 	private ArrayList<ShipCompartment> compartments = new ArrayList<ShipCompartment>();
 	private ArrayList<ShipSystem> systemList = new ArrayList<ShipSystem>();
 
 	// Change During Combat
-	private int stun, wound, mortal, critical, modifier, maneuverability;
+	private int stun, wound, mortal, critical;
 	private boolean edge;
-	private Status status;
+	private Status status = Status.ACTIVE;;
 
 	public Ship() {
 	}
 
+	//TODO: Only used in ship fight for quick ship creation, can be removed when other ship creations methods are finished
 	public Ship(String name, Hull hull, Crew crew) {
 		this.name = name;
 		this.hull = hull;
 		this.crew = crew;
-		this.status = Status.ACTIVE;
 		initShip();
 	}
 	
 	public void initShip() {
-		this.stun = hull.getStun();
-		this.wound = hull.getWound();
-		this.mortal = hull.getMortal();
-		this.critical = hull.getCritical();
-		this.toughness = hull.getToughness();
-		this.maneuverability = hull.getManeuverability();
+		if(hull != null) {
+		stun = hull.getStun();
+		wound = hull.getWound();
+		mortal = hull.getMortal();
+		critical = hull.getCritical();
 		buildCompartments();
+		}
+		else {
+			stun = wound = mortal = critical = 0;
+		}
 	}
 
 	public void statusUpdate() {
@@ -72,17 +65,17 @@ public class Ship {
 	private Damage adjustForToughness(Damage damage) {
 		int step = 0;
 		do {
-			if(damage.firepower.value > toughness.value) {
+			if(damage.firepower.value > hull.getToughness().value) {
 				damage.upgradeDamage();
 				step++;
 			}
 			
-			if(damage.firepower.value < toughness.value) {
+			if(damage.firepower.value < hull.getToughness().value) {
 				damage.downgradeDamage();
 				step--;
 			}
 
-		} while (damage.firepower.value != toughness.value + step);
+		} while (damage.firepower.value != hull.getToughness().value + step);
 		return damage;
 	}
 
@@ -175,10 +168,6 @@ public class Ship {
 	public void setEdge(boolean edge) {
 		this.edge = edge;
 	}
-
-//	public void addWeapon(Weapon weapon) {
-//		this.weapons.add(weapon);
-//	}
 
 	public void setArmor(Armor armor) {
 		this.armor = armor;
@@ -307,4 +296,9 @@ public class Ship {
 		this.systemList.add(newSystem);
 	}
 
+	public ArrayList<ShipSystem> getSystemList() {
+		return systemList;
+	}
+
+	
 }

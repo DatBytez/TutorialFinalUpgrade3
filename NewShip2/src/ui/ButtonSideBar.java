@@ -14,18 +14,18 @@ public class ButtonSideBar extends Bar {
 	private ArrayList<MySideButton> sideButtonList = new ArrayList<MySideButton>();
 	private ArrayList<String> buttonTitles = new ArrayList<String>();
 
-	private int x, y, width, height;
+	private int x, y, width, height, rotation;
 	private Rectangle bounds;
-//	private int buttonHeight = 110;
 	private MySideButton selectedItem;
 	private Stack<ArrayList<String>> buttonHistory = new Stack<>();
 
-	public ButtonSideBar(ArrayList<String> buttonTitles, int x, int y) {
+	public ButtonSideBar(ArrayList<String> buttonTitles, int x, int y, int rotation) {
 		super(x, y, 0, 0);
 		this.y = y;
 		this.x = x;
 		this.width = 30;
 		this.height = GameScreen.YSIZE - 2 * MARGIN;
+		this.rotation = rotation;
 		this.buttonTitles = buttonTitles;
 		initBounds();
 		initButtons();
@@ -42,7 +42,7 @@ public class ButtonSideBar extends Bar {
 
         for (String title : buttonTitles) {
             int buttonHeight = title.length() * 10 + 20;
-            sideButtonList.add(new MySideButton(title, x, yOffset, width, buttonHeight));
+            sideButtonList.add(new MySideButton(title, x, yOffset, width, buttonHeight, rotation));
             yOffset += buttonHeight + spaceBetweenButtons;
         }
     }

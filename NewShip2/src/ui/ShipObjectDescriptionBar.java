@@ -6,9 +6,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import helpz.ShipSystem;
 import static helpz.Constants.*;
 import scenes.BuildScene;
+import ship.ShipSystem;
 
 public class ShipObjectDescriptionBar extends Bar {
 

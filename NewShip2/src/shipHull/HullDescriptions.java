@@ -3,7 +3,7 @@ package shipHull;
 import java.util.ArrayList;
 
 import helpz.MixedList;
-import helpz.ShipSystem;
+import ship.ShipSystem;
 
 public class HullDescriptions {
 

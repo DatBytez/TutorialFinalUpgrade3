@@ -3,7 +3,7 @@ package ship;
 
 import shipHelperz.Moneyz;
 
-public enum supportSystems {
+public enum SupportSystems {
 
 	LifeSupport(		"Life Support",			ProgressLevel.PL6, Tech.N, /*Hull*/ 1,/* Pow */1.0, Moneyz.money(100, "K")),
 	CrewBunkroom(		"Crew Bunkroom",		ProgressLevel.PL6, Tech.N, /*Hull*/ 3,/* Pow */0.0, Moneyz.money(40, "K")),
@@ -26,7 +26,7 @@ public enum supportSystems {
 	double power;
 	int cost, hullCost;
 
-	supportSystems(String name, ProgressLevel progressLevel, Tech tech, int hullCost, double power, int cost) {
+	SupportSystems(String name, ProgressLevel progressLevel, Tech tech, int hullCost, double power, int cost) {
 		this.name = name;
 		this.level = progressLevel;
 		this.tech = tech;

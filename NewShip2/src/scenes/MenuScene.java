@@ -44,7 +44,7 @@ public class MenuScene extends GameScene implements SceneMethods {
 		bQuit.draw(g);
 	}
 
-	@Override
+//	@Override
 	public void mouseClicked(int x, int y) {
 
 		if (bBuilding.getBounds().contains(x, y))
@@ -106,6 +106,12 @@ public class MenuScene extends GameScene implements SceneMethods {
 	public void mouseDragged(int x, int y) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void mouseDoubleClicked(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
