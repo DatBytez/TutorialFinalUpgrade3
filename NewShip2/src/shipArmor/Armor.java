@@ -6,6 +6,7 @@ import ship.ProgressLevel;
 import ship.ShipSystem;
 import ship.Tech;
 import shipHelperz.Rollz;
+import shipHull.Hull;
 import shipWeapons.DamageType;
 
 import static helpz.Format.*;
@@ -78,5 +79,16 @@ public class Armor extends ShipSystem {
 		default:
 			return 0;
 		}
+	}
+
+	public int getCalculatedHullCost(Hull hull) {
+		return (int) (hull.getHullPoints() * (getHullCost() * 0.01));
+	}
+
+	public int getCalculatedCost(Hull hull) {
+		if (getCalculatedHullCost(hull) < 1)
+			return (1 * cost);
+		else
+			return (int) (getCalculatedHullCost(hull) * cost);
 	}
 }

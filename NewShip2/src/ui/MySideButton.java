@@ -18,6 +18,7 @@ public class MySideButton extends MyButton {
 	private boolean mouseOver, mousePressed;
 	private boolean isTopLevelCategory = false;
 	private boolean isActiveCategory = false; // NEW FLAG
+	private boolean isLockedCatagory = false;
 
 	public MySideButton(String text, int x, int y, int width, int height, int rotation) {
 		super(text, x, y, width, height);
@@ -71,8 +72,11 @@ public class MySideButton extends MyButton {
 		g2d.setFont(alternityLiteFont.deriveFont(Font.BOLD, fontSize));
 		int textWidth = g2d.getFontMetrics().stringWidth(text);
 		int textHeight = g2d.getFontMetrics().getAscent();
-
-		g2d.setColor(PHB_SIDE_TEXT);
+		if (isLockedCatagory) {
+			g2d.setColor(Color.GRAY);
+		} else {
+			g2d.setColor(PHB_SIDE_TEXT);
+		}
 		g2d.drawString(text, -textWidth / 2, textHeight / 2);
 
 		Font arrowFont = new Font("Dialog", Font.PLAIN, fontSize);
@@ -107,11 +111,18 @@ public class MySideButton extends MyButton {
 	}
 
 	public void setMousePressed(boolean mousePressed) {
-		this.mousePressed = mousePressed;
+	    if (!isLockedCatagory)
+	        this.mousePressed = mousePressed;
+	    else
+	        this.mousePressed = false;
 	}
 
 	public void setMouseOver(boolean mouseOver) {
-		this.mouseOver = mouseOver;
+		if (!isLockedCatagory) {
+			this.mouseOver = mouseOver;
+		} else {
+			this.mouseOver = false;
+		}
 	}
 
 	public boolean isMouseOver() {
@@ -146,6 +157,14 @@ public class MySideButton extends MyButton {
 		return isActiveCategory;
 	}
 
+	public void setLockedCatagory(boolean isLockedCatagory) {
+		this.isLockedCatagory = isLockedCatagory;
+	}
+
 	public void update() {
+	}
+
+	public boolean isLockedCatagory() {
+		return isLockedCatagory;
 	}
 }

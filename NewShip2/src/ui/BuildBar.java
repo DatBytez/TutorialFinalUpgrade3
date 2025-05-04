@@ -51,26 +51,35 @@ public class BuildBar extends Bar {
 					selectedItem = activeList.getSelectedItem();
 				}
 			});
+		if(descriptionBox.getBounds().contains(x, y))
+			descriptionBox.mouseClicked(x, y);
 	}
 
 	public void mouseMoved(int x, int y) {
 		if (activeList != null)
 			activeList.mouseMoved(x, y);
+		if(descriptionBox.getBounds().contains(x, y))
+				descriptionBox.mouseMoved(x, y);
 	}
 
 	public void mousePressed(int x, int y) {
 		if (activeList != null)
 			activeList.mousePressed(x, y);
+		if(descriptionBox.getBounds().contains(x, y))
+			descriptionBox.mousePressed(x, y);
 	}
 
 	public void mouseReleased(int x, int y) {
 		if (activeList != null)
 			activeList.mouseReleased(x, y);
+		if(descriptionBox.getBounds().contains(x, y))
+			descriptionBox.mouseReleased(x, y);
 	}
 
 	public void update() {
 		if (activeList != null) {
 			activeList.update();
+			descriptionBox.update();
 			descriptionBox.setY(y + activeList.getHeight() + MARGIN);
 			descriptionBox.setHeight(GameScreen.YSIZE - activeList.getHeight() - MARGIN*4);
 		}

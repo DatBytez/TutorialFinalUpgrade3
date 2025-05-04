@@ -2,11 +2,12 @@ package main;
 
 import javax.swing.JFrame;
 
+import helpz.DescriptionLoader;
+import scenes.BuildScene;
+import scenes.CombatScene;
 import scenes.EditorScene;
 import scenes.GameOverScene;
 import scenes.MenuScene;
-import scenes.BuildScene;
-import scenes.CombatScene;
 
 public class Game extends JFrame implements Runnable {
 
@@ -35,6 +36,7 @@ public class Game extends JFrame implements Runnable {
 		setLocationRelativeTo(null);
 		setVisible(true);
 
+		DescriptionLoader.loadDescriptions();
 	}
 
 	private void initClasses() {
@@ -45,7 +47,6 @@ public class Game extends JFrame implements Runnable {
 		combatScene = new CombatScene(this);
 		editing = new EditorScene(this);
 		gameOver = new GameOverScene(this);
-
 	}
 
 	private void start() {

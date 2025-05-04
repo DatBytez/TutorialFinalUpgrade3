@@ -2,7 +2,6 @@ package shipHull;
 
 import java.util.ArrayList;
 
-import helpz.MixedList;
 import ship.ShipSystem;
 
 import static helpz.Format.*;
@@ -122,8 +121,12 @@ public class Hull extends ShipSystem {
 	public int getHull() {
 		return hull;
 	}
-
+	
 	public int getHullPoints() {
+		return hullPoints;
+	}
+	
+	public int getCalculatedHullCost(Hull hull) {
 		return hullPoints;
 	}
 

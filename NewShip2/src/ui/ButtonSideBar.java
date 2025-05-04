@@ -1,5 +1,10 @@
 package ui;
 
+import static helpz.Constants.DEBUG;
+import static helpz.Constants.MARGIN;
+import static main.GameStates.MENU_STATE;
+import static main.GameStates.SetGameState;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -7,9 +12,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import main.GameScreen;
-import static helpz.Constants.*;
-import static main.GameStates.MENU_STATE;
-import static main.GameStates.SetGameState;
+import ship.Ship;
 
 public class ButtonSideBar extends Bar {
 
@@ -49,6 +52,26 @@ public class ButtonSideBar extends Bar {
         }
     }
 	
+	public void updateButtonLocks(Ship newShip) {
+	    boolean lockButtons = (newShip.getHull() == null);
+
+	    for (MySideButton button : sideButtonList) {
+	        String text = button.getText();
+
+	        if (!lockButtons) {
+	            button.setLockedCatagory(false);
+	        } else {
+	            if (text.equals("HULL") || text.equals("CIVILIAN") || text.equals("MILITARY") || text.equals("BACK")) {
+	                button.setLockedCatagory(false);
+	            } else {
+	                button.setLockedCatagory(true);
+	            }
+	        }
+	    }
+	}
+
+
+	
 	public void draw(Graphics g) {
 		if(DEBUG) {
 			g.setColor(Color.red);
@@ -62,17 +85,23 @@ public class ButtonSideBar extends Bar {
 
 	    for (MySideButton button : sideButtonList) {
 	        if (button.getBounds().contains(x, y)) {
+	            if (button.isLockedCatagory()) {
+	                // Ignore click if button is locked
+	                continue;
+	            }
+
 	            selectedItem = button;
 
 	            if (button.getText().equals("BACK") && !buttonHistory.isEmpty()) {
 	                buttonTitles = buttonHistory.pop();
-	                shouldUpdateButtons = true; // Mark that an update is needed
+	                shouldUpdateButtons = true;
 	            }
 	            if (button.getText().equals("MENU")) {
-	            	SetGameState(MENU_STATE);
+	                SetGameState(MENU_STATE);
 	            }
 	        }
 	    }
+
 
 	    if (shouldUpdateButtons) {
 	        initButtons(); // Now we update the button list safely

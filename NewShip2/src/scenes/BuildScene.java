@@ -33,7 +33,6 @@ import ui.ShipInfoBar;
 //	Make lists scrollable
 //	Add page description to blank build pages
 //
-//Select HUll (Grey out Armor and all other catagories) (Add note "Select a hull")
 //Select ARMOR (Grey out all other catagories) (Add a note with "Select Armor, or Skip")
 //	[Create Ship] -> Ask for Name and Crew Quality. Create Zones and Health Track
 //Select Zone
@@ -41,7 +40,7 @@ import ui.ShipInfoBar;
 
 public class BuildScene extends GameScene implements SceneMethods {
 
-	private ButtonSideBar sideBar;
+	private ButtonSideBar rightSideBar;
 	private ButtonSideBar leftSideBar;
 	private BuildBar buildBar;
 	private ShipInfoBar shipInfoBar;
@@ -50,7 +49,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	private MyButtonList activeList;
 	private ShipSystem selectedItem;
-	private MyButton bBuy;
 
 	public BuildScene(Game game) {
 		super(game);
@@ -61,20 +59,11 @@ public class BuildScene extends GameScene implements SceneMethods {
 		buildBar = new BuildBar((GameScreen.XSIZE / 2) + MARGIN, MARGIN, (GameScreen.XSIZE / 2) - MARGIN * 4,
 				GameScreen.YSIZE - MARGIN * 2, this);
 
-		initButtons();
-		initSideBar();
+		initRightSideBar();
 		initLeftSideBar();
 	}
 
-	private void initButtons() {
-
-		int w = 150;
-		int h = w / 3;
-
-		bBuy = new MyButton("BUY", ((GameScreen.XSIZE / 4)*3) - w / 2, GameScreen.YSIZE - MARGIN - h, w, h);
-	}
-
-	public void initSideBar() {
+	public void initRightSideBar() {
 		ArrayList<String> buttonTitles = new ArrayList<>();
 		buttonTitles.add("HULL");
 		buttonTitles.add("POWER");
@@ -84,7 +73,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		buttonTitles.add("COMMAND");
 		buttonTitles.add("SENSORS");
 		buttonTitles.add("MISC");
-		sideBar = new ButtonSideBar(buttonTitles, GameScreen.XSIZE - MARGIN * 3, 0 + MARGIN, 90);
+		rightSideBar = new ButtonSideBar(buttonTitles, GameScreen.XSIZE - MARGIN * 3, 0 + MARGIN, 90);
 	}
 
 	public void initLeftSideBar() {
@@ -101,19 +90,14 @@ public class BuildScene extends GameScene implements SceneMethods {
 		drawBackground(g);
 		buildBar.draw(g);
 		shipInfoBar.draw(g);
-		sideBar.draw(g);
+		rightSideBar.draw(g);
 		leftSideBar.draw(g);
 		if (activeList != null)
 			activeList.draw(g);
-		drawButtons(g);
 		drawScreenEffect(g);
 		drawVerticalVignette(g);
 		drawCenterSpineVignette(g);
 
-	}
-
-	private void drawButtons(Graphics g) {
-		bBuy.draw(g);
 	}
 
 	private void drawBackground(Graphics g) {
@@ -224,7 +208,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 			updateTick();
 			buildBar.update();
 			shipInfoBar.update();
-			sideBar.update();
+			rightSideBar.update();
+			rightSideBar.update();
+			rightSideBar.updateButtonLocks(newShip);
+
 		}
 	}
 
@@ -236,7 +223,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 		this.gamePaused = gamePaused;
 	}
 
-	public void buyClicked() {
+	public void addClicked() {
 		if (buildBar.getSelecteItem() != null) {
 			selectedItem = buildBar.getSelecteItem();
 			if (selectedItem.getClass() == Hull.class)
@@ -246,42 +233,47 @@ public class BuildScene extends GameScene implements SceneMethods {
 			else
 				newShip.addSystem(selectedItem);
 
-//			newShip.setName("NEW-UNNAMED");
 			TEST_SHIP = newShip;
 		}
 	}
 
 	@Override
 	public void mouseClicked(int x, int y) {
-		if (bBuy.getBounds().contains(x, y)) {
-			buyClicked();
-		}
 
-		if (shipInfoBar.getBounds().contains(x, y)) {
-			shipInfoBar.mouseClicked(x, y);
-		}
+	    if (shipInfoBar.getBounds().contains(x, y)) {
+	        shipInfoBar.mouseClicked(x, y);
+	    }
 
-		if (sideBar.getBounds().contains(x, y)) {
-			sideBar.mouseClicked(x, y);
-			if (sideBar.getSelectedItem().getText() == "HULL") {
-				sideBar.changeList(new ArrayList<>(Arrays.asList("HULL>>", "CIVILIAN", "MILITARY", "ARMOR", "BACK")));
-			} else if (sideBar.getSelectedItem().getText() == "ENGINES") {
-				sideBar.changeList(new ArrayList<>(Arrays.asList("ENGINES >>", "SUBSPACE", "FTL", "BACK")));
-			} else if (sideBar.getSelectedItem().getText() == "WEAPONS") {
-				sideBar.changeList(new ArrayList<>(
-						Arrays.asList("WEAPONS>>", "BEAMS", "PROJECTILES", "ORDINANCE", "SPECIAL", "BACK")));
-			} else
-				buildBar.setActiveList(sideBar.getSelectedItem().getText());
-		}
-		
-		if (leftSideBar.getBounds().contains(x, y)) 
-			leftSideBar.mouseClicked(x, y);
+	    if (rightSideBar.getBounds().contains(x, y)) {
+	        rightSideBar.mouseClicked(x, y);
 
-		if (buildBar.getBounds().contains(x, y))
-			buildBar.mouseClicked(x, y);
-		
-		this.selectedItem = buildBar.getSelecteItem();
+	        if (rightSideBar.getSelectedItem() != null) {
+	            String selectedText = rightSideBar.getSelectedItem().getText();
+
+	            if (selectedText.equals("HULL")) {
+	                rightSideBar.changeList(new ArrayList<>(Arrays.asList("HULL>>", "CIVILIAN", "MILITARY", "ARMOR", "BACK")));
+	            } else if (selectedText.equals("ENGINES")) {
+	                rightSideBar.changeList(new ArrayList<>(Arrays.asList("ENGINES >>", "SUBSPACE", "FTL", "BACK")));
+	            } else if (selectedText.equals("WEAPONS")) {
+	                rightSideBar.changeList(new ArrayList<>(Arrays.asList(
+	                        "WEAPONS>>", "BEAMS", "PROJECTILES", "ORDINANCE", "SPECIAL", "BACK")));
+	            } else {
+	                buildBar.setActiveList(selectedText);
+	            }
+	        }
+	    }
+
+	    if (leftSideBar.getBounds().contains(x, y)) {
+	        leftSideBar.mouseClicked(x, y);
+	    }
+
+	    if (buildBar.getBounds().contains(x, y)) {
+	        buildBar.mouseClicked(x, y);
+	    }
+
+	    this.selectedItem = buildBar.getSelecteItem();
 	}
+
 
 	@Override
 	public void mouseDoubleClicked(int x, int y) {
@@ -292,18 +284,15 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseMoved(int x, int y) {
-		bBuy.setMouseOver(false);
-		sideBar.mouseMoved(x, y);
+		rightSideBar.mouseMoved(x, y);
 		leftSideBar.mouseMoved(x, y);
 		buildBar.mouseMoved(x, y);
 	}
 
 	@Override
 	public void mousePressed(int x, int y) {
-		if (bBuy.getBounds().contains(x, y))
-			bBuy.setMousePressed(true);
-		if (sideBar.getBounds().contains(x, y))
-			sideBar.mousePressed(x, y);
+		if (rightSideBar.getBounds().contains(x, y))
+			rightSideBar.mousePressed(x, y);
 		if (leftSideBar.getBounds().contains(x, y))
 			leftSideBar.mousePressed(x, y);
 		if (buildBar.getBounds().contains(x, y))
@@ -313,14 +302,9 @@ public class BuildScene extends GameScene implements SceneMethods {
 
 	@Override
 	public void mouseReleased(int x, int y) {
-		resetButtons();
-		sideBar.mouseReleased(x, y);
+		rightSideBar.mouseReleased(x, y);
 		leftSideBar.mouseReleased(x, y);
 		buildBar.mouseReleased(x, y);
-	}
-
-	private void resetButtons() {
-		bBuy.resetBooleans();
 	}
 
 	@Override

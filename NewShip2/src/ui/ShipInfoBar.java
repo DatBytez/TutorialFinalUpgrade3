@@ -3,6 +3,7 @@ package ui;
 import static helpz.Constants.PHB_DARK;
 import static helpz.Constants.PHB_TEXT;
 import static helpz.Constants.PHB_TITLE;
+import static helpz.Constants.TITLE_MARGIN;
 import static helpz.Format.getDashedString;
 import static helpz.Format.getMoneyString;
 
@@ -12,7 +13,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,8 @@ import java.util.TreeMap;
 import scenes.BuildScene;
 import ship.ShipCompartment;
 import ship.ShipSystem;
+import shipArmor.Armor;
+import shipHull.Hull;
 
 public class ShipInfoBar extends Bar {
 
@@ -28,7 +30,6 @@ public class ShipInfoBar extends Bar {
 
 	private int width, height;
 	private Rectangle bounds;
-	private int yOffset = 30;
 	private int titleOffset = 60;
 
 	private Rectangle nameBounds; // Click area for the name
@@ -44,6 +45,8 @@ public class ShipInfoBar extends Bar {
 		this.width = width;
 		this.height = height;
 		this.building = building;
+		setStyle("extra");
+		hasTitleBar = false;
 		initBounds();
 		initButtons();
 	}
@@ -65,7 +68,8 @@ public class ShipInfoBar extends Bar {
 		drawButtons(g);
 	}
 
-	private void drawTitle(Graphics g) {
+	@Override
+	protected void drawTitle(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
 		g.setColor(PHB_TITLE);
@@ -76,18 +80,18 @@ public class ShipInfoBar extends Bar {
 		String displayName = renamingShip ? tempName.toString() + "|" : building.getNewShip().getName();
 		int titleWidth = g.getFontMetrics().stringWidth(displayName);
 		int titleX = x + (width / 2) - titleWidth / 2;
-		int titleY = y + yOffset;
+		int titleY = y + TITLE_MARGIN;
 
 		g.drawString(displayName, titleX, titleY);
 
 		// Track clickable area
 		nameBounds = new Rectangle(titleX, titleY - 16, titleWidth, 20);
 
-		g2d.setPaint(PHB_DARK);
-		g2d.fillRect(x + 40, y + 35, width - 80, 5);
+		if (hasTitleBar) 
+			drawTitleBar(g,TITLE_MARGIN);
 	}
 
-	private void drawBackground(Graphics g) {
+	protected void drawBackground(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setColor(PHB_DARK);
@@ -107,19 +111,19 @@ public class ShipInfoBar extends Bar {
 		rows.add(new String[] { "TYPE", "POW", "HULL", "SYSTEM", "COST" });
 
 		// Hull
-		ShipSystem hull = building.getNewShip().getHull();
+		Hull hull = building.getNewShip().getHull();
 		if (hull != null) {
-			rows.add(new String[] { "Hull", getDashedString(hull.getPowerReq()), getDashedString(hull.getHullPts()),
-					hull.getName(), getMoneyString(hull.getCost()) });
+			rows.add(new String[] { "Hull", getDashedString(hull.getPowerReq()), getDashedString(hull.getCalculatedHullCost(hull)),
+					hull.getName(), getMoneyString(hull.getCalculatedCost(hull)) });
 		} else {
 			rows.add(new String[] { "Hull", "-", "-", "Select a Hull", "-" });
 		}
 
 		// Armor
-		ShipSystem armor = building.getNewShip().getArmor();
+		Armor armor = building.getNewShip().getArmor();
 		if (armor != null) {
-			rows.add(new String[] { "Armor", getDashedString(armor.getPowerReq()), getDashedString(armor.getHullPts()),
-					armor.getName(), getMoneyString(armor.getCost()) });
+			rows.add(new String[] { "Armor", getDashedString(armor.getPowerReq()), getDashedString(armor.getCalculatedHullCost(hull)),
+					armor.getName(), getMoneyString(armor.getCalculatedCost(hull)) });
 		} else {
 			rows.add(new String[] { "Armor", "-", "-", "Select Armor", "-" });
 		}
@@ -163,8 +167,8 @@ public class ShipInfoBar extends Bar {
 			if (systemTypeExpanded.get(type)) {
 				for (ShipSystem system : group) {
 					rows.add(new String[] { "", // don't repeat type
-							getDashedString(system.getPowerReq()), getDashedString(system.getHullPts()),
-							system.getName(), getMoneyString(system.getCost()) });
+							getDashedString(system.getPowerReq()), getDashedString(system.getCalculatedHullCost(hull)),
+							system.getName(), getMoneyString(system.getCalculatedCost(hull)) });
 				}
 			}
 		}

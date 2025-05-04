@@ -1,6 +1,5 @@
 package shipHull;
 
-import java.awt.Font;
 import java.util.ArrayList;
 
 import ship.ShipSystem;
