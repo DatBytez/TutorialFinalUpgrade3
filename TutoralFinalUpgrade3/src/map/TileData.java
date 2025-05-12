@@ -1,11 +1,16 @@
 package map;
 
+import java.awt.image.BufferedImage;
+
 public class TileData {
     private String atlasId;
     private int tileIndex;
     private boolean isAnimated;
-    private boolean isCollidable;
+    private boolean collision;
     private int animationFrame;
+    
+    // ADDED (check save functionality)
+//    public BufferedImage image;
 
     // No-args constructor for Gson
     public TileData() {
@@ -15,7 +20,7 @@ public class TileData {
         this.atlasId = atlasId;
         this.tileIndex = tileIndex;
         this.isAnimated = false;
-        this.isCollidable = false;
+        this.collision = false;
         this.animationFrame = 0;
     }
 
@@ -23,7 +28,7 @@ public class TileData {
         this.atlasId = other.atlasId;
         this.tileIndex = other.tileIndex;
         this.isAnimated = other.isAnimated;
-        this.isCollidable = other.isCollidable;
+        this.collision = other.collision;
         this.animationFrame = other.animationFrame;
     }
 
@@ -53,11 +58,11 @@ public class TileData {
     }
 
     public boolean isCollidable() {
-        return isCollidable;
+        return collision;
     }
 
     public void setCollidable(boolean collidable) {
-        isCollidable = collidable;
+        collision = collidable;
     }
 
     public int getAnimationFrame() {

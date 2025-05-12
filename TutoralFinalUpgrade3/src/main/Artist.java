@@ -117,4 +117,8 @@ public class Artist {
         }
         return spriteAtlas;
     }
+
+	public void drawImage(BufferedImage image, int x, int y) {
+		g2d.drawImage(image, x, y, null);
+	}
 }

@@ -1,6 +1,10 @@
 /META-INF/
-/target/
+/helpz/
+/inputs/
+/main/
+/managers/
+/map/
+/res/
 /scenes/
 /ui/
-/main/
-/inputs/
+/util/

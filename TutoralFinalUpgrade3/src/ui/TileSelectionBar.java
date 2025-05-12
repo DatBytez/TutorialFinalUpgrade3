@@ -3,6 +3,8 @@ package ui;
 import static helpz.Constants.TILE_SIZE;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,144 +13,204 @@ import main.Artist;
 import map.TileData;
 import scenes.EditingScene;
 
+/**
+ * A tile selection bar that shows fixed buttons (for layer, save, menu)
+ * and a grid of tile images for tile selection.
+ */
 public class TileSelectionBar extends Bar {
-    // Fixed buttons (vertical stack)
-    private List<MyButton> fixedButtons;
-    // Tile buttons arranged in a 2–row grid
+    // Fixed buttons.
+    private MyButton bLayer;
+    private MyButton bSave;
+    private MyButton bMenu;
+    // List of tile buttons in the grid.
     private List<MyButton> tileButtons;
 
+    // Palette of tile data for the tile grid.
     private List<TileData> paletteTiles;
-    // The currently selected tile index (updated by clicking a tile button)
+    // The currently selected tile index (for the grid portion).
     private int selectedTileIndex;
-    
-    // Layout variables for the fixed button column and margins.
-    public int leftColumnWidth;
+
+    // Layout variables.
+    private int fixedWidth = 100; // Width reserved for fixed buttons.
     private int margin = 5;
-    private int fixedButtonHeight;
-    private int fixedButtonWidth;
-    
-    // A reference to the scene so that the bar can perform scene–specific actions.
+    private int columns;  // Calculated for the tile grid area.
+
+    // Reference to the EditingScene.
     private EditingScene editingScene;
 
     /**
      * Constructs a new TileSelectionBar.
      * 
-     * @param x             x coordinate of the bar
-     * @param y             y coordinate of the bar
-     * @param width         total width of the bar
-     * @param height        total height of the bar
-     * @param paletteTiles  list of tile data (from the current atlas)
-     * @param editingScene  reference to the EditingScene using the bar
+     * @param x            x coordinate of the bar.
+     * @param y            y coordinate of the bar.
+     * @param width        total width of the bar.
+     * @param height       total height of the bar.
+     * @param paletteTiles list of TileData for the palette.
+     * @param editingScene reference to the EditingScene.
      */
-    public TileSelectionBar(int x, int y, int width, int height,
-                            List<TileData> paletteTiles, EditingScene editingScene) {
+    public TileSelectionBar(int x, int y, int width, int height, List<TileData> paletteTiles, EditingScene editingScene) {
         super(x, y, width, height);
         this.paletteTiles = paletteTiles;
         this.editingScene = editingScene;
         this.selectedTileIndex = 0;
-        
-        // Fixed buttons: use a constant width.
-        fixedButtonWidth = 80;
-        // Stack three fixed buttons vertically with a margin between them.
-        fixedButtonHeight = (height - margin * 4) / 3;
-        leftColumnWidth = fixedButtonWidth + margin * 2;
-        
-        // Create fixed buttons (stacked vertically)
-        fixedButtons = new ArrayList<>();
-        int buttonX = x + margin;
-        int buttonY = y + margin;
-        fixedButtons.add(new MyButton("Layer", buttonX, buttonY, fixedButtonWidth, fixedButtonHeight));
-        buttonY += fixedButtonHeight + margin;
-        fixedButtons.add(new MyButton("Save", buttonX, buttonY, fixedButtonWidth, fixedButtonHeight));
-        buttonY += fixedButtonHeight + margin;
-        fixedButtons.add(new MyButton("Menu", buttonX, buttonY, fixedButtonWidth, fixedButtonHeight));
-        
-        // Create tile buttons arranged in a grid with 2 rows.
+        // The grid area starts after the fixed column.
+        int gridWidth = width - fixedWidth - margin;
+        this.columns = (gridWidth - margin) / (TILE_SIZE + margin);
+        initFixedButtons();
+        initTileButtons();
+    }
+
+    /**
+     * Initializes the fixed buttons for "Layer", "Save", and "Menu."
+     */
+    private void initFixedButtons() {
+        int btnWidth = fixedWidth - 2 * margin;
+        int btnHeight = (height - 4 * margin) / 3; // Three buttons in vertical stack.
+        int btnX = x + margin;
+        int btnY = y + margin;
+        bLayer = new MyButton("Layer", btnX, btnY, btnWidth, btnHeight);
+        btnY += btnHeight + margin;
+        bSave = new MyButton("Save", btnX, btnY, btnWidth, btnHeight);
+        btnY += btnHeight + margin;
+        bMenu = new MyButton("Menu", btnX, btnY, btnWidth, btnHeight);
+    }
+
+    /**
+     * Initializes tile grid buttons.
+     */
+    private void initTileButtons() {
         tileButtons = new ArrayList<>();
-        // The tile buttons will appear immediately to the right of the fixed buttons.
-        int tileStartX = x + leftColumnWidth + margin;
-        int tileStartY = y + margin;
-        int numTileButtons = paletteTiles.size();
-        for (int i = 0; i < numTileButtons; i++) {
-            int row = i % 2; // Row 0 or 1.
-            int col = i / 2;
-            int btnX = tileStartX + col * (TILE_SIZE + margin);
-            int btnY = tileStartY + row * (TILE_SIZE + margin);
-            MyButton tileButton = new MyButton("", btnX, btnY, TILE_SIZE, TILE_SIZE, i);
-            tileButtons.add(tileButton);
+        // The tile grid area starts after the fixed column.
+        int tileGridX = x + fixedWidth + margin;
+        int tileGridY = y + margin;
+        int gridWidth = width - fixedWidth - margin;
+        // Calculate number of columns based on grid width.
+        int gridColumns = (gridWidth - margin) / (TILE_SIZE + margin);
+        // Create one button per palette tile.
+        for (int i = 0; i < paletteTiles.size(); i++) {
+            int col = i % gridColumns;
+            int row = i / gridColumns;
+            int btnX = tileGridX + col * (TILE_SIZE + margin);
+            int btnY = tileGridY + row * (TILE_SIZE + margin);
+            MyButton tileBtn = new MyButton("", btnX, btnY, TILE_SIZE, TILE_SIZE, i);
+            tileButtons.add(tileBtn);
         }
     }
-    
+
     /**
-     * Renders the entire selection bar: a solid backdrop, fixed buttons, and tile buttons.
-     *
-     * @param a          the Artist instance used for rendering.
-     * @param tileImages list of BufferedImages corresponding to the palette tiles.
+     * Renders the entire selection bar: fixed buttons on the left and tile grid on the right.
+     * 
+     * @param a          the Artist instance for rendering.
+     * @param tileImages list of BufferedImages corresponding to the paletteTiles.
      */
     public void render(Artist a, List<BufferedImage> tileImages) {
-        // Draw a solid backdrop.
+        // Draw the background for the entire bar.
         a.setColor(Color.DARK_GRAY);
         a.fillRect(x, y, width, height);
         
-        // Draw the fixed buttons.
-        for (MyButton btn : fixedButtons) {
-            btn.draw(a);
-        }
-        // Draw the tile buttons.
+        // Render fixed buttons.
+        renderFixedButtons(a);
+        
+        // Render tile grid buttons.
+        renderTileButtons(a, tileImages);
+    }
+    
+    private void renderFixedButtons(Artist a) {
+        // Draw each fixed button.
+        bLayer.draw(a);
+        bSave.draw(a);
+        bMenu.draw(a);
+    }
+    
+    private void renderTileButtons(Artist a, List<BufferedImage> tileImages) {
+        // Render each tile button in the grid.
         for (MyButton btn : tileButtons) {
-//            btn.draw(a);
             int id = btn.getId();
             if (id >= 0 && id < tileImages.size()) {
-                BufferedImage tileImg = tileImages.get(id);
-                a.drawImage(tileImg, btn.x, btn.y, btn.width, btn.height);
+                a.drawImage(tileImages.get(id), btn.x, btn.y, TILE_SIZE, TILE_SIZE);
             }
             btn.draw(a);
         }
+        // Highlight the tile in the grid if it’s the selected one.
+        for (MyButton btn : tileButtons) {
+            if (btn.getId() == selectedTileIndex) {
+                a.setColor(Color.YELLOW);
+                a.drawRect(btn.x, btn.y, TILE_SIZE, TILE_SIZE);
+            }
+        }
     }
-    
+
     /**
-     * Handles mousePressed events within the bar. Fixed buttons call separate
-     * methods on the associated EditingScene.
+     * Processes a mousePressed event. Checks first if the click is in the fixed button area;
+     * if so, it performs the fixed button action. Otherwise, it checks the tile grid.
+     * 
+     * @param mouseX the x coordinate (virtual coordinates).
+     * @param mouseY the y coordinate (virtual coordinates).
      */
     public void mousePressed(int mouseX, int mouseY) {
-        // Check fixed buttons.
-        for (int i = 0; i < fixedButtons.size(); i++) {
-            MyButton btn = fixedButtons.get(i);
-            if (btn.getBounds().contains(mouseX, mouseY)) {
-                btn.setMousePressed(true);
-                if (i == 0) {
-                    editingScene.toggleLayer();
-                } else if (i == 1) {
-                    editingScene.saveMap();
-                } else if (i == 2) {
-                    editingScene.returnToMainMenu();
+        // Check if the click is inside the fixed button area (x to x+fixedWidth).
+        if (mouseX >= x && mouseX < x + fixedWidth) {
+            // Determine which fixed button was clicked.
+            if (bLayer.getBounds().contains(mouseX, mouseY)) {
+                bLayer.setMousePressed(true);
+                editingScene.toggleLayer();
+            } else if (bSave.getBounds().contains(mouseX, mouseY)) {
+                bSave.setMousePressed(true);
+                editingScene.saveLevel();
+            } else if (bMenu.getBounds().contains(mouseX, mouseY)) {
+                bMenu.setMousePressed(true);
+                editingScene.returnToMainMenu();
+            }
+        } else {
+            // Otherwise, process the tile grid click.
+            for (MyButton btn : tileButtons) {
+                if (btn.getBounds().contains(mouseX, mouseY)) {
+                    btn.setMousePressed(true);
+                    selectedTileIndex = btn.getId();
+                    break;
                 }
-                return;
             }
         }
-        // Check tile buttons.
+    }
+    
+    public void mouseReleased(int mouseX, int mouseY) {
+        bLayer.resetBooleans();
+        bSave.resetBooleans();
+        bMenu.resetBooleans();
         for (MyButton btn : tileButtons) {
-            if (btn.getBounds().contains(mouseX, mouseY)) {
-                btn.setMousePressed(true);
-                selectedTileIndex = btn.getId();
-                return;
+            btn.resetBooleans();
+        }
+    }
+    
+    public void mouseMoved(int mouseX, int mouseY) {
+        // Optional: update button hover state.
+        bLayer.setMouseOver(false);
+        bSave.setMouseOver(false);
+        bMenu.setMouseOver(false);
+        for (MyButton btn : tileButtons) {
+            btn.setMouseOver(false);
+        }
+        if (mouseX >= x && mouseX < x + fixedWidth) {
+            if (bLayer.getBounds().contains(mouseX, mouseY))
+                bLayer.setMouseOver(true);
+            else if (bSave.getBounds().contains(mouseX, mouseY))
+                bSave.setMouseOver(true);
+            else if (bMenu.getBounds().contains(mouseX, mouseY))
+                bMenu.setMouseOver(true);
+        } else {
+            for (MyButton btn : tileButtons) {
+                if (btn.getBounds().contains(mouseX, mouseY)) {
+                    btn.setMouseOver(true);
+                    break;
+                }
             }
         }
     }
     
     /**
-     * Handles mouseReleased events within the bar. Resets button states.
+     * Returns the currently selected tile index (from the tile grid).
+     * @return the selected tile index.
      */
-    public void mouseReleased(int mouseX, int mouseY) {
-    	//TODO: Remove for and just have btn.resetBooleans(); once everything is working again
-        for (MyButton btn : fixedButtons) {
-            btn.resetBooleans();
-        }
-        for (MyButton btn : tileButtons) {
-            btn.resetBooleans();
-        }
-    }
-    
     public int getSelectedTileIndex() {
         return selectedTileIndex;
     }

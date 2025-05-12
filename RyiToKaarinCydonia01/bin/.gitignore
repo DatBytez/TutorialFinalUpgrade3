@@ -1,8 +1,11 @@
-/entity/
-/enviroment/
-/helpz/
-/main/
-/managers/
+/config
+/config.txt
+/font/
 /maps/
+/objects/
+/other/
+/projectile/
+/save.dat
+/sound/
+/spriteatlas.png
 /textures/
-/tile/
