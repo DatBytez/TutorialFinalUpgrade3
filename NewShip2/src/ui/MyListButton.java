@@ -5,23 +5,23 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import ship.ShipSystem;
+import ship.systems.ShipSystem;
 
 import static helpz.Constants.*;
 
-public class MyListButton {
+public class MyListButton<T> {
 
 	public int x, y, width, height, index;
 	private Rectangle bounds;
 	private boolean mouseOver, mousePressed, selected;
 	private ArrayList<Object> properties = new ArrayList<Object>();
-	private MyButtonList myButtonList;
-	private ShipSystem item;
+	private MyButtonList<T> myButtonList;
+	private ShipSystem<T> item;
 	private Color translucent = new Color(0, 0, 0, 0);
 	private int frontTAB;
 
 	// For List Buttons
-	public MyListButton(ShipSystem item, int x, int y, MyButtonList myButtonList) {
+	public MyListButton(ShipSystem<T> item, int x, int y, MyButtonList<T> myButtonList) {
 		this.item = item;
 		this.x = x;
 		this.y = y;
@@ -109,7 +109,7 @@ public class MyListButton {
 		return bounds;
 	}
 	
-	public ShipSystem getItem() {
+	public ShipSystem<T> getItem() {
 		return item;
 	}
 }

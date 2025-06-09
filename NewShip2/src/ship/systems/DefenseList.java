@@ -1,16 +1,17 @@
-package shipDefense;
+package ship.systems;
 
+import java.util.ArrayList;
+
+import helpz.SystemFactory;
 import ship.ProgressLevel;
-import ship.Severity;
 import ship.Tech;
 import shipHelperz.Moneyz;
+import ui.SystemListUtilz;
 
-public enum DefenseList {
+public enum DefenseList implements SystemFactory<DefenseList> {
 		
 		Chaff(					"Chaff",					ProgressLevel.PL6, Tech.N, /*Hull*/1, /*Power*/0, Moneyz.money(50, "K"), /*Cover*/100),//+1 Step Missiles/Sensors
-		
 		DamageControl(			"Damage Control",			ProgressLevel.PL6, Tech.N, /*Hull*/0, /*Power*/0, Moneyz.money(0, "K"), /*Cover*/0),//Hull is .05% Power is 1/hull Cost is 100K/hull //-2 Bonus to Damage Checks
-		
 		DecoyDrone(				"Decoy Drone",				ProgressLevel.PL6, Tech.C, /*Hull*/1, /*Power*/1, Moneyz.money(600, "K"), /*Cover*/100),//Adds 3 drones
 		Jammer(					"Jammer",					ProgressLevel.PL6, Tech.N, /*Hull*/1, /*Power*/1, Moneyz.money(100, "K"), /*Cover*/100),//+2 Missiles/Sensors
 		MagneticScreen(			"Magnetic Screen",			ProgressLevel.PL6, Tech.S, /*Hull*/4, /*Power*/2, Moneyz.money(400, "K"), /*Cover*/20),//+2 Missiles/Projectiles
@@ -28,18 +29,38 @@ public enum DefenseList {
 		Displacer(				"Displacer",				ProgressLevel.PL8, Tech.T, /*Hull*/2, /*Power*/3, Moneyz.money(1, "M"), /*Cover*/20),//+3 Penalty to enemy Attacks
 		NaniteRepairArray(		"Nanite Repair Array",		ProgressLevel.PL9, Tech.C, /*Hull*/0, /*Power*/2, Moneyz.money(500, "K"), /*Cover*/50);//Hull is .05% Power is 2/hull Cost is 1M/hull //-5 Bonus to Damage Checks
 				
-		String name;
-		ProgressLevel level;
-		Tech tech;
-		int hull, power, cost, coverage;
+		protected final String name;
+		protected final ProgressLevel level;
+		protected final Tech tech;
+		protected final int hullCost, creditCost, coverage;
+		protected final double powerCost;
 
-		DefenseList(String name, ProgressLevel progressLevel, Tech tech, int hull, int power, int cost, int coverage){
+		DefenseList(String name, ProgressLevel progressLevel, Tech tech, int hullCost, double powerCost, int creditCost, int coverage){
 			this.name = name;
 			this.level = progressLevel;
 			this.tech = tech;
-			this.hull = hull;
-			this.power = power;
-			this.cost = cost;
+			this.hullCost = hullCost;
+			this.powerCost = powerCost;
+			this.creditCost = creditCost;
 			this.coverage = coverage;
+		}
+		
+		public static ArrayList<String> getListTitles(){
+	        ArrayList<String> titles = SystemListUtilz.getListTitles();
+	        
+	        titles.add("Power");
+	        titles.add("Hull");
+	        titles.add("Cost");
+	        titles.add("Coverage");
+	        return titles;
+		}
+		
+		public static ArrayList<ShipSystem<DefenseList>> getList() {
+			return SystemListUtilz.getAll(DefenseList.class);
+		}
+
+		@Override
+		public ShipSystem<DefenseList> createInstance() {
+			return new Defense(this);
 		}
 	}

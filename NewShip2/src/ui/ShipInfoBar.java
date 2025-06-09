@@ -1,12 +1,13 @@
 package ui;
 
-import static helpz.Constants.PHB_DARK;
+import static helpz.Constants.*;
 import static helpz.Constants.PHB_TEXT;
 import static helpz.Constants.PHB_TITLE;
 import static helpz.Constants.TITLE_MARGIN;
 import static helpz.Format.getDashedString;
 import static helpz.Format.getMoneyString;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,9 +21,9 @@ import java.util.TreeMap;
 
 import scenes.BuildScene;
 import ship.ShipCompartment;
-import ship.ShipSystem;
-import shipArmor.Armor;
-import shipHull.Hull;
+import ship.systems.Armor;
+import ship.systems.Hull;
+import ship.systems.ShipSystem;
 
 public class ShipInfoBar extends Bar {
 
@@ -113,7 +114,7 @@ public class ShipInfoBar extends Bar {
 		// Hull
 		Hull hull = building.getNewShip().getHull();
 		if (hull != null) {
-			rows.add(new String[] { "Hull", getDashedString(hull.getPowerReq()), getDashedString(hull.getCalculatedHullCost(hull)),
+			rows.add(new String[] { "Hull", getDashedString((int) hull.getCalculatedPowerCost()), getDashedString(hull.getCalculatedHullCost(hull)),
 					hull.getName(), getMoneyString(hull.getCalculatedCost(hull)) });
 		} else {
 			rows.add(new String[] { "Hull", "-", "-", "Select a Hull", "-" });
@@ -122,15 +123,15 @@ public class ShipInfoBar extends Bar {
 		// Armor
 		Armor armor = building.getNewShip().getArmor();
 		if (armor != null) {
-			rows.add(new String[] { "Armor", getDashedString(armor.getPowerReq()), getDashedString(armor.getCalculatedHullCost(hull)),
+			rows.add(new String[] { "Armor", getDashedString((int) armor.getCalculatedPowerCost()), getDashedString(armor.getCalculatedHullCost(hull)),
 					armor.getName(), getMoneyString(armor.getCalculatedCost(hull)) });
 		} else {
 			rows.add(new String[] { "Armor", "-", "-", "Select Armor", "-" });
 		}
 
 		// Group other systems
-		Map<String, List<ShipSystem>> systemGroups = new TreeMap<>();
-		for (ShipSystem system : building.getNewShip().getSystemList()) {
+		Map<String, List<ShipSystem<?>>> systemGroups = new TreeMap<>();
+		for (ShipSystem<?> system : building.getNewShip().getSystemList()) {
 			if (system == hull || system == armor)
 				continue;
 			String type = system.getClass().getSimpleName();
@@ -152,7 +153,7 @@ public class ShipInfoBar extends Bar {
 
 		// Dynamic sections per system type
 		for (String type : systemGroups.keySet()) {
-			List<ShipSystem> group = systemGroups.get(type);
+			List<ShipSystem<?>> group = systemGroups.get(type);
 
 			systemTypeExpanded.putIfAbsent(type, true);
 
@@ -165,9 +166,9 @@ public class ShipInfoBar extends Bar {
 			rows.add(new String[] { label, "", "", "", "" });
 
 			if (systemTypeExpanded.get(type)) {
-				for (ShipSystem system : group) {
+				for (ShipSystem<?> system : group) {
 					rows.add(new String[] { "", // don't repeat type
-							getDashedString(system.getPowerReq()), getDashedString(system.getCalculatedHullCost(hull)),
+							getDashedString((int) system.getCalculatedPowerCost()), getDashedString(system.getCalculatedHullCost(hull)),
 							system.getName(), getMoneyString(system.getCalculatedCost(hull)) });
 				}
 			}
@@ -211,7 +212,42 @@ public class ShipInfoBar extends Bar {
 					drawX = colX[i] + (colWidths[i] - textWidth); // no shift, already anchored right
 				}
 
-				g.drawString(text, drawX, infoY + rowIndex * lineHeight);
+//				g.drawString(text, drawX, infoY + rowIndex * lineHeight);
+				
+				// Determine base color and format
+				Color textColor = PHB_TEXT;
+				String displayText = text;
+
+				// Apply color and "+" for negative numbers in POW (col 1) and HULL (col 2)
+				if ((i == 1 || i == 2)) {
+					try {
+						int value = Integer.parseInt(text);
+						if (value < 0) {
+							displayText = "+" + Math.abs(value);
+							textColor = PHB_LIST_TITLE;
+						} else {
+							displayText = String.valueOf(value);
+							textColor = PHB_TEXT;
+						}
+					} catch (NumberFormatException ex) {
+						// leave text and color as-is (probably a dash or placeholder)
+					}
+				}
+
+
+				// Measure the final displayText width
+				int displayTextWidth = g.getFontMetrics().stringWidth(displayText);
+
+				// Adjust X for centering in POW and HULL
+				if (i == 1 || i == 2) {
+					drawX = colX[i] + (colWidths[i] - displayTextWidth) / 2;
+				} else if (i == 4) {
+					drawX = colX[i] + (colWidths[i] - displayTextWidth); // right-align
+				}
+
+				// Draw the string
+				g.setColor(textColor);
+				g.drawString(displayText, drawX, infoY + rowIndex * lineHeight);
 			}
 		}
 	}

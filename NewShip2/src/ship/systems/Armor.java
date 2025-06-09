@@ -1,33 +1,27 @@
-package shipArmor;
+package ship.systems;
 
 import java.util.ArrayList;
 
-import ship.ProgressLevel;
-import ship.ShipSystem;
-import ship.Tech;
+import shipArmor.ArmorType;
+import shipArmor.BlockSet;
 import shipHelperz.Rollz;
-import shipHull.Hull;
 import shipWeapons.DamageType;
 
 import static helpz.Format.*;
 
-public class Armor extends ShipSystem {
-	String name, description;
-	ArmorType armorType;
-	ProgressLevel level;
-	Tech tech;
-	BlockSet blockSet;
-	int cost;
-
-	public Armor(ArmorList armor) {
-		super(armor.name, armor.cost);
-		this.name = armor.name;
-		this.armorType = armor.armorType;
-		this.level = armor.level;
-		this.tech = armor.tech;
-		this.blockSet = armor.blockSet;
-		this.cost = armor.cost;
-		this.description = armor.description;
+public class Armor extends BaseSystem<ArmorList>{
+	private ArmorType armorType;
+	private BlockSet blockSet;
+	
+	public Armor(ArmorList system) {
+		super(system, system.name);
+		this.name = system.name;
+		this.armorType = system.armorType;
+		this.level = system.level;
+		this.tech = system.tech;
+		this.blockSet = system.blockSet;
+		this.creditCost = system.baseCost;
+		this.resizeable = false;
 	}
 
 	public int getBlock(DamageType damageType) {
@@ -52,6 +46,7 @@ public class Armor extends ShipSystem {
 		return block;
 	}
 
+	@Override
 	public ArrayList<Object> getProperties() {
 
 		ArrayList<Object> properties = new ArrayList<Object>();
@@ -61,11 +56,16 @@ public class Armor extends ShipSystem {
 		properties.add((tech));
 		properties.add(blockSet);
 		properties.add(getHullCost());
-		properties.add(getMoneyString(cost));
+		properties.add(getMoneyString(creditCost));
 
 		return properties;
 	}
 
+	@Override
+	public int getCalculatedHullCost(Hull hull) {
+		return (int) (hull.getBaseHullPoints() * (getHullCost() * 0.01));
+	}
+	
 	public double getHullCost() {
 		switch (armorType) {
 		case LIGHT:
@@ -81,14 +81,16 @@ public class Armor extends ShipSystem {
 		}
 	}
 
-	public int getCalculatedHullCost(Hull hull) {
-		return (int) (hull.getHullPoints() * (getHullCost() * 0.01));
+	@Override
+	public int getCalculatedCost(Hull hull) { 
+		if (getCalculatedHullCost(hull) > 1)
+			return (1 * creditCost);
+		else
+			return (int) (getCalculatedHullCost(hull) * creditCost);
 	}
 
-	public int getCalculatedCost(Hull hull) {
-		if (getCalculatedHullCost(hull) < 1)
-			return (1 * cost);
-		else
-			return (int) (getCalculatedHullCost(hull) * cost);
+	@Override
+	public ShipSystem<ArmorList> createNewInstanceFromSelf() {
+	    return new Armor(systemData);
 	}
 }

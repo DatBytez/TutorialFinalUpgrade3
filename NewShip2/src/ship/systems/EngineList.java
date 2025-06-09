@@ -1,11 +1,15 @@
-package shipEngine;
+package ship.systems;
 
 
+import java.util.ArrayList;
+
+import helpz.SystemFactory;
 import ship.ProgressLevel;
 import ship.Tech;
 import shipHelperz.Moneyz;
+import ui.SystemListUtilz;
 
-public enum EngineList {
+public enum EngineList implements SystemFactory<EngineList> {
 
 	PlanetaryThruster(	"Planetary Thruster",	ProgressLevel.PL6, Tech.N, /* Pow */1.0, /* MinSize */1, Moneyz.money(200, "K"), Moneyz.money(50, "K"),
 												/*5%*/0.1,/*10%*/0.25,/*15%*/0.5,/*20%*/1.0,/*30%*/0.0,/*40%*/0.0,/*50%*/0.00, /*Eff.*/ 10, Moneyz.money(10, "K")),
@@ -26,28 +30,57 @@ public enum EngineList {
 	SpatialCompressor(	"Spatial Compressor",	ProgressLevel.PL9, Tech.T, /* Pow */2.0, /* MinSize */4, Moneyz.money(1, "M")+Moneyz.money(500, "K"), Moneyz.money(200, "K"),
 												/*5%*/3.0,/*10%*/6.0,/*15%*/9.0,/*20%*/12.0,/*30%*/15.0,/*40%*/18.0,/*50%*/20.0, /*Eff.*/ 0, Moneyz.money(0, "K"));
 
+	protected final String name;
+	protected final ProgressLevel level;
+	protected final Tech tech;
+	protected final double powerCost;
+	
+	protected final int creditCost, minSize, costPerHull;
+	
+	protected final int fuelCost, fuelEfficiency;
+	protected final boolean fuelRequired;
+	
+	protected final double arper5, arper10, arper15, arper20, arper30, arper40, arper50;
 
-	String name;
-	ProgressLevel level;
-	Tech tech;
-	double power, arper5, arper10, arper15, arper20, arper30, arper40, arper50;
-	int baseCost, costPerHull, minSize, fuelCost, fuelEfficiency;
-	boolean fuelReq = false;
-
+	
 	EngineList(String name, ProgressLevel progressLevel, Tech tech, double power, int minSize, int baseCost, int costPerHull, double arper5, double arper10, double arper15, double arper20, double arper30, double arper40, double arper50, int fuelEfficiency, int fuelCost) {
 		this.name = name;
 		this.level = progressLevel;
 		this.tech = tech;
-		this.power = power;
+		this.powerCost = power;
+		this.creditCost = baseCost;
 		this.minSize = minSize;
-		this.baseCost = baseCost;
 		this.costPerHull = costPerHull;
-		this.minSize = minSize;
-		
+		this.fuelRequired = fuelCost > 0;
 		this.fuelCost = fuelCost;
 		this.fuelEfficiency = fuelEfficiency;
-		
-		if(fuelCost > 0)
-			this.fuelReq = true;
+		this.arper5 = arper5;
+		this.arper10 = arper10;
+		this.arper15 = arper15;
+		this.arper20 = arper20;
+		this.arper30 = arper30;
+		this.arper40 = arper40;
+		this.arper50 = arper50;
+	}
+	
+    public static ArrayList<String> getListTitles() {
+        ArrayList<String> titles = SystemListUtilz.getListTitles();
+        
+        titles.add("Power");
+        titles.add("Min Size");
+        titles.add("Base Cost");
+        titles.add("Cost/Hull Pt.");
+		titles.add("Fuel Cost");
+		titles.add("Fuel Eff");
+        return titles;
+    }
+	
+	public static ArrayList<ShipSystem<EngineList>> getList() {
+	    return SystemListUtilz.getAll(EngineList.class);
+	}
+	
+	@Override
+	public ShipSystem<EngineList> createInstance() {
+		return new Engine(this);
 	}
 }

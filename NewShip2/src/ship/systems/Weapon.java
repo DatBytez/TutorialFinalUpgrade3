@@ -1,4 +1,4 @@
-package shipWeapons;
+package ship.systems;
 
 import java.util.ArrayList;
 
@@ -6,40 +6,42 @@ import ship.Damage;
 import ship.ProgressLevel;
 import ship.Result;
 import ship.Severity;
-import ship.ShipSystem;
 import ship.Tech;
 import shipHelperz.Rollz;
+import shipWeapons.DamageSet;
+import shipWeapons.DamageType;
+import shipWeapons.FireRange;
+import shipWeapons.Firepower;
+import shipWeapons.WeaponModes;
+import shipWeapons.WeaponType;
 
 import static helpz.Format.*;
 
-public class Weapon extends ShipSystem{
-	private String name;
-	private WeaponType weaponType;
-	private ProgressLevel level;
-	private Tech tech;
-	private int hull, power, cost, accuracy;
+public class Weapon extends BaseSystem<WeaponList> {
+	private int accuracy;
 	private DamageType damageType;
 	private FireRange range;
 	private Firepower firepower;
 	private WeaponModes modes;
 	private DamageSet damageSet;
 	private Damage damage;
+	private WeaponType weaponType;
 	
-	public Weapon(WeaponList weapon) {
-		super(weapon.name, weapon.cost);
-		this.name = weapon.name;
-		this.weaponType = weapon.weaponType;
-		this.level = weapon.level;
-		this.tech = weapon.tech;
-		this.hull = weapon.hull;
-		this.power = weapon.power;
-		this.cost = weapon.cost;
-		this.accuracy = weapon.accuracy;
-		this.damageType = weapon.damageType;
-		this.range = weapon.range;
-		this.firepower = weapon.firepower;
-		this.modes = weapon.modes;
-		this.damageSet = weapon.damageSet;
+	public Weapon(WeaponList system) {
+		super(system, system.name);
+		this.name = system.name;
+		this.weaponType = system.weaponType;
+		this.level = system.level;
+		this.tech = system.tech;
+		this.hullCost = system.hullCost;
+		this.powerCost = system.powerCost;
+		this.creditCost = system.creditCost;
+		this.accuracy = system.accuracy;
+		this.damageType = system.damageType;
+		this.range = system.range;
+		this.firepower = system.firepower;
+		this.modes = system.modes;
+		this.damageSet = system.damageSet;
 	}
 	
 	public Damage getDamage(Result result) {
@@ -81,12 +83,12 @@ public class Weapon extends ShipSystem{
 
 		properties.add(name);
 		properties.add(tech);
-		properties.add(String.valueOf(hull));
-		properties.add(String.valueOf(power));
-		properties.add(getMoneyString(cost));
+		properties.add(String.valueOf(hullCost));
+		properties.add(String.valueOf(powerCost));
+		properties.add(getMoneyString(creditCost));
 		properties.add(getModifierString(accuracy));
 		properties.add(range);
-		properties.add(damageType +"/" + firepower);
+		properties.add(damageType + "/" + firepower);
 		properties.add(damageSet);
 		properties.add(modes);
 
@@ -95,22 +97,6 @@ public class Weapon extends ShipSystem{
 
 	public WeaponType getWeaponType() {
 		return weaponType;
-	}
-
-	public ProgressLevel getLevel() {
-		return level;
-	}
-
-	public Tech getTech() {
-		return tech;
-	}
-
-	public int getHull() {
-		return hull;
-	}
-
-	public int getPower() {
-		return power;
 	}
 
 	public int getAccuracy() {
@@ -140,6 +126,19 @@ public class Weapon extends ShipSystem{
 	public Damage getDamage() {
 		return damage;
 	}
-	
-	
+
+	@Override
+	public int getCalculatedCost(Hull hull) {
+		return creditCost;
+	}
+
+	@Override
+	public int getCalculatedHullCost(Hull hull) {
+		return hullCost;
+	}
+
+	@Override
+	public ShipSystem<WeaponList> createNewInstanceFromSelf() {
+	    return new Weapon(systemData);
+	}
 }

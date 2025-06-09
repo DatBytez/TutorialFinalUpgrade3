@@ -2,11 +2,12 @@ package ship;
 
 import java.util.ArrayList;
 
-import shipArmor.Armor;
+import ship.systems.Armor;
+import ship.systems.Hull;
+import ship.systems.HullList;
+import ship.systems.ShipSystem;
+import ship.systems.Weapon;
 import shipHelperz.Rollz;
-import shipHull.Hull;
-import shipHull.HullList;
-import shipWeapons.Weapon;
 
 public class Ship {
 	// Established During Ship Creation
@@ -278,7 +279,7 @@ public class Ship {
     		case SMALL:
     			compartments.add(new ShipCompartment(this,"F"));
     			compartments.add(new ShipCompartment(this,"A"));
-    			if (this.getHull().getHull() <= 20) {
+    			if (this.getHull().getBaseHullPoints() <= 20) {
     				break;
     			}
     			else { // May not need this

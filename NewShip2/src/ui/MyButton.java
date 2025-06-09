@@ -12,11 +12,13 @@ import java.io.InputStream;
 
 public class MyButton {
 
-	Font alternityBoldFont,alternityLiteFont,alternityLogoFont,alternityHeadFont;
+	Font alternityBoldFont, alternityLiteFont, alternityLogoFont, alternityHeadFont;
 	public int x, y, width, height, id;
-	private String text;
-	private Rectangle bounds;
-	private boolean mouseOver, mousePressed;
+	protected String text;
+	protected Rectangle bounds;
+	protected boolean mouseOver;
+	protected boolean mousePressed;
+	protected boolean isActive = true;
 
 	// For normal Buttons
 	public MyButton(String text, int x, int y, int width, int height) {
@@ -34,7 +36,10 @@ public class MyButton {
 	private void initBounds() {
 		this.bounds = new Rectangle(x, y, width, height);
 	}
-	
+
+	public void setBounds(int addX, int i, int labelWidth, int labelHeight) {
+	}
+
 	private void initFonts() {
 		try {
 			InputStream is = getClass().getResourceAsStream("/font/geo703b.ttf");
@@ -53,6 +58,7 @@ public class MyButton {
 	}
 
 	public void draw(Graphics g) {
+		if (isActive) {
 		// Body
 		drawBody(g);
 
@@ -61,10 +67,10 @@ public class MyButton {
 
 		// Text
 		drawText(g);
+		}
 	}
 
-	private void drawBorder(Graphics g) {
-
+	protected void drawBorder(Graphics g) {
 		g.setColor(Color.black);
 		g.drawRect(x, y, width, height);
 		if (mousePressed) {
@@ -74,7 +80,7 @@ public class MyButton {
 
 	}
 
-	private void drawBody(Graphics g) {
+	protected void drawBody(Graphics g) {
 		if (mouseOver)
 			g.setColor(Color.gray);
 		else
@@ -115,6 +121,23 @@ public class MyButton {
 		return mouseOver;
 	}
 
+	public void mouseMoved(int mouseX, int mouseY) {
+		if (bounds.contains(mouseX, mouseY))
+			mouseOver = true;
+		else
+			mouseOver = false;
+	}
+	
+	public void mousePressed(int mouseX, int mouseY) {
+		if (bounds.contains(mouseX, mouseY))
+			mousePressed = true;
+	}
+	
+	public void mouseReleased(int mouseX, int mouseY) {
+		mouseOver = false;
+		mousePressed = false;
+	}
+
 	public boolean isMousePressed() {
 		return mousePressed;
 	}
@@ -126,9 +149,27 @@ public class MyButton {
 	public int getId() {
 		return id;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	
 
 }

@@ -13,12 +13,12 @@ import scenes.CombatScene;
 import ship.Crew;
 import ship.Result;
 import ship.Ship;
-import shipArmor.Armor;
-import shipArmor.ArmorList;
-import shipHull.Hull;
-import shipHull.HullList;
-import shipWeapons.Weapon;
-import shipWeapons.WeaponList;
+import ship.systems.Armor;
+import ship.systems.ArmorList;
+import ship.systems.Hull;
+import ship.systems.HullList;
+import ship.systems.Weapon;
+import ship.systems.WeaponList;
 
 import static helpz.Constants.*;
 

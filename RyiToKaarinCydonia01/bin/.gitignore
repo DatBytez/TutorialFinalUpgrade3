@@ -1,11 +1,8 @@
 /config
 /config.txt
 /font/
-/maps/
-/objects/
-/other/
-/projectile/
-/save.dat
 /sound/
 /spriteatlas.png
 /textures/
+/tiles/
+/tiles_interactive/

@@ -22,7 +22,7 @@ public class Constants {
 	public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 	public static final int MARGIN = 20;
 	public static final int TITLE_MARGIN = 30;
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public static Ship TEST_SHIP;
 

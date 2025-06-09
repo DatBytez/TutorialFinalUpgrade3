@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import ship.Result;
 import ship.Ship;
+import ship.systems.Weapon;
 import shipHelperz.Rollz;
-import shipWeapons.Weapon;
 
 public class AttackAction {
 

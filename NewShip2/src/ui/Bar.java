@@ -16,9 +16,14 @@ public class Bar {
 
 	protected int x, y, width, height;
 	private Rectangle bounds;
-	Font alternityBoldFont, alternityLiteFont, alternityLogoFont, alternityHeadFont;
-	String title = "";
-	Color titleColor, titleBarColor, backgroundColor;
+	Font alternityBoldFont;
+	protected Font alternityLiteFont;
+	Font alternityLogoFont;
+	protected Font alternityHeadFont;
+	protected String title = "";
+	protected Color titleColor;
+	Color titleBarColor;
+	Color backgroundColor;
 	boolean hasTitleBar = true;
 
 	public Bar(int x, int y, int width, int height) {

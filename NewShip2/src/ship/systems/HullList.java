@@ -1,11 +1,15 @@
-package shipHull;
+package ship.systems;
 
 import java.util.ArrayList;
 
-import ship.ShipSystem;
+import helpz.SystemFactory;
+import ship.ProgressLevel;
+import ship.Tech;
 import shipHelperz.Moneyz;
+import shipHull.HullType;
+import shipHull.Toughness;
 
-public enum HullList {
+public enum HullList implements SystemFactory<HullList>{
 	
 	// Civilian Hulls
 	None(			"None", 			false, HullType.SMALL, 0, Toughness.GOOD,	0, 0,  0, Moneyz.money(0, "K"),0),
@@ -46,87 +50,68 @@ public enum HullList {
 	FortressShip(	"Fortress Ship",	true, HullType.SUPERHEAVY, 12000, Toughness.SUPERHEAVY, -5, 1, 12000, Moneyz.money(50000, "M"),1800);
 	
 	
-	String name;
-	boolean military;
-	HullType hullType;
-	int hullPoints;
-	Toughness toughness;
-	int target;
-	int maneuverability;
-	int crew;
-	int cost;
-	int zoneLimit;
+	protected final String name;
+	
+	protected final int creditCost;
+	
+	protected final int hullProvided;
+	protected final boolean military;
+	protected final HullType hullType;
+	protected final Toughness toughness;
+	protected final int target, maneuverability, crew, zoneLimit;
 
-	HullList(String name, boolean military, HullType hullType, int hullPoints, Toughness toughness, int target, int maneuverability, int crew, int cost, int zoneLimit){
+	
+	HullList(String name, boolean military, HullType hullType, int baseHullPoints, Toughness toughness, int target, int maneuverability, int crew, int baseCost, int zoneLimit){
 		this.name=name;
+
+		this.creditCost=baseCost;
+		this.hullProvided=baseHullPoints;
+		
 		this.military=military;
 		this.hullType=hullType;
-		this.hullPoints=hullPoints;
 		this.toughness=toughness;
 		this.target=target;
 		this.maneuverability=maneuverability;
 		this.crew=crew;
-		this.cost=cost;
 		this.zoneLimit=zoneLimit;
-	}
-	
-	public static ArrayList<ShipSystem> getCivilianHulls() {
-		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new Hull(Launch));
-		fullList.add(new Hull(Courier));
-		fullList.add(new Hull(Trader));
-		fullList.add(new Hull(FastFreighter));
-		fullList.add(new Hull(FastTransport));
-		fullList.add(new Hull(Hauler));
-		fullList.add(new Hull(Industrial));
-		fullList.add(new Hull(MediumFreighter));
-		fullList.add(new Hull(Tanker));
-		fullList.add(new Hull(Liner));
-		fullList.add(new Hull(HeavyTransport));
-		fullList.add(new Hull(SuperFreighter));
-		fullList.add(new Hull(ColonyTransport));
-		
-		return fullList;
-	}
-
-	public static ArrayList<ShipSystem> getMilitaryHulls() {
-		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new Hull(Fighter));
-		fullList.add(new Hull(StrikeFighter));
-		fullList.add(new Hull(Cutter));
-		fullList.add(new Hull(Scout));
-		fullList.add(new Hull(Escort));
-		fullList.add(new Hull(Corvette));
-		fullList.add(new Hull(Frigate));
-		fullList.add(new Hull(Destroyer));
-		fullList.add(new Hull(LightCruiser));
-		fullList.add(new Hull(HeavyCruiser));
-		fullList.add(new Hull(ArmoredCruiser));
-		fullList.add(new Hull(Battlecruiser));
-		fullList.add(new Hull(Battleship));
-		fullList.add(new Hull(FleetCarrier));
-		fullList.add(new Hull(Dreadnought));
-		fullList.add(new Hull(SuperCarrier));
-		fullList.add(new Hull(SuperDread));
-		fullList.add(new Hull(FortressShip));
-		
-		return fullList;
 	}
 	
 	public static ArrayList<String> getListTitles(){
 		
-		ArrayList<String> listTitles = new ArrayList<String>();
-		listTitles.add("Name");
-		listTitles.add("Pts.");
-		listTitles.add("Tough");
-		listTitles.add("Target");
-		listTitles.add("Move");
-		listTitles.add("Wound");
-		listTitles.add("Mortal");
-		listTitles.add("Critical");
-		listTitles.add("Crew");
-		listTitles.add("Cost");
+		ArrayList<String> titles = new ArrayList<String>();
+		titles.add("Name");
+		titles.add("Pts.");
+		titles.add("Tough");
+		titles.add("Target");
+		titles.add("Move");
+		titles.add("Crew");
+		titles.add("Cost");
 		
-		return listTitles;
+		return titles;
+	}
+	
+	public static ArrayList<ShipSystem<HullList>> getCivilianHulls() {
+		ArrayList<ShipSystem<HullList>> list = new ArrayList<>();
+		for (HullList system : HullList.values()) {
+			if (!system.military && system != HullList.None) {
+				list.add(system.createInstance());
+			}
+		}
+		return list;
+	}
+
+	public static ArrayList<ShipSystem<HullList>> getMilitaryHulls() {
+		ArrayList<ShipSystem<HullList>> list = new ArrayList<>();
+		for (HullList system : HullList.values()) {
+			if (system.military) {
+				list.add(system.createInstance());
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public ShipSystem<HullList> createInstance() {
+		return new Hull(this);
 	}
 }

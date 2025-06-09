@@ -1,11 +1,15 @@
-package shipEngine;
+package ship.systems;
 
 
+import java.util.ArrayList;
+
+import helpz.SystemFactory;
 import ship.ProgressLevel;
 import ship.Tech;
 import shipHelperz.Moneyz;
+import ui.SystemListUtilz;
 
-public enum FTLList {
+public enum FTLList implements SystemFactory<FTLList>{
 
 	JumpDrive(			"Jump Drive",			ProgressLevel.PL6, Tech.T, /* Pow */1.0, /* MinSize */5, Moneyz.money(4, "M"), Moneyz.money(1, "M")),
 	WormholeScreen(		"Wormhole Screen",		ProgressLevel.PL6, Tech.M, /* Pow */2.0, /* MinSize */1, Moneyz.money(1, "M"), Moneyz.money(200, "K")),
@@ -18,20 +22,39 @@ public enum FTLList {
 	TranscendentDrive(	"Transcendent Drive",	ProgressLevel.PL9, Tech.P, /* Pow */1.0, /* MinSize */4, Moneyz.money(12, "M"), Moneyz.money(400, "K")),
 	Warpdrive(			"Warpdrive",			ProgressLevel.PL9, Tech.X, /* Pow */2.0, /* MinSize */2, Moneyz.money(10, "M"), Moneyz.money(5, "M"));
 
-	String name;
-	ProgressLevel level;
-	Tech tech;
-	double power;
-	int baseCost, costPerHull, minSize, fuelCost, fuelEfficiency;
+	protected final String name;
+	protected final ProgressLevel level;
+	protected final Tech tech;
+	protected final double powerCost;
+	
+	protected final int creditCost, minSize, costPerHull;
 
 	FTLList(String name, ProgressLevel progressLevel, Tech tech, double power, int minSize, int baseCost, int costPerHull) {
 		this.name = name;
 		this.level = progressLevel;
 		this.tech = tech;
-		this.power = power;
+		this.powerCost = power;
 		this.minSize = minSize;
-		this.baseCost = baseCost;
+		this.creditCost = baseCost;
 		this.costPerHull = costPerHull;
-		this.minSize = minSize;
+	}
+	
+	public static ArrayList<String> getListTitles(){
+        ArrayList<String> titles = SystemListUtilz.getListTitles();
+        
+        titles.add("Power");
+        titles.add("Min Size");
+        titles.add("Base Cost");
+        titles.add("Cost/Hull Pt.");
+        return titles;
+	}
+	
+	public static ArrayList<ShipSystem<FTLList>> getList() {
+		return SystemListUtilz.getAll(FTLList.class);
+	}
+	
+	@Override
+	public ShipSystem<FTLList> createInstance() {
+		return new FTL(this);
 	}
 }

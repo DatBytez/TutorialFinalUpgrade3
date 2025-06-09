@@ -1,31 +1,32 @@
-package shipHull;
+package ship.systems;
 
 import java.util.ArrayList;
 
-import ship.ShipSystem;
+import shipHull.HullType;
+import shipHull.Toughness;
 
 import static helpz.Format.*;
 
-public class Hull extends ShipSystem {
-
-	private String name;
+public class Hull extends BaseSystem<HullList> {
 	private HullType hullType;
 	private Toughness toughness;
-	private int hull, hullPoints, target, maneuverability, crew;
+	private int hullProvided, target, maneuverability, crew;
 	private int stun, wound, mortal, critical, compartmentCount;
 
-	public Hull(HullList hull) {
-		super(hull.name, hull.cost);
-		this.name = hull.name;
-		this.hullType = hull.hullType;
-		this.hull = hull.hullPoints;
-		this.toughness = hull.toughness;
-		this.target = hull.target;
-		this.maneuverability = hull.maneuverability;
-		this.crew = hull.crew;
-		setDamageTrack(hull.hullPoints);
-		setHullPoints(hull.hullPoints);
-		setCompartmentCount(hull.hullPoints);
+	public Hull(HullList system) {
+		super(system, system.name);
+		this.creditCost = system.creditCost;
+		this.name = system.name;
+		this.hullType = system.hullType;
+		this.hullProvided = system.hullProvided;
+		this.toughness = system.toughness;
+		this.target = system.target;
+		this.maneuverability = system.maneuverability;
+		this.crew = system.crew;
+		setDamageTrack(system.hullProvided);
+		setInitialHullPoints(system.hullProvided);
+		setCompartmentCount(system.hullProvided);
+		this.resizeable = false;
 	}
 
 	private void setDamageTrack(int hull) {
@@ -53,22 +54,22 @@ public class Hull extends ShipSystem {
 		this.critical = (int) Math.ceil((float) mortal / 2);
 	}
 
-	private void setHullPoints(int hull) {
+	private void setInitialHullPoints(int hull) {
 		switch (hullType) {
 		case SMALL:
-			this.hullPoints = hull;
+			this.hullCost = hull;
 			break;
 		case LIGHT:
-			this.hullPoints = (int) Math.ceil((float) hull * 1.1);
+			this.hullCost = (int) Math.ceil((float) hull * 1.1);
 			break;
 		case MEDIUM:
-			this.hullPoints = (int) Math.ceil((float) hull * 1.2);
+			this.hullCost = (int) Math.ceil((float) hull * 1.2);
 			break;
 		case HEAVY:
-			this.hullPoints = (int) Math.ceil((float) hull * 1.3);
+			this.hullCost = (int) Math.ceil((float) hull * 1.3);
 			break;
 		case SUPERHEAVY:
-			this.hullPoints = (int) Math.ceil((float) hull * 1.5);
+			this.hullCost = (int) Math.ceil((float) hull * 1.5);
 			break;
 		}
 	}
@@ -96,50 +97,39 @@ public class Hull extends ShipSystem {
 		}
 	}
 
+	@Override
 	public ArrayList<Object> getProperties() {
 
 		ArrayList<Object> properties = new ArrayList<Object>();
 
 		properties.add(name);
-		properties.add(String.valueOf(hullPoints));
+		properties.add(String.valueOf(hullCost));
 		properties.add(toughness);
 		properties.add(getModifierString(target));
 		properties.add(String.valueOf(maneuverability));
-		properties.add(String.valueOf(wound));
-		properties.add(String.valueOf(mortal));
-		properties.add(String.valueOf(critical));
 		properties.add(String.valueOf(crew));
-		properties.add(getMoneyString(cost));
+		properties.add(getMoneyString(creditCost));
 
 		return properties;
 	}
 
-	public HullType getHullType() {
-		return hullType;
+	@Override
+	public int getCalculatedCost(Hull hull) {
+		return creditCost;
 	}
 
-	public int getHull() {
-		return hull;
-	}
-	
-	public int getHullPoints() {
-		return hullPoints;
-	}
-	
+	@Override
 	public int getCalculatedHullCost(Hull hull) {
-		return hullPoints;
+		return hullCost * -1;
 	}
 
-	public Toughness getToughness() {
-		return toughness;
+	@Override
+	public ShipSystem<HullList> createNewInstanceFromSelf() {
+		return new Hull(systemData);
 	}
 
-	public int getTarget() {
-		return target;
-	}
-
-	public int getManeuverability() {
-		return maneuverability;
+	public int getBaseHullPoints() {
+		return hullProvided;
 	}
 
 	public int getStun() {
@@ -158,11 +148,15 @@ public class Hull extends ShipSystem {
 		return critical;
 	}
 
-	public int getCrew() {
-		return crew;
+	public Toughness getToughness() {
+		return toughness;
 	}
-	
-	public int getCompartmentCount() {
-		return compartmentCount;
+
+	public int getTarget() {
+		return target;
+	}
+
+	public HullType getHullType() {
+		return hullType;
 	}
 }

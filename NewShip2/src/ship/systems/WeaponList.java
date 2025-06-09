@@ -1,15 +1,20 @@
-package shipWeapons;
+package ship.systems;
 
 import java.util.ArrayList;
 
+import helpz.SystemFactory;
 import ship.ProgressLevel;
 import ship.Severity;
-import ship.ShipSystem;
 import ship.Tech;
-import shipArmor.Armor;
 import shipHelperz.Moneyz;
+import shipWeapons.DamageSet;
+import shipWeapons.DamageType;
+import shipWeapons.FireRange;
+import shipWeapons.Firepower;
+import shipWeapons.WeaponModes;
+import shipWeapons.WeaponType;
 
-public enum WeaponList {
+public enum WeaponList implements SystemFactory<WeaponList> {
 	//BEAM
 	Laser(			"Laser", WeaponType.BEAM, ProgressLevel.PL6, Tech.N, /*Hull*/1, /*Power*/2, Moneyz.money(100, "K"), /*Acc*/-2, new FireRange(1,2,3), DamageType.ENERGY, Firepower.SMALL,
 					new DamageSet(1,4,Severity.STUN,1,4,Severity.WOUND,3,6,Severity.WOUND), new WeaponModes(true,false,false,false)),
@@ -195,33 +200,53 @@ public enum WeaponList {
 	MRBMINESArray(	"MRB Mines Array", WeaponType.MISSILE, ProgressLevel.PL7, Tech.Z, /*Hull*/20, /*Power*/2, Moneyz.money(16, "M"), /*Acc*/-3, new FireRange(0,0,0), DamageType.ENERGY, Firepower.MEDIUM,
 					new DamageSet(3,9,Severity.STUN,2,8,Severity.WOUND,2,9,Severity.MORTAL), new WeaponModes(true,false,false,false)),
 	
-	NovArray(		"Nova Array", WeaponType.MISSILE, ProgressLevel.PL8, Tech.C, /*Hull*/10, /*Power*/2, Moneyz.money(23, "M")+Moneyz.money(800, "K"), /*Acc*/-5, new FireRange(0,0,0), DamageType.LOWIMPACT, Firepower.HEAVY,
-					new DamageSet(2,16,Severity.WOUND,2,12,Severity.MORTAL,2,8,Severity.CRITICAL), new WeaponModes(true,false,false,false));//add Tech.G
+	NovaArray(		"Nova Array", WeaponType.MISSILE, ProgressLevel.PL8, Tech.C, /*Hull*/10, /*Power*/2, Moneyz.money(23, "M")+Moneyz.money(800, "K"), /*Acc*/-5, new FireRange(0,0,0), DamageType.LOWIMPACT, Firepower.HEAVY,
+					new DamageSet(2,16,Severity.WOUND,2,12,Severity.MORTAL,2,8,Severity.CRITICAL), new WeaponModes(true,false,false,false)),//add Tech.G
+	
+	// Torpedoes and Special Weapons
+	
+	CableGun(		"Cable Gun", 			WeaponType.SPECIAL, ProgressLevel.PL6, Tech.S, /*Hull*/2, /*Power*/1, Moneyz.money(150, "K"), 	/*Acc*/+1, new FireRange(0,0,0), DamageType.OTHER,	Firepower.ORDINARY, 	new DamageSet(0,0,Severity.STUN,0,0,Severity.STUN,0,0,Severity.STUN), new WeaponModes(true,false,false,false)),
+	RFSpike(		"RF Spike",	 			WeaponType.SPECIAL, ProgressLevel.PL6, Tech.N, /*Hull*/3, /*Power*/6, Moneyz.money(500, "K"), 	/*Acc*/-2, new FireRange(1,2,3), DamageType.ENERGY, Firepower.SUPERHEAVY,	new DamageSet(3,12,Severity.STUN,3,18,Severity.STUN,2,8,Severity.WOUND), new WeaponModes(true,false,false,false)),
+	ThermalInducer(	"Thermal Inducer",		WeaponType.SPECIAL, ProgressLevel.PL6, Tech.X, /*Hull*/8, /*Power*/12, Moneyz.money(4, "M"),	/*Acc*/+3, new FireRange(2,4,6), DamageType.ENERGY, Firepower.MEDIUM,		new DamageSet(1,6,Severity.WOUND,2,7,Severity.WOUND,1,6,Severity.MORTAL), new WeaponModes(true,false,false,false)),
+	ThermalNullifier("Thermal Nullifier", 	WeaponType.SPECIAL, ProgressLevel.PL6, Tech.X, /*Hull*/15, /*Power*/20, Moneyz.money(35, "M"),	/*Acc*/+3, new FireRange(2,4,6), DamageType.ENERGY, Firepower.MEDIUM,		new DamageSet(4,9,Severity.WOUND,5,10,Severity.WOUND,3,8,Severity.MORTAL), new WeaponModes(true,false,false,false)),
+	TractorBeam(	"Tractor Beam",			WeaponType.SPECIAL, ProgressLevel.PL7, Tech.G, /*Hull*/2, /*Power*/5, Moneyz.money(500, "K"),	/*Acc*/-1, new FireRange(0,0,0), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(0,0,Severity.STUN,0,0,Severity.STUN,0,0,Severity.STUN), new WeaponModes(true,false,false,false)),
+	MassConverter(	"Mass Converter",		WeaponType.MISSILE, ProgressLevel.PL7, Tech.M, /*Hull*/4, /*Power*/5, Moneyz.money(1, "M"), 	/*Acc*/-4, new FireRange(2,4,6), DamageType.ENERGY, Firepower.SMALL,		new DamageSet(4,9,Severity.STUN,4,9,Severity.WOUND,3,8,Severity.MORTAL), new WeaponModes(true,false,false,false)),
+	MatterTorpedo(	"Matter Torpedo",		WeaponType.TORPEDO, ProgressLevel.PL7, Tech.D, /*Hull*/5, /*Power*/7, Moneyz.money(600, "K"), 	/*Acc*/ 0, new FireRange(2,4,8), DamageType.ENERGY, Firepower.MEDIUM,		new DamageSet(2,12,Severity.STUN,2,12,Severity.WOUND,4,9,Severity.MORTAL), new WeaponModes(true,false,false,false)),
+	PlasmaTorpedo(	"Plasma Torpedo",		WeaponType.TORPEDO, ProgressLevel.PL7, Tech.F, /*Hull*/10, /*Power*/15, Moneyz.money(10, "M"),	/*Acc*/+1, new FireRange(3,6,9), DamageType.ENERGY, Firepower.HEAVY,		new DamageSet(3,18,Severity.STUN,3,18,Severity.WOUND,4,11,Severity.MORTAL), new WeaponModes(true,false,false,false)),
+	EMTorpedo(		"EM Torpedo",			WeaponType.TORPEDO, ProgressLevel.PL8, Tech.Q, /*Hull*/3, /*Power*/5, Moneyz.money(450, "K"),	/*Acc*/-2, new FireRange(2,5,10), DamageType.ENERGY, Firepower.MEDIUM,		new DamageSet(4,9,Severity.STUN,2,16,Severity.STUN,3,6,Severity.WOUND), new WeaponModes(true,false,false,false)),
+	NeuralInhibitor("Neural Inhibitor",		WeaponType.SPECIAL, ProgressLevel.PL8, Tech.P, /*Hull*/12, /*Power*/20, Moneyz.money(40, "M"),	/*Acc*/ 0, new FireRange(1,2,3), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(1,12,Severity.STUN,1,12,Severity.WOUND,1,20,Severity.WOUND), new WeaponModes(true,false,false,false)),
+	FissionActivator("Fission Activator",	WeaponType.SPECIAL, ProgressLevel.PL8, Tech.M, /*Hull*/25, /*Power*/75, Moneyz.money(80, "M"),	/*Acc*/ 0, new FireRange(4,8,12), DamageType.ENERGY, Firepower.HEAVY,		new DamageSet(2,8,Severity.MORTAL,4,10,Severity.MORTAL,5,14,Severity.CRITICAL), new WeaponModes(true,false,false,false)),
+	BoardingTransport("Boarding Transport",	WeaponType.SPECIAL, ProgressLevel.PL9, Tech.T, /*Hull*/6, /*Power*/9, Moneyz.money(10, "M"),	/*Acc*/ 0, new FireRange(4,6,8), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(0,0,Severity.STUN,0,0,Severity.STUN,0,0,Severity.STUN), new WeaponModes(true,false,false,false)),
+	NullTorpedo(	"Null Torpedo",			WeaponType.TORPEDO, ProgressLevel.PL9, Tech.X, /*Hull*/18, /*Power*/25, Moneyz.money(50, "M"),	/*Acc*/+2, new FireRange(3,6,15), DamageType.ENERGY, Firepower.SUPERHEAVY,	new DamageSet(2,16,Severity.WOUND,2,16,Severity.MORTAL,2,16,Severity.CRITICAL), new WeaponModes(true,false,false,false)),
+	CodeArranger(	"CodeArranger",			WeaponType.SPECIAL, ProgressLevel.PL9, Tech.M, /*Hull*/25, /*Power*/50, Moneyz.money(100, "M"),	/*Acc*/+1, new FireRange(4,8,12), DamageType.OTHER, Firepower.HEAVY,		new DamageSet(1,8,Severity.MORTAL,5,12,Severity.MORTAL,1,8,Severity.CRITICAL), new WeaponModes(true,false,false,false));
 	
 	
-			
-	String name;
-	WeaponType weaponType;
-	ProgressLevel level;
-	Tech tech;
-	int hull, power, cost, accuracy;
-	DamageType damageType;
-	FireRange range;
-	Firepower firepower;
-	WeaponModes modes;
-	DamageSet damageSet;
+	protected final String name;
+	protected final ProgressLevel level;
+	protected final Tech tech;
+	protected final double powerCost;
+	
+	protected final int creditCost;
+	
+	protected final int hullCost, accuracy;
+	protected final WeaponType weaponType;
+	protected final DamageType damageType;
+	protected final FireRange range;
+	protected final Firepower firepower;
+	protected final WeaponModes modes;
+	protected final DamageSet damageSet;
 	
 
-	WeaponList(String name, WeaponType weaponType, ProgressLevel progressLevel, Tech tech, int hull, int power, int cost, int accuracy,
+	WeaponList(String name, WeaponType weaponType, ProgressLevel progressLevel, Tech tech, int hull, int power, int baseCost, int accuracy,
 			FireRange range, DamageType damageType, Firepower firepower, 
 			DamageSet damageSet, WeaponModes modes){
 		this.name = name;
 		this.weaponType = weaponType;
 		this.level = progressLevel;
 		this.tech = tech;
-		this.hull = hull;
-		this.power = power;
-		this.cost = cost;
+		this.hullCost = hull;
+		this.powerCost = power;
+		this.creditCost = baseCost;
 		this.accuracy = accuracy;
 		this.range = range;
 		this.damageType = damageType;
@@ -230,83 +255,65 @@ public enum WeaponList {
 		this.modes = modes;
 	}
 	
-	public static ArrayList<ShipSystem> getListBeams() {
-		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new Weapon(Laser));
-		fullList.add(new Weapon(IRLaser));
-		fullList.add(new Weapon(XRayLaser));
-		fullList.add(new Weapon(HeavyLaser));
-		fullList.add(new Weapon(NeutronGun));
-		fullList.add(new Weapon(FusionLaser));
-		fullList.add(new Weapon(Graser));
-		fullList.add(new Weapon(HeavyNeutronGun));
-		fullList.add(new Weapon(HydrogenBore));
-		fullList.add(new Weapon(PlasmaCannon));
-		fullList.add(new Weapon(ParticleBeam));
-		fullList.add(new Weapon(HeavyParticleBeam));
-		fullList.add(new Weapon(HeavyPlasmaBeam));
-		fullList.add(new Weapon(MatterBeam));
-		fullList.add(new Weapon(FusionBeam));
-		fullList.add(new Weapon(QuantumCannon));
-		fullList.add(new Weapon(BosonGun));
-		fullList.add(new Weapon(HeavyMatterBeam));
-		fullList.add(new Weapon(FusionBore));
-		fullList.add(new Weapon(MaserCannon));
-		fullList.add(new Weapon(KineticLance));
-		fullList.add(new Weapon(PulseMaser));
-		fullList.add(new Weapon(EMCannon));
-		fullList.add(new Weapon(DarkFusionGun));
-		fullList.add(new Weapon(GatlingMaser));
-		fullList.add(new Weapon(WeakForceGun));
-		fullList.add(new Weapon(StrongForceGun));
-		fullList.add(new Weapon(ZeroBore));
-		fullList.add(new Weapon(Blacklaser));
-		fullList.add(new Weapon(TachyonGun));
-		fullList.add(new Weapon(StringProjector));
-		
-		return fullList;
-	}
-	
-	public static ArrayList<ShipSystem> getListProjectiles() {
-		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new Weapon(PointDefense));
-		fullList.add(new Weapon(RailCannon));
-		fullList.add(new Weapon(NeedleDriver));
-		fullList.add(new Weapon(GaussGun));
-		fullList.add(new Weapon(HiRailGun));
-		fullList.add(new Weapon(MassCannon));
-		fullList.add(new Weapon(HeavyMassCannon));
-		fullList.add(new Weapon(Accelerator));
-		fullList.add(new Weapon(TachRifle));
-		fullList.add(new Weapon(HeavyAccelerator));
-		fullList.add(new Weapon(AntimatterGun	));
-		fullList.add(new Weapon(SuperTachRifle	));
-		fullList.add(new Weapon(SliverGun));
-		fullList.add(new Weapon(NeutroniumDriver));
-		fullList.add(new Weapon(BombProjector));
-		fullList.add(new Weapon(BombSalvo));
-		fullList.add(new Weapon(KineticConverter));
-		fullList.add(new Weapon(TunnelerGun));
-		fullList.add(new Weapon(BlackHoleGun));
-		
-		return fullList;
-	}
-	
 	public static ArrayList<String> getListTitles(){
+		ArrayList<String> titles = new ArrayList<String>();
 		
-		ArrayList<String> listTitles = new ArrayList<String>();
-		listTitles.add("Name");
-		listTitles.add("Tech");
-		listTitles.add("Hull");
-		listTitles.add("POW");
-		listTitles.add("Cost");
-		listTitles.add("Acc");
-		listTitles.add("Range");
-		listTitles.add("Type");
-		listTitles.add("Damage");
-		listTitles.add("Mode");
-		
-		return listTitles;
+		titles.add("Name");
+		titles.add("Tech");
+		titles.add("Hull");
+		titles.add("POW");
+		titles.add("Cost");
+		titles.add("Acc");
+		titles.add("Range");
+		titles.add("Type");
+		titles.add("Damage");
+		titles.add("Mode");
+		return titles;
+	}
+	
+	public static ArrayList<ShipSystem<WeaponList>> getListBeams() {
+	    ArrayList<ShipSystem<WeaponList>> list = new ArrayList<>();
+	    for (WeaponList system : WeaponList.values()) {
+	        if (system.weaponType == WeaponType.BEAM) {
+	            list.add(system.createInstance());
+	        }
+	    }
+	    return list;
+	}
+	
+	public static ArrayList<ShipSystem<WeaponList>> getListProjectiles() {
+	    ArrayList<ShipSystem<WeaponList>> list = new ArrayList<>();
+	    for (WeaponList system : WeaponList.values()) {
+	        if (system.weaponType == WeaponType.PROJECTILE) {
+	            list.add(system.createInstance());
+	        }
+	    }
+	    return list;
+	}
+
+	public static ArrayList<ShipSystem<WeaponList>> getListOrdinances() {
+	    ArrayList<ShipSystem<WeaponList>> list = new ArrayList<>();
+	    for (WeaponList system : WeaponList.values()) {
+	        if (system.weaponType == WeaponType.MISSILE) {
+	            list.add(system.createInstance());
+	        }
+	    }
+	    return list;
+	}
+	
+	public static ArrayList<ShipSystem<WeaponList>> getListSpecial() {
+	    ArrayList<ShipSystem<WeaponList>> list = new ArrayList<>();
+	    for (WeaponList system : WeaponList.values()) {
+	        if (system.weaponType == WeaponType.SPECIAL || system.weaponType == WeaponType.TORPEDO) {
+	            list.add(system.createInstance());
+	        }
+	    }
+	    return list;
+	}
+	
+	@Override
+	public ShipSystem<WeaponList> createInstance() {
+		return new Weapon(this);
 	}
 
 }

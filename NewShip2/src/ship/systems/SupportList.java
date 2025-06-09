@@ -1,9 +1,15 @@
-package ship;
+package ship.systems;
 
 
+import java.util.ArrayList;
+
+import helpz.SystemFactory;
+import ship.ProgressLevel;
+import ship.Tech;
 import shipHelperz.Moneyz;
+import ui.SystemListUtilz;
 
-public enum SupportList {
+public enum SupportList implements SystemFactory<SupportList>{
 
 	LifeSupport(		"Life Support",			ProgressLevel.PL6, Tech.N, /*Hull*/ 1,/* Pow */1.0, Moneyz.money(100, "K")),
 	CrewBunkroom(		"Crew Bunkroom",		ProgressLevel.PL6, Tech.N, /*Hull*/ 3,/* Pow */0.0, Moneyz.money(40, "K")),
@@ -20,19 +26,37 @@ public enum SupportList {
 	SymbioticHull(		"Symbiotic Hull",		ProgressLevel.PL8, Tech.P, /*Hull*/ 1,/* Pow */1.0, Moneyz.money(250, "K"));//add tech M
 
 
-	String name;
-	ProgressLevel level;
-	Tech tech;
-	double power;
-	int cost, hullCost;
+	protected final String name;
+	protected final ProgressLevel level;
+	protected final Tech tech;
+	protected final double powerCost;
+	protected final int creditCost, hullCost;
 
-	SupportList(String name, ProgressLevel progressLevel, Tech tech, int hullCost, double power, int cost) {
+	SupportList(String name, ProgressLevel progressLevel, Tech tech, int hullCost, double powerCost, int creditCost) {
 		this.name = name;
 		this.level = progressLevel;
 		this.tech = tech;
-		this.power = power;
-		this.cost = cost;
+		this.powerCost = powerCost;
+		this.creditCost = creditCost;
 		this.hullCost = hullCost;
+	}
+	
+	public static ArrayList<String> getListTitles(){
+        ArrayList<String> titles = SystemListUtilz.getListTitles();
+        
+        titles.add("Hull");
+        titles.add("Power");
+        titles.add("Cost");
+        return titles;
+	}
+	
+	public static ArrayList<ShipSystem<SupportList>> getList() {
+		return SystemListUtilz.getAll(SupportList.class);
+	}
+
+	@Override
+	public ShipSystem<SupportList> createInstance() {
+		return new Support(this);
 	}
 	
 //	Crew are randomly rolled or gain xp based upon success.

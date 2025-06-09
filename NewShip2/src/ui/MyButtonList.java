@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import ship.ShipSystem;
+import ship.systems.ShipSystem;
 
 import static helpz.Constants.*;
 
-public class MyButtonList extends Bar {
+public class MyButtonList<T> extends Bar {
 
-	private ArrayList<ShipSystem> itemList = new ArrayList<ShipSystem>();
-	private ArrayList<MyListButton> listButtons = new ArrayList<MyListButton>();
+	private ArrayList<ShipSystem<T>> itemList = new ArrayList<>();
+	private ArrayList<MyListButton<T>> listButtons = new ArrayList<>();
 	private ArrayList<String> listTitles = new ArrayList<String>();
 	private ArrayList<Integer> spacingList = new ArrayList<Integer>();
 
@@ -31,10 +31,10 @@ public class MyButtonList extends Bar {
 	private int yOffset = 30;
 	private int titleOffset = 30;
 	private int frontTAB = 20;
-	private ShipSystem selectedItem;
-	private MyListButton selectedButton;
+	private ShipSystem<T> selectedItem;
+	private MyListButton<T> selectedButton;
 
-	public MyButtonList(String title, ArrayList<ShipSystem> itemList, ArrayList<String> listTitles, int x, int y,
+	public MyButtonList(String title, ArrayList<ShipSystem<T>> itemList, ArrayList<String> listTitles, int x, int y,
 			int width) {
 		super(x, y, width, 0);
 		this.y = y;
@@ -77,8 +77,8 @@ public class MyButtonList extends Bar {
 
 	private void initButtons() {
 		int i = 0;
-		for (ShipSystem item : itemList) {
-			listButtons.add(new MyListButton(item, x, y + yOffset + titleOffset + (i * buttonHeight) + 5, this));
+		for (ShipSystem<T> item : itemList) {
+			listButtons.add(new MyListButton<T>(item, x, y + yOffset + titleOffset + (i * buttonHeight) + 5, this));
 			i++;
 		}
 	}
@@ -140,8 +140,8 @@ public class MyButtonList extends Bar {
 					selectedButton.setSelected(false);
 				}
 				selectedButton = button;
-				if (button.getItem() != null) // TODO: Not needed but here for troubleshooting
-					selectedItem = button.getItem();// TODO: PROBLEM LINE. WHEN THIS LINE IS REMOVED THE PROGRAM NO LONGER FREEZES
+				if (button.getItem() != null) // TODO: Possibly not needed but here for troubleshooting
+					selectedItem = button.getItem();
 				button.setSelected(true);
 				break;
 			}
@@ -177,7 +177,7 @@ public class MyButtonList extends Bar {
 		initBounds();
 	}
 
-	public ShipSystem getSelectedItem() {
+	public ShipSystem<T> getSelectedItem() {
 		return selectedItem;
 	}
 
@@ -205,7 +205,7 @@ public class MyButtonList extends Bar {
 		return bounds;
 	}
 
-	public ArrayList<MyListButton> getListButtons() {
+	public ArrayList<MyListButton<T>> getListButtons() {
 		return listButtons;
 	}
 }

@@ -1,13 +1,17 @@
-package shipArmor;
+package ship.systems;
 
 import java.util.ArrayList;
 
+import helpz.SystemFactory;
 import ship.ProgressLevel;
-import ship.ShipSystem;
 import ship.Tech;
+import shipArmor.ArmorType;
+import shipArmor.BlockSet;
 import shipHelperz.Moneyz;
+import shipWeapons.WeaponType;
+import ui.SystemListUtilz;
 
-public enum ArmorList {
+public enum ArmorList implements SystemFactory<ArmorList> {
 
 	PolymericLight(		"Polymeric, Light", 	ArmorType.LIGHT, ProgressLevel.PL6, Tech.N, new BlockSet(0,3,0,3,-1,2), Moneyz.money(50, "K")),
 	ReflectiveLight(	"Reflective, Light", 	ArmorType.LIGHT, ProgressLevel.PL6, Tech.N, new BlockSet(-2,1,-1,2,0,5), Moneyz.money(50, "K")),
@@ -36,62 +40,44 @@ public enum ArmorList {
 	ReactiveSuperHeavy(		"Reactive, Super-Heavy",	ArmorType.SUPERHEAVY, ProgressLevel.PL7, Tech.N, new BlockSet(5,11,3,10,4,7), Moneyz.money(600, "K")),
 	NanofluidicSuperHeavy(	"Nanofluidic, Super-Heavy",	ArmorType.SUPERHEAVY, ProgressLevel.PL8, Tech.S, new BlockSet(5,11,6,12,5,11), Moneyz.money(4, "M")); //Add Tech.C
 			
-	String name, description;
-	ArmorType armorType;
-	ProgressLevel level;
-	Tech tech;
-	BlockSet blockSet;
-	int cost;
+	protected final String name;
+	protected final ProgressLevel level;
+	protected final Tech tech;
 	
+	protected final int baseCost;
+	
+	protected final ArmorType armorType;
+	protected final BlockSet blockSet;
 
-	ArmorList(String name, ArmorType armorType, ProgressLevel progressLevel, Tech tech, BlockSet blockSet, int cost){
+	
+	ArmorList(String name, ArmorType armorType, ProgressLevel progressLevel, Tech tech, BlockSet blockSet, int baseCost){
 		this.name = name;
 		this.armorType = armorType;
 		this.level = progressLevel;
 		this.tech = tech;
 		this.blockSet = blockSet;
-		this.cost = cost;
-	}
-	
-	public static ArrayList<ShipSystem> getListArmors() {
-		ArrayList<ShipSystem> fullList = new ArrayList<>();
-		fullList.add(new Armor(PolymericLight));
-		fullList.add(new Armor(ReflectiveLight));
-		fullList.add(new Armor(CerametalLight));
-		fullList.add(new Armor(CrystallisLight));
-		fullList.add(new Armor(NanofluidicLight));
-		fullList.add(new Armor(AlloyMedium));
-		fullList.add(new Armor(PolymericMedium));
-		fullList.add(new Armor(ReflectiveMedium));
-		fullList.add(new Armor(CerametalMedium));
-		fullList.add(new Armor(NeutroniteMedium));
-		fullList.add(new Armor(ReactiveMedium));
-		fullList.add(new Armor(CrystallisMedium));
-		fullList.add(new Armor(NanofluidicMedium));
-		fullList.add(new Armor(AlloyHeavy));
-		fullList.add(new Armor(ReflectiveHeavy));
-		fullList.add(new Armor(CerametalHeavy));
-		fullList.add(new Armor(NeutroniteHeavy));
-		fullList.add(new Armor(ReactiveHeavy));
-		fullList.add(new Armor(NanofluidicHeavy));
-		fullList.add(new Armor(AlloySuperHeavy));
-		fullList.add(new Armor(NeutroniteSuperHeavy));
-		fullList.add(new Armor(ReactiveSuperHeavy));
-		fullList.add(new Armor(NanofluidicSuperHeavy));
-		
-		return fullList;
+		this.baseCost = baseCost;
 	}
 	
 	public static ArrayList<String> getListTitles(){
 		
-		ArrayList<String> listTitles = new ArrayList<String>();
-		listTitles.add("Name");
-		listTitles.add("PL");
-		listTitles.add("Tech");
-		listTitles.add("LI / HI / En");
-		listTitles.add("Hull%");
-		listTitles.add("Cost/Hull Pt.");
+		ArrayList<String> titles = new ArrayList<String>();
+		titles.add("Name");
+		titles.add("PL");
+		titles.add("Tech");
+		titles.add("LI / HI / En");
+		titles.add("Hull%");
+		titles.add("Cost/Hull Pt.");
 		
-		return listTitles;
+		return titles;
+	}
+	
+	public static ArrayList<ShipSystem<ArmorList>> getList() {
+		return SystemListUtilz.getAll(ArmorList.class);
+	}
+	
+	@Override
+	public ShipSystem<ArmorList> createInstance() {
+		return new Armor(this);
 	}
 }
