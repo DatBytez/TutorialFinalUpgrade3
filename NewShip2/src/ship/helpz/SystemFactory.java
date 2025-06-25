@@ -1,4 +1,4 @@
-package helpz;
+package ship.helpz;
 
 import ship.systems.ShipSystem;
 

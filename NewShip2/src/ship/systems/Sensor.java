@@ -1,12 +1,11 @@
 package ship.systems;
 
-import static helpz.Format.getModifierString;
-import static helpz.Format.getMoneyString;
+import static ship.helpz.Format.getModifierString;
+import static ship.helpz.Format.getMoneyString;
 
 import java.util.ArrayList;
 
-import shipWeapons.FireRange;
-import shipWeapons.SensorType;
+import ship.enums.FireRange;
 
 public class Sensor extends BaseSystem<SensorList> {
 	private SensorType sensorType;

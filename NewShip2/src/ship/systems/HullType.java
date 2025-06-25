@@ -1,4 +1,4 @@
-package shipHull;
+package ship.systems;
 
 public enum HullType {
 	

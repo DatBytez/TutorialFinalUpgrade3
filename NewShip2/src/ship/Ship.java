@@ -2,12 +2,16 @@ package ship;
 
 import java.util.ArrayList;
 
+import actions.Rollz;
+import ship.enums.Crew;
+import ship.enums.Damage;
+import ship.enums.Result;
+import ship.enums.Severity;
 import ship.systems.Armor;
 import ship.systems.Hull;
 import ship.systems.HullList;
 import ship.systems.ShipSystem;
 import ship.systems.Weapon;
-import shipHelperz.Rollz;
 
 public class Ship {
 	// Established During Ship Creation

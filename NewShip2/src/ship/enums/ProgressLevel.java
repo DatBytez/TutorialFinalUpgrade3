@@ -1,4 +1,4 @@
-package ship;
+package ship.enums;
 
 public enum ProgressLevel {
 PL6("Fusion Age",6),

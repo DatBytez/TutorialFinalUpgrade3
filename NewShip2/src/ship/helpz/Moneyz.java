@@ -1,4 +1,4 @@
-package shipHelperz;
+package ship.helpz;
 
 public final class Moneyz {
 	

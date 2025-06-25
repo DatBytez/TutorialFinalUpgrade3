@@ -1,8 +1,8 @@
 package ship.systems;
 
-import java.util.ArrayList;
+import static ship.helpz.Format.*;
 
-import static helpz.Format.*;
+import java.util.ArrayList;
 
 public class Power extends BaseSystem<PowerList> {
 	

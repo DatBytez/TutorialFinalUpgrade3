@@ -2,10 +2,9 @@ package actions;
 
 import java.util.ArrayList;
 
-import ship.Result;
 import ship.Ship;
+import ship.enums.Result;
 import ship.systems.Weapon;
-import shipHelperz.Rollz;
 
 public class AttackAction {
 

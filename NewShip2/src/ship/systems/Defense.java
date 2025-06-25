@@ -1,6 +1,6 @@
 package ship.systems;
 
-import static helpz.Format.getMoneyString;
+import static ship.helpz.Format.getMoneyString;
 
 import java.util.ArrayList;
 

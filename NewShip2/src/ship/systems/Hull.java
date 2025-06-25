@@ -1,11 +1,10 @@
 package ship.systems;
 
+import static ship.helpz.Format.*;
+
 import java.util.ArrayList;
 
-import shipHull.HullType;
-import shipHull.Toughness;
-
-import static helpz.Format.*;
+import ship.enums.Toughness;
 
 public class Hull extends BaseSystem<HullList> {
 	private HullType hullType;

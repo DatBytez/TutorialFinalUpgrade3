@@ -1,4 +1,4 @@
-package ship;
+package ship.enums;
 
 public class Roll {
 

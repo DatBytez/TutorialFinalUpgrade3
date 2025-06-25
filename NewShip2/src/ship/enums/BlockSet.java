@@ -1,4 +1,4 @@
-package shipArmor;
+package ship.enums;
 
 public class BlockSet {
 	

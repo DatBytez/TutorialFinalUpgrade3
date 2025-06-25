@@ -1,10 +1,11 @@
 package ui;
 
-import static helpz.Constants.*;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
+import static ship.helpz.Constants.*;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.RenderingHints;

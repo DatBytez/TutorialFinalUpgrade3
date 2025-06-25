@@ -1,4 +1,4 @@
-package ship;
+package ship.enums;
 
 public enum Severity {
 	STUN, WOUND, MORTAL, CRITICAL, MISS;

@@ -1,4 +1,4 @@
-package ship;
+package ship.enums;
 
 public enum Crew {
 MARGINAL("Green",10),

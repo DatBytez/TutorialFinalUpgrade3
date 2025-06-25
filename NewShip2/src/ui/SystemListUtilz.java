@@ -2,7 +2,7 @@ package ui;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
+import ship.helpz.SystemFactory;
 import ship.systems.ArmorList;
 import ship.systems.CommandList;
 import ship.systems.ComputerList;

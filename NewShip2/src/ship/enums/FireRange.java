@@ -1,4 +1,4 @@
-package shipWeapons;
+package ship.enums;
 
 public class FireRange {
 	

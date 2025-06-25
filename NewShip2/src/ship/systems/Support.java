@@ -1,11 +1,11 @@
 package ship.systems;
 
+import static ship.helpz.Format.*;
+
 import java.util.ArrayList;
 
-import ship.ProgressLevel;
 import ship.Tech;
-
-import static helpz.Format.*;
+import ship.enums.ProgressLevel;
 
 public class Support extends BaseSystem<SupportList> {
 

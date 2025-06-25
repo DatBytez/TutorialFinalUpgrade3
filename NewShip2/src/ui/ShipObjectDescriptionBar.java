@@ -1,8 +1,8 @@
 package ui;
 
-import static helpz.Constants.DEBUG;
-import static helpz.Constants.PHB_DARK;
-import static helpz.Constants.PHB_TEXT;
+import static ship.helpz.Constants.DEBUG;
+import static ship.helpz.Constants.PHB_DARK;
+import static ship.helpz.Constants.PHB_TEXT;
 
 import java.awt.Color;
 import java.awt.Font;

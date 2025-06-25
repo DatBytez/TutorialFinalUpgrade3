@@ -1,6 +1,6 @@
 package ui;
 
-import static helpz.Constants.*;
+import static ship.helpz.Constants.*;
 
 import java.awt.Color;
 import java.awt.Font;

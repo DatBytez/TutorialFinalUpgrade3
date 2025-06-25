@@ -2,17 +2,16 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
-import ship.Severity;
 import ship.Tech;
-import shipHelperz.Moneyz;
-import shipWeapons.DamageSet;
-import shipWeapons.DamageType;
-import shipWeapons.FireRange;
-import shipWeapons.Firepower;
-import shipWeapons.WeaponModes;
-import shipWeapons.WeaponType;
+import ship.enums.DamageSet;
+import ship.enums.DamageType;
+import ship.enums.FireRange;
+import ship.enums.Firepower;
+import ship.enums.ProgressLevel;
+import ship.enums.Severity;
+import ship.enums.WeaponModes;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 
 public enum WeaponList implements SystemFactory<WeaponList> {
 	//BEAM
@@ -216,9 +215,9 @@ public enum WeaponList implements SystemFactory<WeaponList> {
 	EMTorpedo(		"EM Torpedo",			WeaponType.TORPEDO, ProgressLevel.PL8, Tech.Q, /*Hull*/3, /*Power*/5, Moneyz.money(450, "K"),	/*Acc*/-2, new FireRange(2,5,10), DamageType.ENERGY, Firepower.MEDIUM,		new DamageSet(4,9,Severity.STUN,2,16,Severity.STUN,3,6,Severity.WOUND), new WeaponModes(true,false,false,false)),
 	NeuralInhibitor("Neural Inhibitor",		WeaponType.SPECIAL, ProgressLevel.PL8, Tech.P, /*Hull*/12, /*Power*/20, Moneyz.money(40, "M"),	/*Acc*/ 0, new FireRange(1,2,3), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(1,12,Severity.STUN,1,12,Severity.WOUND,1,20,Severity.WOUND), new WeaponModes(true,false,false,false)),
 	FissionActivator("Fission Activator",	WeaponType.SPECIAL, ProgressLevel.PL8, Tech.M, /*Hull*/25, /*Power*/75, Moneyz.money(80, "M"),	/*Acc*/ 0, new FireRange(4,8,12), DamageType.ENERGY, Firepower.HEAVY,		new DamageSet(2,8,Severity.MORTAL,4,10,Severity.MORTAL,5,14,Severity.CRITICAL), new WeaponModes(true,false,false,false)),
-	BoardingTransport("Boarding Transport",	WeaponType.SPECIAL, ProgressLevel.PL9, Tech.T, /*Hull*/6, /*Power*/9, Moneyz.money(10, "M"),	/*Acc*/ 0, new FireRange(4,6,8), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(0,0,Severity.STUN,0,0,Severity.STUN,0,0,Severity.STUN), new WeaponModes(true,false,false,false)),
+	BoardingTransporter("Boarding Transporter",	WeaponType.SPECIAL, ProgressLevel.PL9, Tech.T, /*Hull*/6, /*Power*/9, Moneyz.money(10, "M"),	/*Acc*/ 0, new FireRange(4,6,8), DamageType.OTHER, Firepower.ORDINARY,		new DamageSet(0,0,Severity.STUN,0,0,Severity.STUN,0,0,Severity.STUN), new WeaponModes(true,false,false,false)),
 	NullTorpedo(	"Null Torpedo",			WeaponType.TORPEDO, ProgressLevel.PL9, Tech.X, /*Hull*/18, /*Power*/25, Moneyz.money(50, "M"),	/*Acc*/+2, new FireRange(3,6,15), DamageType.ENERGY, Firepower.SUPERHEAVY,	new DamageSet(2,16,Severity.WOUND,2,16,Severity.MORTAL,2,16,Severity.CRITICAL), new WeaponModes(true,false,false,false)),
-	CodeArranger(	"CodeArranger",			WeaponType.SPECIAL, ProgressLevel.PL9, Tech.M, /*Hull*/25, /*Power*/50, Moneyz.money(100, "M"),	/*Acc*/+1, new FireRange(4,8,12), DamageType.OTHER, Firepower.HEAVY,		new DamageSet(1,8,Severity.MORTAL,5,12,Severity.MORTAL,1,8,Severity.CRITICAL), new WeaponModes(true,false,false,false));
+	CodeArranger(	"Code Arranger",			WeaponType.SPECIAL, ProgressLevel.PL9, Tech.M, /*Hull*/25, /*Power*/50, Moneyz.money(100, "M"),	/*Acc*/+1, new FireRange(4,8,12), DamageType.OTHER, Firepower.HEAVY,		new DamageSet(1,8,Severity.MORTAL,5,12,Severity.MORTAL,1,8,Severity.CRITICAL), new WeaponModes(true,false,false,false));
 	
 	
 	protected final String name;

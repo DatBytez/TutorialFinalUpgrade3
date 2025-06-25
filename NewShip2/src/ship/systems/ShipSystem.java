@@ -6,6 +6,7 @@ public interface ShipSystem<T> {
 	T getSystemData();
 	String getName();
 	String getDescription();
+	String getCompartment();
 	int getHullPoints();
 	void setHullPoints(int points);
 	double getPowerCost();

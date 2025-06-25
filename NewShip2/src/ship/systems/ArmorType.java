@@ -1,4 +1,4 @@
-package shipArmor;
+package ship.systems;
 
 public enum ArmorType {
 	LIGHT(.00),

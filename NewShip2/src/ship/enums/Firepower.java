@@ -1,4 +1,4 @@
-package shipWeapons;
+package ship.enums;
 
 public enum Firepower {
 	ORDINARY(0), GOOD(1), SMALL(2), LIGHT(3), MEDIUM(4), HEAVY(5), SUPERHEAVY(6);

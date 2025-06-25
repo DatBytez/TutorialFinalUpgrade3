@@ -1,4 +1,4 @@
-package helpz;
+package ship.helpz;
 
 
 import java.text.DecimalFormat;

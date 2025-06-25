@@ -3,17 +3,16 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
 import ship.Tech;
-import shipHelperz.Moneyz;
-import shipWeapons.FireRange;
+import ship.enums.FireRange;
+import ship.enums.ProgressLevel;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 import ui.SystemListUtilz;
-import shipWeapons.SensorType;
 
 public enum SensorList implements SystemFactory<SensorList>{
 
-	AirSpaceRadar(		"Air/space Radar",		ProgressLevel.PL6, Tech.N, /*Hull*/ 0.5,/* Pow */1.0, Moneyz.money( 20, "K"), SensorType.ACTIVE,  new FireRange( 5,10,20), 1, 0),
+	AirSpaceRadar(		"Air/Space Radar",		ProgressLevel.PL6, Tech.N, /*Hull*/ 0.5,/* Pow */1.0, Moneyz.money( 20, "K"), SensorType.ACTIVE,  new FireRange( 5,10,20), 1, 0),
 	EMDetector(			"EM Detector",			ProgressLevel.PL6, Tech.N, /*Hull*/ 0.5,/* Pow */0.0, Moneyz.money( 20, "K"), SensorType.PASSIVE, new FireRange(10,20,60), 2, 3),
 	HiResVideo(			"Hi-Res Video",			ProgressLevel.PL6, Tech.N, /*Hull*/ 0.5,/* Pow */0.0, Moneyz.money( 10, "K"), SensorType.PASSIVE, new FireRange( 1, 2,10), 1, 2),
 	IRDetector(			"IR Detector",			ProgressLevel.PL6, Tech.N, /*Hull*/ 0.5,/* Pow */0.0, Moneyz.money( 20, "K"), SensorType.PASSIVE, new FireRange( 2, 4, 8), 1, 2),
@@ -22,14 +21,14 @@ public enum SensorList implements SystemFactory<SensorList>{
 
 	MassDetector(		"Mass Detector",		ProgressLevel.PL7, Tech.G, /*Hull*/ 1.0,/* Pow */1.0, Moneyz.money(100, "K"), SensorType.PASSIVE, new FireRange(10,30,50), 2, 1),
 	MultibandRadar(		"Multiband Radar",		ProgressLevel.PL7, Tech.N, /*Hull*/ 0.5,/* Pow */1.0, Moneyz.money( 50, "K"), SensorType.ACTIVE,  new FireRange(10,20,40), 1, 0),
-	Probeadvanced(		"Probe, advanced",		ProgressLevel.PL7, Tech.C, /*Hull*/ 1.0,/* Pow */0.0, Moneyz.money(500, "K"), SensorType.REMOTE,  new FireRange( 0, 0, 0), 4, 0),
+	Probeadvanced(		"Probe, Advanced",		ProgressLevel.PL7, Tech.C, /*Hull*/ 1.0,/* Pow */0.0, Moneyz.money(500, "K"), SensorType.REMOTE,  new FireRange( 0, 0, 0), 4, 0),
 	RemoteNetwork(		"Remote Network",		ProgressLevel.PL7, Tech.C, /*Hull*/ 2.0,/* Pow */2.0, Moneyz.money(750, "K"), SensorType.REMOTE,  new FireRange( 0, 0, 0), 4, 0),
 	Spectroanalyzer(	"Spectroanalyzer",		ProgressLevel.PL7, Tech.N, /*Hull*/ 1.0,/* Pow */1.0, Moneyz.money(100, "K"), SensorType.ACTIVE,  new FireRange( 0, 0, 0), 1, 0),
 	DriveDetectionArray("Drive Detection Array",ProgressLevel.PL7, Tech.G, /*Hull*/ 80.0,/* Pow */120.0, Moneyz.money(1000, "M"), SensorType.PASSIVE, new FireRange( 0, 0, 0), 4, 0),// ADD C Tech
 	
 	CEPassiveArray(		"CE Passive Array",		ProgressLevel.PL8, Tech.N, /*Hull*/ 2.0,/* Pow */1.0, Moneyz.money(  1, "M"), SensorType.PASSIVE,  new FireRange(30,60,100), 2, 0),
 	DriveDetector(		"Drive Detector",		ProgressLevel.PL8, Tech.N, /*Hull*/ 4.0,/* Pow */4.0, Moneyz.money(500, "K"), SensorType.PASSIVE,  new FireRange( 0, 0, 0), 4, 0),
-	Madar(				"Madar",				ProgressLevel.PL8, Tech.G, /*Hull*/ 1.0,/* Pow */1.0, Moneyz.money(200, "K"), SensorType.ACTIVE,   new FireRange(20,30,40), 1, 0),
+	MassRadar(			"Mass Radar",			ProgressLevel.PL8, Tech.G, /*Hull*/ 1.0,/* Pow */1.0, Moneyz.money(200, "K"), SensorType.ACTIVE,   new FireRange(20,30,40), 1, 0),
 	MultiphaseRadar(	"Multiphase Radar",		ProgressLevel.PL8, Tech.N, /*Hull*/ 1.0,/* Pow */0.0, Moneyz.money(250, "K"), SensorType.ACTIVE,   new FireRange(20,40,80), 1, 0),
 	OmniscienceSphere(	"Omniscience Sphere",	ProgressLevel.PL8, Tech.N, /*Hull*/ 3.0,/* Pow */1.0, Moneyz.money(  2, "M"), SensorType.PASSIVE,  new FireRange(50,50,50), 4, 0);
 

@@ -1,6 +1,4 @@
-package shipWeapons;
-
-import ship.Severity;
+package ship.enums;
 
 public class DamageSet {
 	

@@ -2,12 +2,11 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
 import ship.Tech;
-import shipHelperz.Moneyz;
-import shipHull.HullType;
-import shipHull.Toughness;
+import ship.enums.ProgressLevel;
+import ship.enums.Toughness;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 
 public enum HullList implements SystemFactory<HullList>{
 	

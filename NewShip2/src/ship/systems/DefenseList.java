@@ -2,10 +2,10 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
 import ship.Tech;
-import shipHelperz.Moneyz;
+import ship.enums.ProgressLevel;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 import ui.SystemListUtilz;
 
 public enum DefenseList implements SystemFactory<DefenseList> {

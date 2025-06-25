@@ -2,13 +2,11 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
 import ship.Tech;
-import shipArmor.ArmorType;
-import shipArmor.BlockSet;
-import shipHelperz.Moneyz;
-import shipWeapons.WeaponType;
+import ship.enums.BlockSet;
+import ship.enums.ProgressLevel;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 import ui.SystemListUtilz;
 
 public enum ArmorList implements SystemFactory<ArmorList> {

@@ -1,13 +1,13 @@
 package ui;
 
+import static ship.helpz.Constants.*;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import ship.systems.ShipSystem;
-
-import static helpz.Constants.*;
 
 public class MyListButton<T> {
 

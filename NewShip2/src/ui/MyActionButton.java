@@ -1,10 +1,11 @@
 package ui;
 
+import static ship.helpz.Constants.PHB_TITLE;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import static helpz.Constants.PHB_TITLE;
 
 public class MyActionButton extends MyButton {
 	

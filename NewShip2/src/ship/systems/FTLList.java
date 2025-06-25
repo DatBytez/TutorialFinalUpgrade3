@@ -3,10 +3,10 @@ package ship.systems;
 
 import java.util.ArrayList;
 
-import helpz.SystemFactory;
-import ship.ProgressLevel;
 import ship.Tech;
-import shipHelperz.Moneyz;
+import ship.enums.ProgressLevel;
+import ship.helpz.Moneyz;
+import ship.helpz.SystemFactory;
 import ui.SystemListUtilz;
 
 public enum FTLList implements SystemFactory<FTLList>{
@@ -17,7 +17,7 @@ public enum FTLList implements SystemFactory<FTLList>{
 	Hyperdrive(			"Hyperdrive",			ProgressLevel.PL7, Tech.X, /* Pow */3.0, /* MinSize */4, Moneyz.money(5, "M"), Moneyz.money(2, "M")),
 	Stardrive(			"Stardrive",			ProgressLevel.PL7, Tech.G, /* Pow */0.0, /* MinSize */3, Moneyz.money(2, "M"), Moneyz.money(1, "M")),
 	Drivewave(			"Drivewave",			ProgressLevel.PL8, Tech.G, /* Pow */0.0, /* MinSize */2, Moneyz.money(3, "M"), Moneyz.money(1, "M")+Moneyz.money(500, "K")),
-	SpacefoldDrive(		"SpacefoldDrive",		ProgressLevel.PL8, Tech.T, /* Pow */4.0, /* MinSize */4, Moneyz.money(8, "M"), Moneyz.money(2, "M")),
+	SpacefoldDrive(		"Spacefold Drive",		ProgressLevel.PL8, Tech.T, /* Pow */4.0, /* MinSize */4, Moneyz.money(8, "M"), Moneyz.money(2, "M")),
 	PsychoportiveDrive(	"Psychoportive Drive",	ProgressLevel.PL8, Tech.P, /* Pow */1.0, /* MinSize */10, Moneyz.money(6, "M"), Moneyz.money(200, "K")),
 	TranscendentDrive(	"Transcendent Drive",	ProgressLevel.PL9, Tech.P, /* Pow */1.0, /* MinSize */4, Moneyz.money(12, "M"), Moneyz.money(400, "K")),
 	Warpdrive(			"Warpdrive",			ProgressLevel.PL9, Tech.X, /* Pow */2.0, /* MinSize */2, Moneyz.money(10, "M"), Moneyz.money(5, "M"));

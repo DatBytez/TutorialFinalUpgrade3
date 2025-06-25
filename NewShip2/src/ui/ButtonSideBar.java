@@ -1,9 +1,9 @@
 package ui;
 
-import static helpz.Constants.DEBUG;
-import static helpz.Constants.MARGIN;
 import static main.GameStates.MENU_STATE;
 import static main.GameStates.SetGameState;
+import static ship.helpz.Constants.DEBUG;
+import static ship.helpz.Constants.MARGIN;
 
 import java.awt.Color;
 import java.awt.Graphics;

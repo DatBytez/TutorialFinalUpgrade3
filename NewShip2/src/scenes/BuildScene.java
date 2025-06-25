@@ -1,11 +1,8 @@
 package scenes;
 
-import static helpz.Constants.*;
-import static helpz.Constants.PHB_BKGR;
-import static helpz.Constants.PHB_TEXT;
-import static helpz.Constants.TEST_SHIP;
-import static helpz.Format.getDashedString;
-import static helpz.Format.getMoneyString;
+import static ship.helpz.Constants.*;
+import static ship.helpz.Format.getDashedString;
+import static ship.helpz.Format.getMoneyString;
 
 import java.awt.Color;
 import java.awt.Font;

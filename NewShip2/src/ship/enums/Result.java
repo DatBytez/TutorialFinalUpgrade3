@@ -1,4 +1,4 @@
-package ship;
+package ship.enums;
 
 public enum Result {
 	AMAZING(3),

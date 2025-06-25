@@ -2,6 +2,7 @@ package ui;
 
 import static main.GameStates.MENU_STATE;
 import static main.GameStates.SetGameState;
+import static ship.helpz.Constants.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,17 +11,15 @@ import java.awt.Graphics;
 import actions.AttackAction;
 import main.GameScreen;
 import scenes.CombatScene;
-import ship.Crew;
-import ship.Result;
 import ship.Ship;
+import ship.enums.Crew;
+import ship.enums.Result;
 import ship.systems.Armor;
 import ship.systems.ArmorList;
 import ship.systems.Hull;
 import ship.systems.HullList;
 import ship.systems.Weapon;
 import ship.systems.WeaponList;
-
-import static helpz.Constants.*;
 
 public class ActionBar extends Bar {
 

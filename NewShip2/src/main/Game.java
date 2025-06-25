@@ -2,12 +2,12 @@ package main;
 
 import javax.swing.JFrame;
 
-import helpz.DescriptionLoader;
 import scenes.BuildScene;
 import scenes.CombatScene;
 import scenes.EditorScene;
 import scenes.GameOverScene;
 import scenes.MenuScene;
+import ship.helpz.DescriptionLoader;
 
 public class Game extends JFrame implements Runnable {
 

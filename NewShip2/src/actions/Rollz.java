@@ -1,6 +1,6 @@
-package shipHelperz;
+package actions;
 
-import ship.Result;
+import ship.enums.Result;
 
 public class Rollz {
 	

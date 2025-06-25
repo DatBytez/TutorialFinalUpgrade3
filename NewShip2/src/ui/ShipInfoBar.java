@@ -1,11 +1,8 @@
 package ui;
 
-import static helpz.Constants.*;
-import static helpz.Constants.PHB_TEXT;
-import static helpz.Constants.PHB_TITLE;
-import static helpz.Constants.TITLE_MARGIN;
-import static helpz.Format.getDashedString;
-import static helpz.Format.getMoneyString;
+import static ship.helpz.Constants.*;
+import static ship.helpz.Format.getDashedString;
+import static ship.helpz.Format.getMoneyString;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -98,7 +95,6 @@ public class ShipInfoBar extends Bar {
 		g2d.setColor(PHB_DARK);
 		g2d.fillRoundRect(x, y, width, height, 50, 50);
 	}
-
 	private void drawShipInfo(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(PHB_TEXT);
@@ -107,119 +103,109 @@ public class ShipInfoBar extends Bar {
 		int infoY = y + 20 + titleOffset;
 
 		ArrayList<String[]> rows = new ArrayList<>();
+		rows.add(new String[] { "TYPE", "COMP", "POW", "HULL", "SYSTEM", "COST" });
 
-		// Header row
-		rows.add(new String[] { "TYPE", "POW", "HULL", "SYSTEM", "COST" });
-
-		// Hull
 		Hull hull = building.getNewShip().getHull();
 		if (hull != null) {
-			rows.add(new String[] { "Hull", getDashedString((int) hull.getCalculatedPowerCost()), getDashedString(hull.getCalculatedHullCost(hull)),
-					hull.getName(), getMoneyString(hull.getCalculatedCost(hull)) });
+			rows.add(new String[] {
+				"Hull", "-", getDashedString((int) hull.getCalculatedPowerCost()), getDashedString(hull.getCalculatedHullCost(hull)),
+				hull.getName(), getMoneyString(hull.getCalculatedCost(hull))
+			});
 		} else {
-			rows.add(new String[] { "Hull", "-", "-", "Select a Hull", "-" });
+			rows.add(new String[] { "Hull", "-", "-", "-", "Select a Hull", "-" });
 		}
 
-		// Armor
 		Armor armor = building.getNewShip().getArmor();
 		if (armor != null) {
-			rows.add(new String[] { "Armor", getDashedString((int) armor.getCalculatedPowerCost()), getDashedString(armor.getCalculatedHullCost(hull)),
-					armor.getName(), getMoneyString(armor.getCalculatedCost(hull)) });
+			rows.add(new String[] {
+				"Armor", "-", getDashedString((int) armor.getCalculatedPowerCost()), getDashedString(armor.getCalculatedHullCost(hull)),
+				armor.getName(), getMoneyString(armor.getCalculatedCost(hull))
+			});
 		} else {
-			rows.add(new String[] { "Armor", "-", "-", "Select Armor", "-" });
+			rows.add(new String[] { "Armor", "-", "-", "-", "Select Armor", "-" });
 		}
 
-		// Group other systems
 		Map<String, List<ShipSystem<?>>> systemGroups = new TreeMap<>();
 		for (ShipSystem<?> system : building.getNewShip().getSystemList()) {
-			if (system == hull || system == armor)
-				continue;
+			if (system == hull || system == armor) continue;
 			String type = system.getClass().getSimpleName();
 			systemGroups.computeIfAbsent(type, k -> new ArrayList<>()).add(system);
 		}
 
-		// Column widths (initial guess — updated later)
-		int[] colWidths = new int[5];
-		int padding = 20;
-		int[] colX = new int[5];
-		colX[0] = x + padding;
-
-		// Placeholder for now: header and hull/armor
+		int padding = 5;
+		int sidePadding = 20;
+		int[] colWidths = new int[6];
+		int[] colX = new int[6];
+		colX[0] = x + sidePadding;
+		
+		// Calculate max width per column
 		for (String[] row : rows) {
 			for (int i = 0; i < row.length; i++) {
-				colWidths[i] = Math.max(colWidths[i], g.getFontMetrics().stringWidth(row[i]));
+				int width = g.getFontMetrics().stringWidth(row[i]);
+				colWidths[i] = Math.max(colWidths[i], width);
 			}
 		}
+		
+		// Set X positions from left to right, except for COST
+		for (int i = 1; i < 5; i++) {
+			colX[i] = colX[i - 1] + colWidths[i - 1] + padding;
+		}
+		
+		// COST is anchored to the right edge
+		colWidths[5] = Math.max(colWidths[5], g.getFontMetrics().stringWidth("COST")); // ensure title fits
+		colX[5] = x + width - (padding) - colWidths[5];
 
-		// Dynamic sections per system type
+
 		for (String type : systemGroups.keySet()) {
 			List<ShipSystem<?>> group = systemGroups.get(type);
-
 			systemTypeExpanded.putIfAbsent(type, true);
-
 			int headerY = infoY + (rows.size()) * lineHeight;
 			Rectangle clickZone = new Rectangle(colX[0], headerY - lineHeight + 4, 100, lineHeight);
 			typeClickZones.put(type, clickZone);
-
-			// Label row
 			String label = (systemTypeExpanded.get(type) ? "▼ " : "▶ ") + type;
-			rows.add(new String[] { label, "", "", "", "" });
+			rows.add(new String[] { label, "", "", "", "", "" });
 
 			if (systemTypeExpanded.get(type)) {
 				for (ShipSystem<?> system : group) {
-					rows.add(new String[] { "", // don't repeat type
-							getDashedString((int) system.getCalculatedPowerCost()), getDashedString(system.getCalculatedHullCost(hull)),
-							system.getName(), getMoneyString(system.getCalculatedCost(hull)) });
+					rows.add(new String[] {
+						"", system.getCompartment(),
+						getDashedString((int) system.getCalculatedPowerCost()),
+						getDashedString(system.getCalculatedHullCost(hull)),
+						system.getName(), getMoneyString(system.getCalculatedCost(hull))
+					});
 				}
 			}
 		}
 
-		// Final width calculations with all rows
 		for (String[] row : rows) {
 			for (int i = 0; i < row.length; i++) {
 				colWidths[i] = Math.max(colWidths[i], g.getFontMetrics().stringWidth(row[i]));
 			}
 		}
 
+		// Set TYPE through HULL positions (0–3)
 		for (int i = 1; i < 4; i++) {
 			colX[i] = colX[i - 1] + colWidths[i - 1] + padding;
 		}
 
-		// Right-align COST to the right edge of the ShipInfoBar
-		colX[4] = x + width - padding - colWidths[4];
+		// SYSTEM column should always follow HULL directly
+		colX[4] = colX[3] + colWidths[3] + padding;
 
-		// Draw the rows
+		// COST stays right-aligned
+		colX[5] = x + width - sidePadding - colWidths[5];
+
+
+
 		for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
 			String[] row = rows.get(rowIndex);
 			boolean isHeaderRow = rowIndex == 0;
 
 			for (int i = 0; i < row.length; i++) {
 				String text = row[i];
-				int drawX = colX[i];
-
-				if (row[0].startsWith("▼") || row[0].startsWith("▶")) {
-					g.setFont(new Font("Dialog", Font.PLAIN, 14)); // Use fallback font for arrows
-				} else {
-					g.setFont(alternityLiteFont.deriveFont(isHeaderRow ? Font.BOLD : Font.PLAIN, 14F));
-				}
-
-				int textWidth = g.getFontMetrics().stringWidth(text);
-
-				if (i == 1 || i == 2) {
-					drawX = colX[i] + (colWidths[i] - textWidth) / 2; // center POW, HULL
-
-				} else if (i == 4) {
-					drawX = colX[i] + (colWidths[i] - textWidth); // no shift, already anchored right
-				}
-
-//				g.drawString(text, drawX, infoY + rowIndex * lineHeight);
-				
-				// Determine base color and format
-				Color textColor = PHB_TEXT;
 				String displayText = text;
+				Color textColor = PHB_TEXT;
 
-				// Apply color and "+" for negative numbers in POW (col 1) and HULL (col 2)
-				if ((i == 1 || i == 2)) {
+				if (i == 2 || i == 3) {
 					try {
 						int value = Integer.parseInt(text);
 						if (value < 0) {
@@ -227,25 +213,27 @@ public class ShipInfoBar extends Bar {
 							textColor = PHB_LIST_TITLE;
 						} else {
 							displayText = String.valueOf(value);
-							textColor = PHB_TEXT;
 						}
-					} catch (NumberFormatException ex) {
-						// leave text and color as-is (probably a dash or placeholder)
-					}
+					} catch (NumberFormatException ignored) {}
 				}
 
+				g.setFont(row[0].startsWith("▼") || row[0].startsWith("▶")
+						? new Font("Dialog", Font.PLAIN, 14)
+						: alternityLiteFont.deriveFont(isHeaderRow ? Font.BOLD : Font.PLAIN, 14F));
 
-				// Measure the final displayText width
 				int displayTextWidth = g.getFontMetrics().stringWidth(displayText);
+				int drawX;
 
-				// Adjust X for centering in POW and HULL
-				if (i == 1 || i == 2) {
-					drawX = colX[i] + (colWidths[i] - displayTextWidth) / 2;
+				if (i == 1 || i == 2 || i == 3) {
+					drawX = colX[i] + (colWidths[i] - displayTextWidth) / 2; // Center COMP, POW, HULL
+				} else if (i == 5) {
+					drawX = colX[i] + (colWidths[i] - displayTextWidth);     // Right-align COST
 				} else if (i == 4) {
-					drawX = colX[i] + (colWidths[i] - displayTextWidth); // right-align
+					drawX = colX[4]; // SYSTEM — left-aligned and full length
+				} else {
+					drawX = colX[i]; // Left-align TYPE
 				}
 
-				// Draw the string
 				g.setColor(textColor);
 				g.drawString(displayText, drawX, infoY + rowIndex * lineHeight);
 			}

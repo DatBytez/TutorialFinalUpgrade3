@@ -1,4 +1,4 @@
-package shipWeapons;
+package ship.systems;
 
 public enum SensorType {
 	ACTIVE,PASSIVE,REMOTE,

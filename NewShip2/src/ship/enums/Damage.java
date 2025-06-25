@@ -1,13 +1,10 @@
-package ship;
-
-import shipWeapons.DamageType;
-import shipWeapons.Firepower;
+package ship.enums;
 
 public class Damage {
-	int damage;
-	Severity severity;
+	public int damage;
+	public Severity severity;
 	DamageType type;
-	Firepower firepower;
+	public Firepower firepower;
 	int damageMultiplier = 1;
 	
 	public Damage(int damage, Severity severity, DamageType type, Firepower firepower) {

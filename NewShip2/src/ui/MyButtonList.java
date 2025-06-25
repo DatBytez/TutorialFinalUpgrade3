@@ -1,5 +1,7 @@
 package ui;
 
+import static ship.helpz.Constants.*;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -14,8 +16,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import ship.systems.ShipSystem;
-
-import static helpz.Constants.*;
 
 public class MyButtonList<T> extends Bar {
 

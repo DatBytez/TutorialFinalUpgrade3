@@ -1,4 +1,4 @@
-package shipWeapons;
+package ship.enums;
 
 public enum FireModes {
 	F("Single-shot"),

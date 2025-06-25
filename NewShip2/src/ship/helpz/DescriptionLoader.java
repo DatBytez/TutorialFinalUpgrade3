@@ -1,4 +1,4 @@
-package helpz;
+package ship.helpz;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -62,32 +62,3 @@ public class DescriptionLoader {
 }
 
 
-//package helpz;
-//
-//import java.io.InputStreamReader;
-//import java.util.HashMap;
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//import java.lang.reflect.Type;
-//
-//public class DescriptionLoader {
-//    private static HashMap<String, String> descriptions = new HashMap<>();
-//
-//    public static void loadDescriptions() {
-//        try {
-//            Gson gson = new Gson();
-//            Type type = new TypeToken<HashMap<String, String>>() {}.getType();
-//            InputStreamReader reader = new InputStreamReader(
-//                DescriptionLoader.class.getResourceAsStream("descriptions.json"));
-//            descriptions = gson.fromJson(reader, type);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            descriptions = new HashMap<>();
-//        }
-//    }
-//
-//    public static String getDescription(String name) {
-//    	System.out.println(name);
-//        return descriptions.getOrDefault(name, "");
-//    }
-//}

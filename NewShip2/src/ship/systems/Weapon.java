@@ -1,21 +1,20 @@
 package ship.systems;
 
+import static ship.helpz.Format.*;
+
 import java.util.ArrayList;
 
-import ship.Damage;
-import ship.ProgressLevel;
-import ship.Result;
-import ship.Severity;
+import actions.Rollz;
 import ship.Tech;
-import shipHelperz.Rollz;
-import shipWeapons.DamageSet;
-import shipWeapons.DamageType;
-import shipWeapons.FireRange;
-import shipWeapons.Firepower;
-import shipWeapons.WeaponModes;
-import shipWeapons.WeaponType;
-
-import static helpz.Format.*;
+import ship.enums.Damage;
+import ship.enums.DamageSet;
+import ship.enums.DamageType;
+import ship.enums.FireRange;
+import ship.enums.Firepower;
+import ship.enums.ProgressLevel;
+import ship.enums.Result;
+import ship.enums.Severity;
+import ship.enums.WeaponModes;
 
 public class Weapon extends BaseSystem<WeaponList> {
 	private int accuracy;

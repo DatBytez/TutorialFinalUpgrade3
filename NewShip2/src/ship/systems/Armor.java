@@ -1,13 +1,12 @@
 package ship.systems;
 
+import static ship.helpz.Format.*;
+
 import java.util.ArrayList;
 
-import shipArmor.ArmorType;
-import shipArmor.BlockSet;
-import shipHelperz.Rollz;
-import shipWeapons.DamageType;
-
-import static helpz.Format.*;
+import actions.Rollz;
+import ship.enums.BlockSet;
+import ship.enums.DamageType;
 
 public class Armor extends BaseSystem<ArmorList>{
 	private ArmorType armorType;
