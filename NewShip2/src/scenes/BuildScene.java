@@ -244,7 +244,8 @@ public class BuildScene extends GameScene implements SceneMethods {
 			} else if (selected instanceof Armor) {
 				newShip.setArmor((Armor) selected);
 			} else {
-				newShip.addSystem(selected.copy());
+//				newShip.addSystem(selected.copy());
+				newShip.addSystemToCompartment(selected.copy(), newShip.getCompartments().get(0).getName());
 			}
 
 			TEST_SHIP = newShip;
@@ -481,6 +482,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 			addButton.mouseMoved(mouseX, mouseY);
 			incButton.mouseMoved(mouseX, mouseY);
 			decButton.mouseMoved(mouseX, mouseY);
+			shipInfoBar.mouseMoved(mouseX, mouseY);
 		}
 
 		public void mouseClicked(int mouseX, int mouseY) {

@@ -4,9 +4,6 @@ import static ship.helpz.Format.*;
 
 import java.util.ArrayList;
 
-import ship.Tech;
-import ship.enums.ProgressLevel;
-
 public class Command extends BaseSystem<CommandList> {
 
 	Command(CommandList system) {

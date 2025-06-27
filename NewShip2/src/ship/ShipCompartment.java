@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import ship.systems.ShipSystem;
 
 public class ShipCompartment {
-	private ArrayList<ShipSystem> ShipObjects = new ArrayList<ShipSystem>();
+	private ArrayList<ShipSystem<?>> shipSystems = new ArrayList<>();
 	private String name;
 	
 	public ShipCompartment(Ship ship,String name) {
@@ -20,8 +20,8 @@ public class ShipCompartment {
 		this.name = name;
 	}
 
-	public ArrayList<ShipSystem> getShipObjects() {
-		return ShipObjects;
+	public ArrayList<ShipSystem<?>> getShipSystems() {
+		return shipSystems;
 	}
 
 }

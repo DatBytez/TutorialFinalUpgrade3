@@ -9,7 +9,6 @@ import ship.enums.Result;
 import ship.enums.Severity;
 import ship.systems.Armor;
 import ship.systems.Hull;
-import ship.systems.HullList;
 import ship.systems.ShipSystem;
 import ship.systems.Weapon;
 
@@ -18,11 +17,10 @@ public class Ship {
 	private int cost = 0;
 	private String name = "New Ship";
 	private Hull hull;
-//	private Hull hull = new Hull(HullList.None);
 	private Armor armor;
 	private Crew crew = Crew.MARGINAL;
 	private ArrayList<ShipCompartment> compartments = new ArrayList<ShipCompartment>();
-	private ArrayList<ShipSystem> systemList = new ArrayList<ShipSystem>();
+	private ArrayList<ShipSystem<?>> systemList = new ArrayList<>();
 
 	// Change During Combat
 	private int stun, wound, mortal, critical;
@@ -204,7 +202,7 @@ public class Ship {
 
 	public ArrayList<Weapon> getWeapons() {
 		ArrayList<Weapon> weapons = new ArrayList<>();
-		for (ShipSystem system : systemList) {
+		for (ShipSystem<?> system : systemList) {
 		    if (system instanceof Weapon) {
 		        weapons.add((Weapon) system);
 		    }
@@ -297,11 +295,23 @@ public class Ship {
 		return compartments;
 	}
 	
-	public void addSystem(ShipSystem newSystem) {
+	public void addSystem(ShipSystem<?> newSystem) {
 		this.systemList.add(newSystem);
 	}
+	
+	public void addSystemToCompartment(ShipSystem<?> system, String compartmentName) {
+		for (ShipCompartment compartment : compartments) {
+			if (compartment.getName().equals(compartmentName)) {
+				compartment.getShipSystems().add(system);
+				systemList.add(system);
+				system.setCompartment(compartment);
+				return;
+			}
+		}
+		throw new IllegalArgumentException("No compartment found with name: " +compartmentName);
+	}
 
-	public ArrayList<ShipSystem> getSystemList() {
+	public ArrayList<ShipSystem<?>> getSystemList() {
 		return systemList;
 	}
 

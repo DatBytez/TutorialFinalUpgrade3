@@ -2,11 +2,13 @@ package ship.systems;
 
 import java.util.ArrayList;
 
+import ship.ShipCompartment;
+
 public interface ShipSystem<T> {
 	T getSystemData();
 	String getName();
 	String getDescription();
-	String getCompartment();
+	ShipCompartment getCompartment();
 	int getHullPoints();
 	void setHullPoints(int points);
 	double getPowerCost();
@@ -33,4 +35,5 @@ public interface ShipSystem<T> {
 		copySharedStateTo(copy);
 		return copy;
 	}
+	void setCompartment(ShipCompartment compartment);
 }

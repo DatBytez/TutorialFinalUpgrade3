@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import scenes.BuildScene;
 import ship.ShipCompartment;
 import ship.systems.Armor;
+import ship.systems.BaseSystem;
 import ship.systems.Hull;
 import ship.systems.ShipSystem;
 
@@ -36,6 +37,14 @@ public class ShipInfoBar extends Bar {
 
 	private Map<String, Boolean> systemTypeExpanded = new TreeMap<>(); // Track expanded/collapsed
 	private Map<String, Rectangle> typeClickZones = new TreeMap<>(); // Track clickable areas
+	
+	// Dropdown Menu
+	private Map<ShipSystem<?>, Rectangle> compDropdownZones = new java.util.IdentityHashMap<>();
+	private ShipSystem<?> activeDropdownSystem = null;
+	private Rectangle dropdownBounds = null;
+	private boolean showingDropdown = false;
+	private int hoveredDropdownIndex = -1;
+
 
 	public ShipInfoBar(int x, int y, int width, int height, BuildScene building) {
 		super(x, y, width, height);
@@ -103,26 +112,28 @@ public class ShipInfoBar extends Bar {
 		int infoY = y + 20 + titleOffset;
 
 		ArrayList<String[]> rows = new ArrayList<>();
-		rows.add(new String[] { "TYPE", "COMP", "POW", "HULL", "SYSTEM", "COST" });
+		ArrayList<ShipSystem<?>> rowToSystem = new ArrayList<>();
+
+		addRow(rows, rowToSystem, new String[] { "TYPE", "COMP", "POW", "HULL", "SYSTEM", "COST" }, null);
 
 		Hull hull = building.getNewShip().getHull();
 		if (hull != null) {
-			rows.add(new String[] {
+			addRow(rows, rowToSystem, new String[] {
 				"Hull", "-", getDashedString((int) hull.getCalculatedPowerCost()), getDashedString(hull.getCalculatedHullCost(hull)),
 				hull.getName(), getMoneyString(hull.getCalculatedCost(hull))
-			});
+			}, null);
 		} else {
-			rows.add(new String[] { "Hull", "-", "-", "-", "Select a Hull", "-" });
+			addRow(rows, rowToSystem, new String[] { "Hull", "-", "-", "-", "Select a Hull", "-" }, null);
 		}
 
 		Armor armor = building.getNewShip().getArmor();
 		if (armor != null) {
-			rows.add(new String[] {
+			addRow(rows, rowToSystem, new String[] {
 				"Armor", "-", getDashedString((int) armor.getCalculatedPowerCost()), getDashedString(armor.getCalculatedHullCost(hull)),
 				armor.getName(), getMoneyString(armor.getCalculatedCost(hull))
-			});
+			}, null);
 		} else {
-			rows.add(new String[] { "Armor", "-", "-", "-", "Select Armor", "-" });
+			addRow(rows, rowToSystem, new String[] { "Armor", "-", "-", "-", "Select Armor", "-" }, null);
 		}
 
 		Map<String, List<ShipSystem<?>>> systemGroups = new TreeMap<>();
@@ -141,41 +152,51 @@ public class ShipInfoBar extends Bar {
 		// Calculate max width per column
 		for (String[] row : rows) {
 			for (int i = 0; i < row.length; i++) {
-				int width = g.getFontMetrics().stringWidth(row[i]);
-				colWidths[i] = Math.max(colWidths[i], width);
+				colWidths[i] = Math.max(colWidths[i], g.getFontMetrics().stringWidth(row[i]));
 			}
 		}
-		
-		// Set X positions from left to right, except for COST
+
+		// Set column X positions
 		for (int i = 1; i < 5; i++) {
 			colX[i] = colX[i - 1] + colWidths[i - 1] + padding;
 		}
-		
-		// COST is anchored to the right edge
-		colWidths[5] = Math.max(colWidths[5], g.getFontMetrics().stringWidth("COST")); // ensure title fits
-		colX[5] = x + width - (padding) - colWidths[5];
+		colWidths[5] = Math.max(colWidths[5], g.getFontMetrics().stringWidth("COST"));
+		colX[5] = x + width - sidePadding - colWidths[5];
+
 
 
 		for (String type : systemGroups.keySet()) {
 			List<ShipSystem<?>> group = systemGroups.get(type);
 			systemTypeExpanded.putIfAbsent(type, true);
+
 			int headerY = infoY + (rows.size()) * lineHeight;
 			Rectangle clickZone = new Rectangle(colX[0], headerY - lineHeight + 4, 100, lineHeight);
 			typeClickZones.put(type, clickZone);
+
 			String label = (systemTypeExpanded.get(type) ? "▼ " : "▶ ") + type;
-			rows.add(new String[] { label, "", "", "", "", "" });
+			addRow(rows, rowToSystem, new String[] { label, "", "", "", "", "" }, null);
 
 			if (systemTypeExpanded.get(type)) {
 				for (ShipSystem<?> system : group) {
+					// Safely get the compartment name
+					String compName = "-";
+					if (system.getCompartment() != null && system.getCompartment().getName() != null) {
+						compName = system.getCompartment().getName();
+					}
+
 					rows.add(new String[] {
-						"", system.getCompartment(),
+						"",
+						compName,
 						getDashedString((int) system.getCalculatedPowerCost()),
 						getDashedString(system.getCalculatedHullCost(hull)),
-						system.getName(), getMoneyString(system.getCalculatedCost(hull))
+						system.getName(),
+						getMoneyString(system.getCalculatedCost(hull))
 					});
+					rowToSystem.add(system);
 				}
 			}
 		}
+
 
 		for (String[] row : rows) {
 			for (int i = 0; i < row.length; i++) {
@@ -198,7 +219,6 @@ public class ShipInfoBar extends Bar {
 
 		for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
 			String[] row = rows.get(rowIndex);
-			boolean isHeaderRow = rowIndex == 0;
 
 			for (int i = 0; i < row.length; i++) {
 				String text = row[i];
@@ -216,10 +236,15 @@ public class ShipInfoBar extends Bar {
 						}
 					} catch (NumberFormatException ignored) {}
 				}
+				
+				if (rowIndex == 0) {
+					g.setFont(alternityLiteFont.deriveFont(Font.BOLD, 14F)); // Column header
+				} else if (row[0].startsWith("▼") || row[0].startsWith("▶")) {
+					g.setFont(new Font("Dialog", Font.PLAIN, 14)); // Group header (collapsible)
+				} else {
+					g.setFont(alternityLiteFont.deriveFont(Font.PLAIN, 14F)); // Standard row
+				}
 
-				g.setFont(row[0].startsWith("▼") || row[0].startsWith("▶")
-						? new Font("Dialog", Font.PLAIN, 14)
-						: alternityLiteFont.deriveFont(isHeaderRow ? Font.BOLD : Font.PLAIN, 14F));
 
 				int displayTextWidth = g.getFontMetrics().stringWidth(displayText);
 				int drawX;
@@ -236,8 +261,52 @@ public class ShipInfoBar extends Bar {
 
 				g.setColor(textColor);
 				g.drawString(displayText, drawX, infoY + rowIndex * lineHeight);
+
+				if (i == 1 && rowToSystem.get(rowIndex) != null) {
+					ShipSystem<?> system = rowToSystem.get(rowIndex);
+					int dropX = drawX - 15; // Move icon to the left of text
+					int dropY = infoY + rowIndex * lineHeight - 14;
+					g.setFont(new Font("Dialog", Font.PLAIN, 10));
+					g.drawString("▼", dropX, dropY + 10);
+					compDropdownZones.put(system, new Rectangle(dropX, dropY, 12, 12));
+				}
 			}
 		}
+		
+		// MAYBE MAKE INTO IT'S OWN METHOD
+		if (showingDropdown && activeDropdownSystem != null) {
+			ArrayList<ShipCompartment> compartments = building.getNewShip().getCompartments();
+
+			int dropX = compDropdownZones.get(activeDropdownSystem).x;
+			int dropY = compDropdownZones.get(activeDropdownSystem).y + 12;
+			int menuWidth = 60;
+			int itemHeight = 18;
+			int menuHeight = (compartments.size() + 1) * itemHeight; // +1 for DROP option
+			
+			dropdownBounds = new Rectangle(dropX, dropY, menuWidth, menuHeight);
+
+			g.setColor(Color.DARK_GRAY);
+			g.fillRoundRect(dropX - 5, dropY - 5, menuWidth, menuHeight + 10, 12, 12); // Rounded corners
+			g.setFont(new Font("Dialog", Font.PLAIN, 12));
+
+			for (int i = 0; i <= compartments.size(); i++) {
+				if (i == hoveredDropdownIndex) {
+					// Draw hover background
+					g.setColor(new Color(80, 80, 80));
+					g.fillRoundRect(dropX -5, dropY + i * itemHeight, menuWidth, itemHeight, 6, 6);
+				}
+				g.setColor(Color.WHITE);
+				String name = (i < compartments.size()) ? compartments.get(i).getName() : "DROP";
+				g.drawString(name, dropX + 5, dropY + (i + 1) * itemHeight - 4);
+			}
+
+
+		}
+	}
+	
+	private void addRow(ArrayList<String[]> rows, ArrayList<ShipSystem<?>> rowToSystem, String[] rowData, ShipSystem<?> system) {
+		rows.add(rowData);
+		rowToSystem.add(system);
 	}
 
 	private void drawCompInfo(Graphics g, int infoX, int infoY, int i) {
@@ -268,7 +337,63 @@ public class ShipInfoBar extends Bar {
 				break;
 			}
 		}
+		
+		// DROPDOWN ICON
+		for (Map.Entry<ShipSystem<?>, Rectangle> entry : compDropdownZones.entrySet()) {
+			if (entry.getValue().contains(mouseX, mouseY)) {
+				activeDropdownSystem = entry.getKey();
+				showingDropdown = true;
+				return;
+			}
+		}
+		// DROPDOWN MENU
+		if (showingDropdown && dropdownBounds != null && dropdownBounds.contains(mouseX, mouseY)) {
+			ArrayList<ShipCompartment> compartments = building.getNewShip().getCompartments();
+			int index = (mouseY - dropdownBounds.y) / 18;
+
+			if (index >= 0 && index < compartments.size()) {
+				ShipCompartment newComp = compartments.get(index);
+				if (activeDropdownSystem instanceof BaseSystem<?>) {
+					ShipCompartment oldComp = activeDropdownSystem.getCompartment();
+					if (oldComp != null) {
+						oldComp.getShipSystems().remove(activeDropdownSystem);
+					}
+					newComp.getShipSystems().add(activeDropdownSystem);
+					((BaseSystem<?>) activeDropdownSystem).setCompartment(newComp);
+				}
+			} else if (index == compartments.size()) {
+				dropSystem(activeDropdownSystem);
+			}
+
+			showingDropdown = false;
+			activeDropdownSystem = null;
+			hoveredDropdownIndex = -1;
+			return;
+		}
+
+		// CLICKED OUTSIDE DROPDOWN — close without changes
+		if (showingDropdown) {
+		    showingDropdown = false;
+		    activeDropdownSystem = null;
+		    hoveredDropdownIndex = -1;
+		}
 	}
+	
+		private void dropSystem(ShipSystem<?> system) {
+			if (system instanceof BaseSystem<?>) {
+				// Remove from its compartment
+				ShipCompartment oldComp = system.getCompartment();
+				if (oldComp != null) {
+					oldComp.getShipSystems().remove(system);
+				}
+				((BaseSystem<?>) system).setCompartment(null);
+
+				// Remove from ship's system list
+				building.getNewShip().getSystemList().remove(system);
+			}
+		}
+
+
 
 	public void mouseDoubleClicked(int mouseX, int mouseY) {
 		if (nameBounds != null && nameBounds.contains(mouseX, mouseY)) {
@@ -278,16 +403,24 @@ public class ShipInfoBar extends Bar {
 		}
 	}
 
-	public void mouseMoved(int x, int y) {
-
+	public void mouseMoved(int mouseX, int mouseY) {
+		if (showingDropdown && dropdownBounds != null) {
+			if (dropdownBounds.contains(mouseX, mouseY)) {
+				int itemHeight = 18;
+				hoveredDropdownIndex = (mouseY - dropdownBounds.y) / itemHeight;
+			} else {
+				hoveredDropdownIndex = -1;
+			}
+		} else {
+			hoveredDropdownIndex = -1;
+		}
 	}
 
-	public void mousePressed(int x, int y) {
 
+	public void mousePressed(int x, int y) {
 	}
 
 	public void mouseReleased(int x, int y) {
-
 	}
 
 	public void keyPressed(KeyEvent e) {
