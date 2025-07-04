@@ -13,6 +13,7 @@ public abstract class BaseSystem<T> implements ShipSystem<T> {
 	protected int hullCost = 0;
 	protected double powerCost = 0;
 	protected int creditCost = 0;
+	protected int quantity = 1;
 	protected boolean resizeable = false;
 	//
 	protected ProgressLevel level;
@@ -29,8 +30,6 @@ public abstract class BaseSystem<T> implements ShipSystem<T> {
 		this.compartment = compartment;
 	}
 	
-//	public void addToCompartment(ShipCompartment compartment) { this.compartment = compartment;}
-
 	@Override public T getSystemData() { return systemData; }
 	@Override public String getName() { return name; }
 	@Override public String getDescription() { return description; }
@@ -44,6 +43,9 @@ public abstract class BaseSystem<T> implements ShipSystem<T> {
 	@Override
 	public void copySharedStateTo(ShipSystem<T> other) {
 		other.setHullPoints(this.hullCost);
+		
+		if(other instanceof Weapon)
+			((Weapon) other).setQuantity(this.quantity);
 	}
 	
 }

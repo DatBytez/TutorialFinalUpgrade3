@@ -28,7 +28,6 @@ public class ShipInfoBar extends Bar {
 	private BuildScene building;
 
 	private int width, height;
-	private Rectangle bounds;
 	private int titleOffset = 60;
 
 	private Rectangle nameBounds; // Click area for the name
@@ -54,15 +53,6 @@ public class ShipInfoBar extends Bar {
 		this.building = building;
 		setStyle("extra");
 		hasTitleBar = false;
-		initBounds();
-		initButtons();
-	}
-
-	private void initBounds() {
-		this.bounds = new Rectangle(x, y, width, height);
-	}
-
-	private void initButtons() {
 	}
 
 	private void drawButtons(Graphics g) {

@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -22,14 +24,17 @@ import javax.imageio.ImageIO;
 import main.Game;
 import main.GameScreen;
 import ship.Ship;
+import ship.enums.MountType;
 import ship.systems.Armor;
 import ship.systems.Hull;
 import ship.systems.ShipSystem;
+import ship.systems.Weapon;
 import ui.Bar;
 import ui.BuildBar;
 import ui.ButtonSideBar;
 import ui.MyActionButton;
 import ui.ShipInfoBar;
+import ui.SimpleDropdown;
 
 //RANDOM TODO:
 //	Make lists scrollable
@@ -43,7 +48,6 @@ import ui.ShipInfoBar;
 
 // Adjust descriptions to wrap around "ADD Bar"
 
-
 public class BuildScene extends GameScene implements SceneMethods {
 
 	private ButtonSideBar rightSideBar;
@@ -53,6 +57,8 @@ public class BuildScene extends GameScene implements SceneMethods {
 	private AddSubBar addBar;
 	private Ship newShip = new Ship();
 	private boolean gamePaused;
+	int defaultAddBarHeight;
+	int defaultAddBarY;
 
 	private ShipSystem<?> selectedItem;
 
@@ -67,8 +73,9 @@ public class BuildScene extends GameScene implements SceneMethods {
 		int subWidth = 260;
 		int subHeight = 160;
 		int subX = GameScreen.XSIZE - (subWidth + MARGIN * 4);
-		int subY = GameScreen.YSIZE - (subHeight + MARGIN);
-		addBar = new AddSubBar(subX, subY, subWidth, subHeight);
+		defaultAddBarY = GameScreen.YSIZE - (subHeight + MARGIN);
+		defaultAddBarHeight = 160;
+		addBar = new AddSubBar(subX, defaultAddBarY, subWidth, defaultAddBarHeight);
 
 		initRightSideBar();
 		initLeftSideBar();
@@ -244,7 +251,6 @@ public class BuildScene extends GameScene implements SceneMethods {
 			} else if (selected instanceof Armor) {
 				newShip.setArmor((Armor) selected);
 			} else {
-//				newShip.addSystem(selected.copy());
 				newShip.addSystemToCompartment(selected.copy(), newShip.getCompartments().get(0).getName());
 			}
 
@@ -288,8 +294,8 @@ public class BuildScene extends GameScene implements SceneMethods {
 					rightSideBar.changeList(new ArrayList<>(
 							Arrays.asList("WEAPONS>>", "BEAMS", "PROJECTILES", "ORDINANCES", "SPECIAL", "BACK")));
 				} else if (selectedText.equals("MISC")) {
-					rightSideBar.changeList(new ArrayList<>(
-							Arrays.asList("MISC>>", "SUPPORT", "COMPUTERS", "MISCELLANEOUS", "BACK")));
+					rightSideBar.changeList(
+							new ArrayList<>(Arrays.asList("MISC>>", "SUPPORT", "COMPUTERS", "MISCELLANEOUS", "BACK")));
 				} else {
 					buildBar.setActiveList(selectedText);
 				}
@@ -370,6 +376,9 @@ public class BuildScene extends GameScene implements SceneMethods {
 		private ArrayList<MyActionButton> buttonList = new ArrayList<>();
 		private MyActionButton addButton, incButton, decButton;
 		private ShipSystem<?> selectedSystem;
+		private SimpleDropdown mountDropdown;
+		private Rectangle mountBounds;
+		private final int lineHeight = 20;
 
 		public AddSubBar(int x, int y, int width, int height) {
 			super(x, y, width, height);
@@ -387,6 +396,10 @@ public class BuildScene extends GameScene implements SceneMethods {
 				incButton.setActive(selectedItem.isResizeable());
 				decButton.setActive(selectedItem.isResizeable());
 			}
+
+			if (mountDropdown != null && selectedSystem != getSelectedItem()) {
+				mountDropdown = null;
+			}
 		}
 
 		public void draw(Graphics g) {
@@ -398,6 +411,7 @@ public class BuildScene extends GameScene implements SceneMethods {
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 			selectedSystem = getSelectedItem();
+			boolean isWeapon = selectedSystem instanceof Weapon;
 			title = selectedSystem.getName();
 			int powerCost = (int) selectedSystem.getCalculatedPowerCost();
 			int hullCost = selectedSystem.getCalculatedHullCost(getNewShip().getHull()) * -1;
@@ -408,16 +422,58 @@ public class BuildScene extends GameScene implements SceneMethods {
 			// Info Text
 			g2d.setColor(PHB_TEXT);
 			g2d.setFont(alternityLiteFont.deriveFont(Font.BOLD, 14F));
-			int lineHeight = 20;
+			int titleBarHeight = 40;
+			int baseInfoY = y + titleBarHeight + MARGIN;
 			int textX = x + MARGIN;
-			int infoY = y + 40 + lineHeight;
+			int infoY = baseInfoY;
+
+			// Dynamically adjust bar height if a Weapon (mount line) is selected
+			int extraHeight = isWeapon ? lineHeight : 0;
+			this.setHeight(defaultAddBarHeight + extraHeight);
+			this.setY(defaultAddBarY - extraHeight);
+
+			String mountLabel = "MOUNT: ";
+			int labelWidth = g2d.getFontMetrics().stringWidth(mountLabel);
+
+			if (selectedSystem instanceof Weapon weapon && mountDropdown == null) {
+
+				List<String> mountOptions = Arrays.stream(MountType.values()).map(Enum::name).toList();
+				mountDropdown = new SimpleDropdown(
+						mountOptions, 
+						textX + labelWidth, 
+						infoY - lineHeight - 15, 
+						100,
+						alternityLiteFont.deriveFont(Font.BOLD, 14f), // <- Explicit match
+						index -> {
+							weapon.setMountType(MountType.values()[index]);
+						});
+			}
+
+			if (isWeapon) {
+				Weapon weapon = (Weapon) selectedSystem;
+				String mountValue = weapon.getMountType().toString();
+
+				g2d.setColor(PHB_TEXT);
+				g2d.drawString(mountLabel, textX, infoY);
+				g2d.drawString(">", labelWidth+textX, infoY);
+				int valueWidth = g2d.getFontMetrics().stringWidth(mountValue);
+				g2d.setColor(PHB_LIST_TITLE);
+				g2d.drawString(mountValue, textX + labelWidth, infoY);
+
+				// Update bounds for mount text
+				int ascent = g2d.getFontMetrics().getAscent();
+				mountBounds = new Rectangle(textX + labelWidth, infoY - ascent + 4, valueWidth, lineHeight);
+
+				infoY += lineHeight;
+			}
 
 			// === HULL COST LINE ===
 			String hullLabel;
 			String hullValue;
-			if(selectedSystem instanceof Hull hull && hull.getHullPoints() - hull.getBaseHullPoints() > 0) {
-				hullValue = getDashedString(hull.getBaseHullPoints()) + "(+" + getDashedString(hull.getHullPoints() - hull.getBaseHullPoints() + ")");
-			}else {
+			if (selectedSystem instanceof Hull hull && hull.getHullPoints() - hull.getBaseHullPoints() > 0) {
+				hullValue = getDashedString(hull.getBaseHullPoints()) + "(+"
+						+ getDashedString(hull.getHullPoints() - hull.getBaseHullPoints() + ")");
+			} else {
 				hullValue = getDashedString(Math.abs(hullCost));
 			}
 			if (hullCost > 0) {
@@ -475,17 +531,66 @@ public class BuildScene extends GameScene implements SceneMethods {
 			for (MyActionButton button : buttonList) {
 				button.draw(g2d);
 			}
+
+			if (mountDropdown != null) {
+				mountDropdown.draw(g);
+			}
+
 		}
 
+		private void setHeight(int height) {
+			this.height = height;
+		}
+
+		private void setY(int y) {
+			this.y = y;
+		}
 
 		public void mouseMoved(int mouseX, int mouseY) {
 			addButton.mouseMoved(mouseX, mouseY);
 			incButton.mouseMoved(mouseX, mouseY);
 			decButton.mouseMoved(mouseX, mouseY);
 			shipInfoBar.mouseMoved(mouseX, mouseY);
+
+			if (mountDropdown != null && mountDropdown.isVisible())
+				mountDropdown.mouseMoved(mouseX, mouseY);
 		}
 
 		public void mouseClicked(int mouseX, int mouseY) {
+			// Priority: Dropdown click
+			if (mountDropdown != null && mountDropdown.isVisible()) {
+				// Check if click was inside dropdown
+				if (mountDropdown.getBounds().contains(mouseX, mouseY)) {
+					mountDropdown.mouseClicked(mouseX, mouseY);
+					return;
+				} else {
+					// Clicked outside — close dropdown
+					mountDropdown.hide();
+					return;
+				}
+			}
+
+			// Clicked on mount label to show dropdown
+			if (mountBounds != null && mountBounds.contains(mouseX, mouseY)) {
+				if (mountDropdown == null) {
+					List<String> mountOptions = Arrays.stream(MountType.values()).map(Enum::name).toList();
+
+					Weapon weapon = (Weapon) selectedSystem;
+					mountDropdown = new SimpleDropdown(
+							mountOptions, 
+							mountBounds.x, 
+							mountBounds.y + lineHeight, 100,
+							alternityLiteFont.deriveFont(Font.BOLD, 14f),
+							index -> {
+								weapon.setMountType(MountType.values()[index]);
+								mountDropdown.hide();
+							});
+				}
+				mountDropdown.show();
+				return;
+			}
+
+			// Other buttons
 			if (addButton.getBounds().contains(mouseX, mouseY) && addButton.isActive())
 				addClicked();
 			if (incButton.getBounds().contains(mouseX, mouseY) && incButton.isActive())

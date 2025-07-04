@@ -11,6 +11,7 @@ import ship.enums.DamageSet;
 import ship.enums.DamageType;
 import ship.enums.FireRange;
 import ship.enums.Firepower;
+import ship.enums.MountType;
 import ship.enums.ProgressLevel;
 import ship.enums.Result;
 import ship.enums.Severity;
@@ -25,6 +26,7 @@ public class Weapon extends BaseSystem<WeaponList> {
 	private DamageSet damageSet;
 	private Damage damage;
 	private WeaponType weaponType;
+	private MountType mountType = MountType.STANDARD;;
 	
 	public Weapon(WeaponList system) {
 		super(system, system.name);
@@ -41,6 +43,7 @@ public class Weapon extends BaseSystem<WeaponList> {
 		this.firepower = system.firepower;
 		this.modes = system.modes;
 		this.damageSet = system.damageSet;
+		this.resizeable = true;
 	}
 	
 	public Damage getDamage(Result result) {
@@ -97,6 +100,10 @@ public class Weapon extends BaseSystem<WeaponList> {
 	public WeaponType getWeaponType() {
 		return weaponType;
 	}
+	
+	public MountType getMountType() {
+		return mountType;
+	}
 
 	public int getAccuracy() {
 		return accuracy;
@@ -128,16 +135,62 @@ public class Weapon extends BaseSystem<WeaponList> {
 
 	@Override
 	public int getCalculatedCost(Hull hull) {
-		return creditCost;
+		return getMultiWeaponCost((int) (creditCost*mountType.creditCost));
 	}
+	
+	public int getMultiWeaponCost(int singleWeaponCost) {
+		switch (quantity) {
+		case 1:
+			return singleWeaponCost;
+		case 2:
+			return (int) (singleWeaponCost*1.5);
+		case 3:
+			return singleWeaponCost*2;
+		case 4:
+			return (int) (singleWeaponCost*2.5);
+			default:
+				return 0;
+		}
+	}
+	
+	@Override
+	public void incHullPoint() { 
+		if(quantity < 4)
+			quantity++;
+		}
+	
+	@Override
+	public void decHullPoint() { 
+		if(quantity > 1)
+			quantity--;
+		}
 
 	@Override
 	public int getCalculatedHullCost(Hull hull) {
-		return hullCost;
+		return getMultiWeaponCost((int) (hullCost*mountType.hullCost));
 	}
+	
+	public double getCalculatedPowerCost() { return getPowerCost()*quantity;	}
 
 	@Override
 	public ShipSystem<WeaponList> createNewInstanceFromSelf() {
 	    return new Weapon(systemData);
+	}
+	
+	@Override
+	public String getName() {
+		return quantity > 1 ? name + " x" + quantity : name;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setMountType(MountType mountType) {
+		this.mountType = mountType;
 	}
 }
